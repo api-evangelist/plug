@@ -1,0 +1,1340 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Subscriptions API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Subscriptions
+  description: 'Através da API de `subscriptions` é possível realizar a criação, edição, listagem e exclusão de assinaturas.
+
+
+    **Dados básicos de um objeto do tipo subscription**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Subscription" exampleRef="#/components/examples/Subscription" />
+
+    '
+paths:
+  /v1/subscriptions:
+    post:
+      summary: Criação de uma nova assinatura
+      operationId: createSubscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubscriptionRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+      tags:
+      - Subscriptions
+    get:
+      summary: Listagem de assinaturas
+      operationId: getSubscriptions
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: number
+        required: false
+        description: Número da página ativa
+      - in: query
+        name: limit
+        schema:
+          type: number
+        required: false
+        description: Quantidade de registros por página 1-100
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionList'
+      tags:
+      - Subscriptions
+  /v1/subscriptions/{id}:
+    get:
+      summary: Recuperar detalhes de assinatura
+      operationId: getSubscription
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id da assinatura que deseja recuperar
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+      tags:
+      - Subscriptions
+    put:
+      summary: Atualizar assinatura
+      operationId: updateSubscription
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id da assinatura que deseja atualizar
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSubscriptionRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+      tags:
+      - Subscriptions
+  /v1/subscriptions/{id}/cancel:
+    patch:
+      summary: Cancelar assinatura
+      operationId: cancelSubscription
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id da assinatura que deseja cancelar
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelSubscriptionResponse'
+      tags:
+      - Subscriptions
+  /v1/subscriptions/{id}/pause:
+    patch:
+      summary: Pausar assinatura
+      operationId: pauseSubscription
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id da assinatura que deseja pausar
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PauseSubscriptionResponse'
+      tags:
+      - Subscriptions
+  /v1/subscriptions/{id}/resume:
+    patch:
+      summary: Reativar assinatura
+      operationId: resumeSubscription
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id da assinatura que deseja reativar
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResumeSubscriptionResponse'
+      tags:
+      - Subscriptions
+  /v1/subscriptions/{id}/cycles:
+    get:
+      summary: Listar cycles de uma assinatura
+      operationId: listSubscriptionCycles
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id da assinatura
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: Número máximo de items por página
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: page
+        in: query
+        description: Número da página
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CycleList'
+      tags:
+      - Subscriptions
+  /v1/subscriptions/{id}/cycles/{cycleId}:
+    get:
+      summary: Recuperar detalhes de um cycle específico
+      operationId: getSubscriptionCycle
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id da assinatura
+        schema:
+          type: string
+          format: uuid
+      - name: cycleId
+        required: true
+        in: path
+        description: Id do cycle
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CycleDetailResponse'
+      tags:
+      - Subscriptions
+  /v1/subscriptions/settings:
+    get:
+      summary: Obter configurações do cliente
+      description: Recupera as configurações atuais do cliente para assinaturas (retry policy, statement descriptor, etc.)
+      operationId: getClientSettings
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientSettingsResponse'
+        '404':
+          description: Configurações não encontradas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Subscriptions
+    patch:
+      summary: Atualizar configurações do cliente
+      description: Atualiza as configurações do cliente para assinaturas (retry policy, statement descriptor, etc.)
+      operationId: updateClientSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateClientSettingsRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientSettingsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Subscriptions
+components:
+  schemas:
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    ListSubscriptionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador da assinatura
+          example: 01985cf8-96df-7d37-b17c-a9985a1e78bb
+        name:
+          type: string
+          description: Nome da assinatura
+          example: Test Without Request
+        clientId:
+          type: string
+          format: uuid
+          description: Identificador do criador da assinatura
+          example: e234eeb3-483d-4df2-87eb-1e2be5cdaccd
+        merchantId:
+          type: string
+          format: uuid
+          description: Identificador do merchant
+          example: 225d39bc-1fbb-480a-90bd-f0caad05d2d0
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador do cliente
+          example: 2a8b64ce-904c-4256-b79a-49525808609c
+        referenceKey:
+          type: string
+          description: Chave de referência da assinatura
+          example: SUB-PREMIUM-001
+        currency:
+          type: string
+          description: Moeda da assinatura
+          example: BRL
+        trial:
+          type: object
+          properties:
+            endAt:
+              type: string
+              format: date
+              description: Data de término do período de trial
+              example: '2025-08-15'
+          description: Informações do período de trial (se aplicável)
+        status:
+          type: string
+          enum:
+          - created
+          - active
+          - paused
+          - canceled
+          - unpaid
+          - expired
+          - trialing
+          description: Status da assinatura
+          example: paused
+        amount:
+          type: integer
+          description: Valor total da assinatura em centavos
+          example: 29900
+        liveMode:
+          type: boolean
+          description: Indica se a assinatura está em modo de produção
+          example: true
+        interval:
+          type: string
+          enum:
+          - weekly
+          - monthly
+          - quarterly
+          - yearly
+          - biennial
+          - triennial
+          description: Intervalo de recorrência
+          example: monthly
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação da assinatura
+          example: '2025-07-30T20:14:12.191866Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data da última atualização da assinatura
+          example: '2025-07-31T16:57:23.751952Z'
+    UpdateClientSettingsRequest:
+      type: object
+      properties:
+        retryPolicy:
+          type: array
+          items:
+            $ref: '#/components/schemas/RetryPolicyRule'
+          minItems: 1
+          maxItems: 6
+          description: Política de retentativas para pagamentos falhados
+          example:
+          - daysAfterLastAttempt: 1
+          - daysAfterLastAttempt: 4
+          - daysAfterLastAttempt: 9
+          - daysAfterLastAttempt: 16
+        statementDescriptor:
+          type: string
+          maxLength: 25
+          description: Texto que aparece na fatura do cartão de crédito
+          example: MINHA EMPRESA
+        cancelAfterAllRetries:
+          type: boolean
+          description: Se a assinatura deve ser cancelada após todas as retentativas falharem
+          example: false
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    ResumeSubscriptionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador da assinatura
+          example: c7e9f0a3-b0b2-4c56-b918-79e31ed5a4f1
+        status:
+          type: string
+          description: Novo status da assinatura após retomar
+          example: active
+        message:
+          type: string
+          description: Mensagem explicando o resultado da retomada
+          example: Assinatura retomada com sucesso
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data da atualização da assinatura
+          example: '2025-07-31T15:00:00Z'
+    CancelSubscriptionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador da assinatura
+          example: 019860b2-feb8-7edf-b5ba-0c48a7a8bd3f
+        status:
+          type: string
+          description: Status da assinatura após o cancelamento
+          example: canceled
+        message:
+          type: string
+          description: Mensagem explicativa do resultado
+          example: Assinatura cancelada com sucesso
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data da atualização do status
+          example: '2025-07-31T14:00:00Z'
+    CreateSubscriptionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nome da assinatura
+          example: Assinatura Premium com Eventos
+        merchantId:
+          type: string
+          format: uuid
+          description: Identificador do merchant
+          example: 225d39bc-1fbb-480a-90bd-f0caad05d2d0
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador do cliente
+          example: 2a8b64ce-904c-4256-b79a-49525808609c
+        referenceKey:
+          type: string
+          description: Chave de referência da assinatura no seu sistema
+          example: SUB-PREMIUM-001
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionItem'
+        recurrence:
+          type: object
+          properties:
+            interval:
+              type: string
+              enum:
+              - weekly
+              - monthly
+              - quarterly
+              - yearly
+              - biennial
+              - triennial
+              description: Intervalo de recorrência
+              example: monthly
+            cycles:
+              type: number
+              description: Quantidade de ciclos de recorrência
+            startAt:
+              type: string
+              description: Data de início da assinatura em formato YYYY-MM-DD (UTC)
+              example: '2025-07-30'
+        paymentMethod:
+          type: object
+          required:
+          - type
+          - card
+          properties:
+            type:
+              type: string
+              enum:
+              - credit
+              description: Tipo de método de pagamento
+              example: credit
+            card:
+              type: object
+              required:
+              - cardId
+              properties:
+                cardId:
+                  type: string
+                  format: uuid
+                  description: Identificador do cartão
+                  example: ebef4e7e-b5d3-49d8-ac8f-b973faaa3ac5
+                cvv:
+                  type: string
+                  description: Código de segurança do cartão
+                  example: '123'
+            installments:
+              type: integer
+              description: Número de parcelas
+              example: 1
+        trial:
+          type: object
+          properties:
+            endAt:
+              type: string
+              format: date
+              description: Data de término do período de trial em formato YYYY-MM-DD
+              example: '2025-08-15'
+          description: Configuração do período de trial (opcional)
+        splitRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/SplitRule'
+          description: Regras de divisão de valores entre recebedores (opcional)
+      required:
+      - name
+      - merchantId
+      - customerId
+      - items
+      - recurrence
+      - paymentMethod
+    SubscriptionList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListSubscriptionResponse'
+        meta:
+          type: object
+          properties:
+            totalItems:
+              type: integer
+              description: Total de itens
+            totalPages:
+              type: integer
+              description: Total de páginas
+            currentPage:
+              type: integer
+              description: Página atual
+            itemsPerPage:
+              type: integer
+              description: Itens por página
+            itemCount:
+              type: integer
+              description: Quantidade de itens
+    SubscriptionItem:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nome do item
+          example: Ingresso VIP Mensal
+        description:
+          type: string
+          description: Descrição do item
+          example: Acesso VIP premium a eventos mensais
+        amount:
+          type: integer
+          description: Valor do item em centavos
+          example: 29900
+        quantity:
+          type: integer
+          description: Quantidade do item
+          example: 1
+        sku:
+          type: string
+          description: Código de identificação do item
+          example: VIP-EVENT-001
+        risk:
+          type: string
+          enum:
+          - Low
+          - High
+          description: Nível de risco da transação
+          example: Low
+        categoryId:
+          type: string
+          description: Categoria do item
+          example: entertainment
+        locality:
+          type: string
+          description: Localidade do evento
+          example: São Paulo
+        date:
+          type: string
+          format: date
+          description: Data do evento
+          example: '2025-12-01'
+        type:
+          type: integer
+          description: Tipo de item
+          example: 1
+        genre:
+          type: string
+          description: Gênero do evento
+          example: Shows e Eventos
+        tickets:
+          type: object
+          properties:
+            quantityTicketSale:
+              type: integer
+              description: Quantidade de ingressos à venda
+              example: 1
+            quantityEventHouse:
+              type: integer
+              nullable: true
+              description: Quantidade de ingressos da casa de eventos
+              example: 0
+            convenienceFeeValue:
+              type: number
+              format: float
+              description: Valor da taxa de conveniência
+              example: 15.5
+            quantityFull:
+              type: integer
+              description: Quantidade de ingressos inteiros
+              example: 1
+            quantityHalf:
+              type: integer
+              description: Quantidade de ingressos meia-entrada
+              example: 0
+            batch:
+              type: integer
+              description: Lote do ingresso
+              example: 1
+        location:
+          type: object
+          properties:
+            street:
+              type: string
+              description: Nome da rua
+              example: Av. Paulista
+            number:
+              type: string
+              description: Número do endereço
+              example: '1000'
+            complement:
+              type: string
+              description: Complemento do endereço
+              example: Centro de Convenções
+            zipCode:
+              type: string
+              description: CEP
+              example: 01310-100
+            city:
+              type: string
+              description: Cidade
+              example: São Paulo
+            state:
+              type: string
+              description: Estado
+              example: SP
+            country:
+              type: string
+              description: País
+              example: Brasil
+            district:
+              type: string
+              description: Bairro
+              example: Bela Vista
+            reference:
+              type: string
+              description: Ponto de referência
+              example: Próximo ao MASP
+            quantityHalf:
+              type: integer
+              nullable: true
+              example: 0
+            batch:
+              type: integer
+              example: 1
+      required:
+      - amount
+      - name
+      - quantity
+    PaymentHistoryItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador do payment history
+          example: 84ec50c5-1fb4-4d6b-bbff-fedc47ba9fa3
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação do payment history
+          example: '2025-07-30T20:14:12.608115Z'
+        chargeId:
+          type: string
+          format: uuid
+          description: Identificador da cobrança
+          example: 6f2a0713-c4cd-4e2d-8603-69855902676d
+        status:
+          type: string
+          enum:
+          - pending
+          - authorized
+          - failed
+          description: Status da cobrança. `pending` quando criada, `authorized` quando bem-sucedida, `failed` quando falhou
+          example: authorized
+    CycleList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CycleResponse'
+        meta:
+          type: object
+          properties:
+            totalItems:
+              type: integer
+              description: Total de items
+              example: 1
+            itemCount:
+              type: integer
+              description: Quantidade de items na página atual
+              example: 1
+            itemsPerPage:
+              type: integer
+              description: Quantidade de items por página
+              example: 10
+            totalPages:
+              type: integer
+              description: Total de páginas
+              example: 1
+            currentPage:
+              type: integer
+              description: Página atual
+              example: 1
+    CycleDetailResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador do cycle
+          example: 01985cf8-9877-7c09-bbf6-2cceb3384a61
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador do cliente
+          example: 2a8b64ce-904c-4256-b79a-49525808609c
+        merchantId:
+          type: string
+          format: uuid
+          description: Identificador do merchant
+          example: 225d39bc-1fbb-480a-90bd-f0caad05d2d0
+        cycle:
+          type: integer
+          description: Número do cycle
+          example: 1
+        status:
+          type: string
+          enum:
+          - scheduled
+          - pending
+          - authorized
+          - failed
+          - retrying
+          - canceled
+          description: Status do cycle
+          example: authorized
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação do cycle
+          example: '2025-07-30T20:14:12.599715Z'
+        paymentHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentHistoryItem'
+          description: Histórico de pagamentos do cycle
+    ClientSettingsResponse:
+      type: object
+      properties:
+        clientId:
+          type: string
+          format: uuid
+          description: Identificador do cliente
+          example: e234eeb3-483d-4df2-87eb-1e2be5cdaccd
+        retryPolicy:
+          type: array
+          items:
+            $ref: '#/components/schemas/RetryPolicyRule'
+          description: Política de retentativas configurada
+          example:
+          - daysAfterLastAttempt: 1
+          - daysAfterLastAttempt: 4
+          - daysAfterLastAttempt: 9
+          - daysAfterLastAttempt: 16
+        statementDescriptor:
+          type: string
+          description: Texto que aparece na fatura do cartão de crédito
+          example: MINHA EMPRESA
+        cancelAfterAllRetries:
+          type: boolean
+          description: Se a assinatura deve ser cancelada após todas as retentativas falharem
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação das configurações
+          example: '2025-01-31T10:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data da última atualização das configurações
+          example: '2025-01-31T15:30:00Z'
+      required:
+      - clientId
+      - retryPolicy
+      - cancelAfterAllRetries
+      - createdAt
+      - updatedAt
+    PauseSubscriptionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador da assinatura
+          example: c7e9f0a3-b0b2-4c56-b918-79e31ed5a4f1
+        status:
+          type: string
+          description: Novo status da assinatura após pausa
+          example: paused
+        message:
+          type: string
+          description: Mensagem explicando o resultado da pausa
+          example: Assinatura pausada com sucesso
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data da atualização da assinatura
+          example: '2025-07-31T15:00:00Z'
+    UpdateSubscriptionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nome da assinatura
+          minLength: 1
+          maxLength: 100
+        merchantId:
+          type: string
+          format: uuid
+          description: Identificador do merchant
+        referenceKey:
+          type: string
+          description: Chave de referência da assinatura
+        items:
+          type: array
+          description: Lista de itens da assinatura
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Nome do item
+              description:
+                type: string
+                description: Descrição do item
+              amount:
+                type: integer
+                description: Valor em centavos
+                minimum: 1
+              quantity:
+                type: integer
+                description: Quantidade de itens
+                minimum: 1
+              sku:
+                type: string
+              risk:
+                type: string
+                enum:
+                - Low
+                - High
+              categoryId:
+                type: string
+              locality:
+                type: string
+              date:
+                type: string
+                format: date
+              type:
+                type: integer
+              genre:
+                type: string
+              tickets:
+                type: object
+                properties:
+                  quantityTicketSale:
+                    type: integer
+                  quantityEventHouse:
+                    type: integer
+                  convenienceFeeValue:
+                    type: number
+                    format: float
+                  quantityFull:
+                    type: integer
+                  quantityHalf:
+                    type: integer
+                  batch:
+                    type: integer
+              location:
+                type: object
+                properties:
+                  street:
+                    type: string
+                  number:
+                    type: string
+                  complement:
+                    type: string
+                  zipCode:
+                    type: string
+                  city:
+                    type: string
+                  state:
+                    type: string
+                  country:
+                    type: string
+                  district:
+                    type: string
+                  reference:
+                    type: string
+            required:
+            - name
+            - amount
+            - quantity
+        recurrence:
+          type: object
+          properties:
+            interval:
+              type: string
+              enum:
+              - weekly
+              - monthly
+              - quarterly
+              - yearly
+              - biennial
+              - triennial
+              description: Intervalo de recorrência
+            cycles:
+              type: integer
+              minimum: 1
+            startAt:
+              type: string
+        splitRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/SplitRule'
+          description: Regras de divisão de valores entre recebedores (opcional)
+        paymentMethod:
+          type: object
+          required:
+          - type
+          - card
+          properties:
+            type:
+              type: string
+              enum:
+              - credit
+              description: Tipo de método de pagamento
+            card:
+              type: object
+              required:
+              - cardId
+              properties:
+                cardId:
+                  type: string
+                  format: uuid
+                  description: Identificador do cartão
+            installments:
+              type: integer
+              description: Número de parcelas
+        cancelAtPeriodEnd:
+          type: boolean
+          description: Indica se a assinatura está agendada para cancelamento ao final do período atual
+          example: true
+        scheduledCancellationAt:
+          type: string
+          format: date
+          description: Data agendada para o cancelamento (formato YYYY-MM-DD). Quando definida, tem prioridade sobre trialEnd e nextDueDate para determinar a data efetiva de cancelamento
+          example: '2025-12-31'
+        scheduledCancellationReason:
+          type: string
+          description: Motivo do cancelamento agendado (opcional)
+          example: Cliente solicitou cancelamento
+    CycleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador do cycle
+          example: 01985cf8-9877-7c09-bbf6-2cceb3384a61
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador do cliente
+          example: 2a8b64ce-904c-4256-b79a-49525808609c
+        merchantId:
+          type: string
+          format: uuid
+          description: Identificador do merchant
+          example: 225d39bc-1fbb-480a-90bd-f0caad05d2d0
+        cycle:
+          type: integer
+          description: Número do cycle
+          example: 1
+        status:
+          type: string
+          enum:
+          - scheduled
+          - pending
+          - authorized
+          - failed
+          - retrying
+          - canceled
+          description: Status do cycle.
+          example: authorized
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação do cycle
+          example: '2025-07-30T20:14:12.599715Z'
+    SubscriptionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador da assinatura
+          example: 019860b2-feb8-7edf-b5ba-0c48a7a8bd3f
+        name:
+          type: string
+          description: Nome da assinatura
+          example: Assinatura Premium com Eventos
+        clientId:
+          type: string
+          format: uuid
+          description: Identificador do client
+          example: e234eeb3-483d-4df2-87eb-1e2be5cdaccd
+        merchantId:
+          type: string
+          format: uuid
+          description: Identificador do merchant
+          example: 225d39bc-1fbb-480a-90bd-f0caad05d2d0
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador do cliente
+          example: 2a8b64ce-904c-4256-b79a-49525808609c
+        referenceKey:
+          type: string
+          description: Chave de referência da assinatura
+          example: SUB-PREMIUM-001
+        currency:
+          type: string
+          description: Moeda da assinatura
+          example: BRL
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionItem'
+        recurrence:
+          type: object
+          properties:
+            interval:
+              type: string
+              enum:
+              - weekly
+              - monthly
+              - quarterly
+              - yearly
+              - biennial
+              - triennial
+              example: monthly
+            cycles:
+              type: integer
+              example: 12
+            startAt:
+              type: string
+              format: date
+              description: Data de início da assinatura (UTC)
+              example: '2025-08-10'
+            endAt:
+              type: string
+              format: date
+              example: '2026-08-10'
+            nextDueDate:
+              type: string
+              format: date
+              description: Próxima data de vencimento da assinatura
+              example: '2025-07-30'
+        paymentMethod:
+          type: object
+          required:
+          - type
+          - card
+          properties:
+            type:
+              type: string
+              enum:
+              - credit
+              description: Tipo de método de pagamento
+              example: credit
+            card:
+              type: object
+              required:
+              - cardId
+              properties:
+                cardId:
+                  type: string
+                  format: uuid
+                  description: Identificador do cartão
+                  example: ebef4e7e-b5d3-49d8-ac8f-b973faaa3ac5
+            installments:
+              type: integer
+              description: Número de parcelas
+              example: 1
+        trial:
+          type: object
+          properties:
+            endAt:
+              type: string
+              format: date
+              description: Data de término do período de trial
+              example: '2025-08-15'
+          description: Informações do período de trial (se aplicável)
+        splitRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/SplitRule'
+          description: Regras de divisão de valores entre recebedores
+        status:
+          type: string
+          enum:
+          - created
+          - active
+          - paused
+          - canceled
+          - unpaid
+          - expired
+          - trialing
+          description: Status da assinatura
+          example: created
+        amount:
+          type: integer
+          example: 29900
+        liveMode:
+          type: boolean
+          description: Indica se a assinatura está em modo de produção
+          example: true
+        lastCycle:
+          $ref: '#/components/schemas/CycleDetailResponse'
+          nullable: true
+          description: Último cycle da assinatura. Sempre presente nas respostas individuais (GET, CREATE, UPDATE), pode ser null se não houver cycles.
+        createdAt:
+          type: string
+          format: date-time
+          example: '2025-07-31T13:36:40.118822Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2025-07-31T13:36:40.118822Z'
+        cancelAtPeriodEnd:
+          type: boolean
+          description: Indica se a assinatura está agendada para cancelamento ao final do período atual
+          example: true
+        scheduledCancellationAt:
+          type: string
+          format: date
+          nullable: true
+          description: Data agendada para o cancelamento (formato YYYY-MM-DD). Quando definida, tem prioridade sobre trialEnd e nextDueDate para determinar a data efetiva de cancelamento
+          example: '2025-12-31'
+        scheduledCancellationReason:
+          type: string
+          nullable: true
+          description: Motivo do cancelamento agendado (opcional)
+          example: Cliente solicitou cancelamento
+    RetryPolicyRule:
+      type: object
+      properties:
+        daysAfterLastAttempt:
+          type: integer
+          minimum: 1
+          maximum: 30
+          description: Dias após a última tentativa para fazer nova retentativa
+          example: 1
+      required:
+      - daysAfterLastAttempt
+    SplitRule:
+      type: object
+      properties:
+        sellerId:
+          type: string
+          format: uuid
+          description: Identificador do recebedor já cadastrado na API de [sellers](/api-reference/sellers/criacao-de-um-novo-recebedor).
+          example: 5323ece6-816d-11ed-a1eb-0242ac120002
+        percentage:
+          type: integer
+          minimum: 1
+          maximum: 100
+          description: Campo condicional. Percentual do valor da transação que será enviado ao recebedor. Envie exatamente um dos campos, `percentage` ou `amount`, nunca ambos.
+          example: 70
+        amount:
+          type: integer
+          minimum: 1
+          description: Campo condicional. Valor em centavos que será enviado ao recebedor. Envie exatamente um dos campos, `amount` ou `percentage`, nunca ambos.
+          example: 5000
+        processingFee:
+          type: boolean
+          description: Indica se o recebedor vinculado à regra será cobrado pelas taxas da transação.
+          example: false
+        chargeEntireFee:
+          type: boolean
+          description: Indica se o recebedor será cobrado pela taxa inteira da transação. Não pode ser verdadeiro junto com `chargeRemainderFee`.
+          example: false
+        chargeRemainderFee:
+          type: boolean
+          description: Indica se o recebedor será cobrado pela taxa restante da transação.
+          example: false
+        liable:
+          type: boolean
+          description: Indica se o recebedor atrelado assumirá os riscos de chargeback da transação.
+          example: true
+        transactionOwner:
+          type: boolean
+          description: Indica se o recebedor é o responsável pela transação.
+          example: true
+        fares:
+          type: object
+          description: Informações sobre as taxas que serão cobradas do recebedor.
+          properties:
+            mdr:
+              type: number
+              minimum: 0
+              description: Percentual de MDR que será aplicado ao recebedor.
+              example: 2.5
+            fee:
+              type: number
+              minimum: 0
+              description: Taxa fixa que será aplicada ao recebedor.
+              example: 0.3
+      required:
+      - sellerId
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos

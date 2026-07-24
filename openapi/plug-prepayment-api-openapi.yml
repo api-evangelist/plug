@@ -1,0 +1,678 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Prepayment API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Prepayment
+  description: '
+
+    > **🚧 Beta** — esta API está em fase Beta. Já está disponível para clientes habilitados, mas detalhes do contrato e do fluxo podem evoluir nas próximas versões.
+
+
+    **Antecipação avulsa de recebíveis.** Permite que clientes habilitados recebam antes da data prevista os recebíveis das suas vendas, mediante desconto proporcional ao tempo antecipado.
+
+
+    ### Pré-requisitos
+
+
+    - Transacionar pelo **provedor de pagamento Malga** (a antecipação não está disponível para transações feitas por outros provedores conectados à plataforma).
+
+    - Sua conta precisa estar **habilitada** para antecipar recebíveis. Para solicitar a habilitação, entre em contato com o suporte. A solicitação passa por uma análise antes de ser aprovada.
+
+
+    ### Fluxo
+
+
+    1. Consulte os recebíveis disponíveis para antecipação.
+
+    2. Simule a antecipação informando uma ou mais datas de recebimento — a Malga agrupa todos os recebíveis previstos para cada data informada.
+
+    3. Confirme a simulação para efetivar a antecipação. Para receber em D+1, o aceite precisa acontecer **até as 15h (horário de Brasília)** do dia da simulação.
+
+
+    Detalhes do guia conceitual em [Antecipação avulsa](/documentations/more/prepayment).
+
+    '
+paths:
+  /v1/subacquirer/prepayment/receivables:
+    get:
+      operationId: listPrepaymentReceivables
+      summary: Consultar recebíveis disponíveis para antecipação
+      description: '> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.
+
+
+        Lista os recebíveis disponíveis para antecipação avulsa e retorna um resumo com o valor total disponível e a quantidade de recebíveis.
+
+
+        Quando `sellerId` é informado, a consulta é feita sobre os recebíveis do recebedor correspondente. Sem `sellerId`, opera sobre a conta principal.
+
+        '
+      parameters:
+      - name: sellerId
+        in: query
+        required: false
+        description: ID do recebedor para consultar os recebíveis dele.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Recebíveis disponíveis retornados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentReceivablesResponse'
+              examples:
+                PrepaymentReceivablesResponse:
+                  $ref: '#/components/examples/PrepaymentReceivablesResponse'
+        '400':
+          description: Header `X-Client-Id` ausente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Conta ainda não habilitada para antecipação. Entre em contato com o suporte.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Prepayment
+  /v1/subacquirer/prepayment:
+    post:
+      operationId: simulatePrepayment
+      summary: Simular antecipação
+      description: '> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.
+
+
+        Cria uma simulação de antecipação para o **período que termina em `endDate`**. A Malga inclui **todos os recebíveis elegíveis com data prevista de recebimento até `endDate` (inclusive)** e calcula o valor líquido a ser recebido pelo cliente, junto com o desconto aplicado.
+
+
+        A simulação fica válida até as **15h (horário de Brasília)** do dia em que foi criada (campo `expiresAt`). Para receber em D+1, o aceite precisa acontecer dentro desse prazo.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrepaymentSimulateRequest'
+            examples:
+              PrepaymentSimulateRequest:
+                $ref: '#/components/examples/PrepaymentSimulateRequest'
+      responses:
+        '201':
+          description: Simulação criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentResponse'
+              examples:
+                PrepaymentResponse:
+                  $ref: '#/components/examples/PrepaymentResponse'
+        '400':
+          description: Body inválido ou header obrigatório ausente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Conta ainda não habilitada para antecipação. Entre em contato com o suporte.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentError'
+        '404':
+          description: Conta sem recebíveis associados ao provedor Malga
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentError'
+        '422':
+          description: Nenhum recebível disponível para o período informado (até `endDate`)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Prepayment
+  /v1/subacquirer/prepayment/{id}:
+    get:
+      operationId: getPrepayment
+      summary: Recuperar detalhes de uma antecipação
+      description: '> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.
+
+
+        Retorna os detalhes de uma simulação ou antecipação pelo seu identificador.
+
+
+        Se a simulação ainda está com status `pending` mas o horário atual já passou do `expiresAt` (15h, horário de Brasília), o `status` retornado vem como `expired` automaticamente. Nesse caso, basta criar uma nova simulação.
+
+        '
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Identificador da antecipação.
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Detalhes da antecipação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentResponse'
+              examples:
+                PrepaymentResponse:
+                  $ref: '#/components/examples/PrepaymentResponse'
+        '400':
+          description: Header obrigatório ausente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Antecipação não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Prepayment
+  /v1/subacquirer/prepayment/{id}/commit:
+    post:
+      operationId: commitPrepayment
+      summary: Confirmar antecipação (aceite)
+      description: '> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.
+
+
+        Confirma o aceite de uma simulação, efetivando a antecipação.
+
+
+        Para receber em D+1, o aceite precisa acontecer até as **15h (horário de Brasília)** do dia em que a simulação foi criada. Após esse horário, a simulação fica expirada e é preciso simular novamente.
+
+        '
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Identificador da antecipação a ser aceita.
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Antecipação confirmada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentResponse'
+              examples:
+                PrepaymentCommittedResponse:
+                  $ref: '#/components/examples/PrepaymentCommittedResponse'
+        '400':
+          description: Header obrigatório ausente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Antecipação não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentError'
+        '409':
+          description: Antecipação não está mais pendente ou simulação expirou (passou de 15h do dia da criação)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentError'
+        '422':
+          description: Os recebíveis mudaram desde a simulação. Faça uma nova simulação.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrepaymentError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Prepayment
+components:
+  schemas:
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    PrepaymentSimulateRequest:
+      type: object
+      properties:
+        sellerId:
+          type: string
+          description: ID do recebedor para antecipar recebíveis dele. Se omitido, opera sobre a conta principal.
+          nullable: true
+          example: '123'
+        endDate:
+          type: string
+          format: date
+          description: Data-limite (YYYY-MM-DD) do período a antecipar. A Malga inclui todos os recebíveis elegíveis com data prevista de recebimento **até essa data (inclusive)**.
+          example: '2026-06-20'
+      required:
+      - endDate
+    PrepaymentReceivablesSummary:
+      type: object
+      description: Resumo dos recebíveis disponíveis para antecipação.
+      properties:
+        availableAmount:
+          type: integer
+          format: int64
+          description: Valor total disponível para antecipação, em centavos.
+          example: 25000
+        receivableCount:
+          type: integer
+          description: Quantidade de recebíveis disponíveis.
+          example: 3
+      required:
+      - availableAmount
+      - receivableCount
+    PrepaymentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador da antecipação.
+          example: 01964c5a-0001-7000-8000-000000000001
+        status:
+          type: string
+          enum:
+          - pending
+          - committed
+          - paid
+          - expired
+          description: 'Status atual da antecipação:
+
+            - `pending`: simulação criada, ainda não aceita.
+
+            - `committed`: aceite confirmado, antecipação em processamento.
+
+            - `paid`: pagamento da antecipação realizado.
+
+            - `expired`: simulação expirou (passou de 15h sem aceite) ou aceite recusado porque o conjunto de recebíveis mudou.
+
+            '
+          example: pending
+        grossAmount:
+          type: integer
+          format: int64
+          description: Soma do valor original dos recebíveis incluídos em `items`, em centavos.
+          example: 20000
+        netAmount:
+          type: integer
+          format: int64
+          description: Valor líquido a ser recebido pelo cliente após o desconto, em centavos.
+          example: 19323
+        markupAmount:
+          type: integer
+          format: int64
+          description: Componente do desconto referente ao markup do contrato, em centavos.
+          example: 387
+        feeAmount:
+          type: integer
+          format: int64
+          description: Componente do desconto referente à taxa base da Malga, em centavos.
+          example: 290
+        effectiveRate:
+          type: number
+          format: double
+          description: Taxa efetiva total da antecipação sobre o valor bruto.
+          example: 0.03385
+        monthlyRate:
+          type: number
+          format: double
+          description: Taxa mensal base aplicada no cálculo (decimal).
+          example: 0.015
+        markup:
+          type: number
+          format: double
+          description: Markup mensal do contrato aplicado no cálculo (decimal).
+          example: 0.02
+        expiresAt:
+          type: string
+          format: date-time
+          description: Data e hora limite para confirmar a antecipação (sempre 15h, horário de Brasília, do dia da simulação).
+          example: '2026-05-27T18:00:00Z'
+        endDate:
+          type: string
+          format: date
+          description: Data-limite (YYYY-MM-DD) considerada na simulação. Todos os recebíveis com data de recebimento até essa data (inclusive) foram incluídos.
+          example: '2026-06-20'
+        paymentDate:
+          type: string
+          format: date
+          description: Data prevista de pagamento da antecipação (YYYY-MM-DD). Retornada para simulações pendentes (D+1 se criada antes das 15h) e após o aceite.
+          example: '2026-05-28'
+        items:
+          type: array
+          description: Lista dos recebíveis incluídos na antecipação.
+          items:
+            $ref: '#/components/schemas/PrepaymentItemResponse'
+      required:
+      - id
+      - status
+      - grossAmount
+      - netAmount
+      - markupAmount
+      - feeAmount
+      - effectiveRate
+      - monthlyRate
+      - markup
+      - expiresAt
+      - items
+    PrepaymentError:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Código interno do erro.
+          enum:
+          - I-400
+          - I-401
+          - I-403
+          - I-404
+          - I-409
+          - I-422
+          example: I-403
+        networkDeniedMessage:
+          type: string
+          description: Mensagem detalhando o erro.
+          example: Client is not eligible for prepayment
+      required:
+      - code
+      - networkDeniedMessage
+    PrepaymentReceivablesResponse:
+      type: object
+      properties:
+        summary:
+          $ref: '#/components/schemas/PrepaymentReceivablesSummary'
+        receivables:
+          type: array
+          description: Lista de recebíveis disponíveis, ordenada pela data prevista de recebimento.
+          items:
+            $ref: '#/components/schemas/PrepaymentReceivableListItem'
+      required:
+      - summary
+      - receivables
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    PrepaymentReceivableListItem:
+      type: object
+      description: Recebível individual disponível para antecipação.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador do recebível.
+          example: 019d6afe-c505-70a9-8df0-d052b578b35a
+        settlementDate:
+          type: string
+          format: date
+          description: Data prevista de recebimento original (YYYY-MM-DD).
+          example: '2026-06-15'
+        paymentArrangement:
+          type: string
+          description: Arranjo de pagamento do recebível (bandeira/modalidade).
+          example: vcc
+        amount:
+          type: integer
+          format: int64
+          description: Valor original do recebível, em centavos.
+          example: 12000
+      required:
+      - id
+      - settlementDate
+      - paymentArrangement
+      - amount
+    PrepaymentItemResponse:
+      type: object
+      description: 'Recebível individual incluído na antecipação.
+
+        '
+      properties:
+        receivableUnitExternalId:
+          type: string
+          description: Identificador do recebível antecipado.
+          example: ru-ext-ok-1
+        grossAmount:
+          type: integer
+          format: int64
+          description: Valor original do recebível, em centavos.
+          example: 12000
+        netAmount:
+          type: integer
+          format: int64
+          description: Valor líquido deste recebível após o desconto, em centavos.
+          example: 11594
+        markupAmount:
+          type: integer
+          format: int64
+          description: Parte do desconto correspondente ao markup do contrato, em centavos.
+          example: 232
+        feeAmount:
+          type: integer
+          format: int64
+          description: Parte do desconto correspondente à taxa base da Malga, em centavos.
+          example: 174
+        daysToAnticipate:
+          type: integer
+          description: Quantos dias estão sendo antecipados em relação à data original de recebimento.
+          example: 30
+        settlementDate:
+          type: string
+          format: date
+          description: Data prevista de recebimento original deste recebível (YYYY-MM-DD).
+          example: '2026-06-15'
+        paymentArrangement:
+          type: string
+          description: Arranjo de pagamento do recebível.
+          example: vcc
+      required:
+      - receivableUnitExternalId
+      - grossAmount
+      - netAmount
+      - markupAmount
+      - feeAmount
+      - daysToAnticipate
+      - settlementDate
+      - paymentArrangement
+  examples:
+    PrepaymentSimulateRequest:
+      summary: Simulação por período (até endDate, inclusive)
+      value:
+        endDate: '2026-06-20'
+    PrepaymentCommittedResponse:
+      summary: Exemplo de antecipação confirmada
+      value:
+        id: 01964c5a-0001-7000-8000-000000000001
+        status: committed
+        grossAmount: 20000
+        netAmount: 19323
+        markupAmount: 387
+        feeAmount: 290
+        effectiveRate: 0.03385
+        monthlyRate: 0.015
+        markup: 0.02
+        expiresAt: '2026-05-27T18:00:00Z'
+        endDate: '2026-06-20'
+        paymentDate: '2026-05-28'
+        items:
+        - receivableUnitExternalId: ru-ext-ok-1
+          grossAmount: 12000
+          netAmount: 11594
+          markupAmount: 232
+          feeAmount: 174
+          daysToAnticipate: 30
+          settlementDate: '2026-06-15'
+          paymentArrangement: vcc
+        - receivableUnitExternalId: ru-ext-ok-2
+          grossAmount: 8000
+          netAmount: 7729
+          markupAmount: 155
+          feeAmount: 116
+          daysToAnticipate: 30
+          settlementDate: '2026-06-15'
+          paymentArrangement: vcc
+    PrepaymentReceivablesResponse:
+      summary: Exemplo de recebíveis disponíveis
+      value:
+        summary:
+          availableAmount: 25000
+          receivableCount: 3
+        receivables:
+        - id: 019d6afe-c505-70a9-8df0-d052b578b35a
+          settlementDate: '2026-06-15'
+          paymentArrangement: vcc
+          amount: 12000
+        - id: 019d6afe-c505-70a9-8df0-d052b578b35b
+          settlementDate: '2026-06-15'
+          paymentArrangement: vcc
+          amount: 8000
+        - id: 019d6afe-c505-70a9-8df0-d052b578b35c
+          settlementDate: '2026-06-20'
+          paymentArrangement: mcc
+          amount: 5000
+    PrepaymentResponse:
+      summary: Exemplo de simulação criada
+      value:
+        id: 01964c5a-0001-7000-8000-000000000001
+        status: pending
+        grossAmount: 20000
+        netAmount: 19323
+        markupAmount: 387
+        feeAmount: 290
+        effectiveRate: 0.03385
+        monthlyRate: 0.015
+        markup: 0.02
+        expiresAt: '2026-05-27T18:00:00Z'
+        endDate: '2026-06-20'
+        paymentDate: '2026-05-28'
+        items:
+        - receivableUnitExternalId: ru-ext-ok-1
+          grossAmount: 12000
+          netAmount: 11594
+          markupAmount: 232
+          feeAmount: 174
+          daysToAnticipate: 30
+          settlementDate: '2026-06-15'
+          paymentArrangement: vcc
+        - receivableUnitExternalId: ru-ext-ok-2
+          grossAmount: 8000
+          netAmount: 7729
+          markupAmount: 155
+          feeAmount: 116
+          daysToAnticipate: 30
+          settlementDate: '2026-06-15'
+          paymentArrangement: vcc
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos

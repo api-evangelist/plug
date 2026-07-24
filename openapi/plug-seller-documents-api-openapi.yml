@@ -1,0 +1,349 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Seller Documents API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Seller Documents
+paths:
+  /v1/sellers/documents:
+    post:
+      summary: Upload de documento
+      operationId: uploadSellerDocument
+      description: 'Faz upload de um documento (imagem ou PDF) para posterior associação a um seller.
+
+        O arquivo fica armazenado temporariamente por 7 dias. Após esse prazo, o documento expira e não pode mais ser utilizado.
+
+
+        **Tipos aceitos:** SELFIE, CNH_FULL, CNH_FRONT, CNH_BACK, RG_FRONT, RG_BACK
+
+
+        **Formatos aceitos:**
+
+        - SELFIE e CNH_FULL: PNG, JPEG, BMP, WebP, HEIC, HEIF, PDF
+
+        - CNH_FRONT, CNH_BACK, RG_FRONT, RG_BACK: PNG, JPEG, BMP, WebP, HEIC, HEIF (sem PDF)
+
+
+        **Tamanho máximo:** 3MB
+
+        '
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                  - SELFIE
+                  - CNH_FULL
+                  - CNH_FRONT
+                  - CNH_BACK
+                  - RG_FRONT
+                  - RG_BACK
+                  description: Tipo do documento
+                file:
+                  type: string
+                  format: binary
+                  description: Arquivo do documento
+              required:
+              - type
+              - file
+      responses:
+        '201':
+          description: Documento enviado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadedDocumentResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: Arquivo excede o tamanho máximo de 3MB
+      tags:
+      - Seller Documents
+    get:
+      summary: Listar documentos
+      operationId: listSellerDocuments
+      description: 'Lista os documentos do cliente autenticado. Documentos expirados não são retornados.
+
+        '
+      parameters:
+      - name: status
+        in: query
+        required: false
+        description: Filtrar por status do documento
+        schema:
+          type: string
+          enum:
+          - uploaded
+          - attached
+          - sent
+      - name: type
+        in: query
+        required: false
+        description: Filtrar por tipo do documento
+        schema:
+          type: string
+          enum:
+          - SELFIE
+          - CNH_FULL
+          - CNH_FRONT
+          - CNH_BACK
+          - RG_FRONT
+          - RG_BACK
+      - name: createdAt
+        in: query
+        required: false
+        description: Filtrar documentos criados a partir desta data (ISO 8601)
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        in: query
+        required: false
+        description: Itens por página (máximo 50)
+        schema:
+          type: number
+          default: 10
+      - name: page
+        in: query
+        required: false
+        description: Número da página
+        schema:
+          type: number
+          default: 1
+      - name: sort
+        in: query
+        required: false
+        description: Ordenação por data de criação
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+          default: DESC
+      responses:
+        '200':
+          description: Lista de documentos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadedDocumentListResponse'
+      tags:
+      - Seller Documents
+  /v1/sellers/documents/{documentId}:
+    get:
+      summary: Consultar documento
+      operationId: getSellerDocument
+      description: Retorna os detalhes de um documento. Documentos expirados retornam 404.
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        description: ID do documento
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Detalhes do documento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadedDocumentResponse'
+        '404':
+          description: Documento não encontrado ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Seller Documents
+    delete:
+      summary: Deletar documento
+      operationId: deleteSellerDocument
+      description: 'Remove um documento. Apenas documentos com status `uploaded` podem ser deletados.
+
+        Documentos já associados a um seller (status `attached` ou `sent`) não podem ser removidos.
+
+        '
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        description: ID do documento
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Documento removido com sucesso
+        '400':
+          description: Documento já associado a um seller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Documento não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Seller Documents
+components:
+  schemas:
+    UploadedDocumentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador do documento
+        type:
+          type: string
+          enum:
+          - SELFIE
+          - CNH_FULL
+          - CNH_FRONT
+          - CNH_BACK
+          - RG_FRONT
+          - RG_BACK
+          description: Tipo do documento
+        status:
+          type: string
+          enum:
+          - uploaded
+          - attached
+          - sent
+          description: 'Status do documento:
+
+            - `uploaded`: documento enviado, aguardando associação com seller
+
+            - `attached`: documento associado a um seller, aguardando envio ao provedor
+
+            - `sent`: documento enviado ao provedor com sucesso
+
+            '
+        expiresAt:
+          type: string
+          format: date-time
+          description: Data de expiração do documento (7 dias após upload)
+      example:
+        id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        type: SELFIE
+        status: uploaded
+        expiresAt: '2026-04-15T18:00:00.000Z'
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    UploadedDocumentListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/UploadedDocumentResponse'
+        meta:
+          type: object
+          properties:
+            totalItems:
+              type: number
+            itemCount:
+              type: number
+            itemsPerPage:
+              type: number
+            totalPages:
+              type: number
+            currentPage:
+              type: number
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos

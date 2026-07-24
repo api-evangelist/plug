@@ -1,0 +1,341 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Webhooks API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Webhooks
+  description: '
+
+    A Malga utiliza o serviço de webhooks para notificar o seu sistema sobre os eventos ocorridos na nossa plataforma. Através de webhooks você consegue atualizar seu sistema sempre que um evento importante acontece, como a atualização de status de uma cobrança para confirmar ou cancelar um determinado pagamento.
+
+
+    **Dados básicos de um objeto do tipo event:**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Event" exampleRef="#/components/examples/Event" />
+
+    '
+paths:
+  /v1/webhooks:
+    post:
+      summary: Criação de novo webhook para notificação
+      operationId: createWebhook
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebhookRequest'
+            examples:
+              CreateWebhookRequest:
+                $ref: '#/components/examples/CreateWebhookRequest'
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+              examples:
+                Webhook:
+                  $ref: '#/components/examples/Webhook'
+        '409':
+          description: Webhook Duplicado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookError'
+      tags:
+      - Webhooks
+    get:
+      summary: Listagem de webhooks cadastrados
+      operationId: ListWebhooks
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: number
+        required: false
+        description: Número da página
+      - in: query
+        name: limit
+        schema:
+          type: number
+        required: false
+        description: Quantidade de itens por página
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Webhook'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Webhooks
+  /v1/webhooks/{id}:
+    get:
+      summary: Recuperar detalhes de webhook
+      operationId: getWebhook
+      parameters:
+      - name: id
+        required: true
+        description: Id do webhook que deseja recuperar
+        in: path
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+              examples:
+                Webhook:
+                  $ref: '#/components/examples/Webhook'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Webhooks
+    delete:
+      operationId: deleteWebhook
+      summary: Deletar webhook pelo id
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id do webhook que deseja deletar
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: ''
+      tags:
+      - Webhooks
+    patch:
+      operationId: updateWebhook
+      summary: Atualizar webhook pelo id
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id do webhook que deseja alterar
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebhookRequest'
+      responses:
+        '200':
+          description: The record has been successfully updated.
+      tags:
+      - Webhooks
+components:
+  schemas:
+    WebhookError:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          description: Código do erro
+        message:
+          type: string
+          description: Descrição do erro
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador do webhook
+        createdAt:
+          type: string
+          description: Data de criação
+        clientId:
+          type: string
+          format: uuid
+          description: Identificador do client
+        event:
+          type: string
+          description: Tipo do evento que deseja receber notificações no seu webhook
+        endpoint:
+          type: string
+          description: URL do seu sistema que deverá receber as notificações de evento
+        version:
+          type: number
+          description: Versão da api da Malga que seu webhook implementa
+          default: 1.1
+        publicKey:
+          type: string
+          description: Chave pública ed25519
+        status:
+          type: boolean
+          description: Identifica se o webhooks está ativo ou não para receber notificações de evento da Malga
+          default: true
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    CreateWebhookRequest:
+      type: object
+      properties:
+        event:
+          type: string
+          description: Evento que deseja receber notificações no seu webhook conforme descrito na seção [Eventos suportados para notificação via webhooks](/documentations/webhooks/webhook1-1#eventos-suportados-para-notificacao-via-webhooks). Deve ser criado um webhook para cada evento, podendo ser utilizado o wildcard `*` no lugar do evento para receber todos os eventos em um único webhook.
+        endpoint:
+          type: string
+          description: URL do seu sistema que deverá receber as notificações de evento, o valor não pode se repetir em outro webhook.
+        version:
+          type: number
+          description: Versão da api da Malga que seu webhook implementa
+          default: 1.1
+        status:
+          type: boolean
+          enum:
+          - true
+          - false
+          description: Identifica se o webhooks está ativo ou não para receber notificações de evento da Malga
+          default: true
+      required:
+      - event
+      - endpoint
+      - version
+      - status
+  examples:
+    Webhook:
+      value:
+        id: 31c142ad-4c30-4964-ba24-2df0f2bbb745
+        event: transaction.authorized
+        endpoint: https://enuqkxq2lu8be0y.m.pipedream.net
+        version: 1.1
+        publicKey: '-----BEGIN PUBLIC KEY-----
+
+          MCowBQYDK2VwAyEAnFQSIT7Mwg5QLeJLAwhAJx9wS+XsQvnyph/Lz7AJyQA=
+
+          -----END PUBLIC KEY-----
+
+          '
+        status: true
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        createdAt: '2021-07-06T21:03:36.590Z'
+        updatedAt: '2021-07-06T21:03:36.590Z'
+    CreateWebhookRequest:
+      value:
+        event: transaction.authorized
+        endpoint: https://enuqkxq2lu8be0y.m.pipedream.net
+        version: 1.1
+        status: true
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos

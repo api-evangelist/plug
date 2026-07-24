@@ -1,0 +1,1015 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Customers API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Customers
+  description: '
+
+    Através da API de `customers` é possível realizar a criação, edição, listagem e exclusão de dados de compradores para uso nos serviços de tokenização de cartões, cobrança por PIX, Boleto, uso em análise de motores de antifraude e recorrência.
+
+
+    *A fim de manter maior integridade dos dados, as informações de email e documento (CPF/CNJP) são únicos para customers na sua conta Malga, não podendo existir dois compradores iguais.*
+
+
+    ### Consulte a [tabela de tipos de paises e documentos suportados](#section/Tabela-tipos-de-paises-e-documentos-cadastro-de-Customer) para criação de customer
+
+    '
+paths:
+  /v1/customers:
+    post:
+      summary: Criação de novo customer para cobrança
+      operationId: createCustomer
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerRequest'
+            examples:
+              CustomerRequest:
+                $ref: '#/components/examples/CustomerRequest'
+      responses:
+        '201':
+          description: Created.
+      tags:
+      - Customers
+    get:
+      summary: Listagem de customers cadastrados
+      operationId: ListCustomers
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: number
+        required: false
+        description: Número da página
+      - in: query
+        name: limit
+        schema:
+          type: number
+        required: false
+        description: Quantidade de itens por página
+      - in: query
+        name: sort
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+        required: false
+        description: Ordenação dos itens
+      - in: query
+        name: id
+        schema:
+          type: string
+        required: false
+        description: Identificador de um customer
+      - in: query
+        name: document.type
+        schema:
+          type: string
+        required: false
+        description: Tipo de documento
+      - in: query
+        name: document.number
+        schema:
+          type: string
+        required: false
+        description: Número do documento
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Customer'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Customers
+  /v1/customers/{id}:
+    get:
+      summary: Recuperar detalhes de customer
+      operationId: getCustomer
+      parameters:
+      - name: id
+        required: true
+        description: Id do customers que deseja recuperar
+        in: path
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+              examples:
+                Customer:
+                  $ref: '#/components/examples/Customer'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Customers
+    delete:
+      operationId: deleteCustomer
+      summary: Deletar customer pelo id
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id do customers que deseja deletar
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: ''
+      tags:
+      - Customers
+    patch:
+      operationId: updateCustomer
+      summary: Atualizar customer pelo id
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id do customers que deseja alterar
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCustomerRequest'
+      responses:
+        '200':
+          description: The record has been successfully updated.
+      tags:
+      - Customers
+  /v1/customers/{customer_id}/cards:
+    post:
+      operationId: linkCard
+      summary: Adicionar cartão de crédito ao customer
+      parameters:
+      - name: customer_id
+        required: true
+        description: Id do customers que deseja alterar
+        in: path
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkCardRequest'
+            examples:
+              LinkCardRequest:
+                $ref: '#/components/examples/LinkCardRequest'
+      responses:
+        '204':
+          description: The card has been linked successfully.
+      tags:
+      - Customers
+    get:
+      summary: Listagem dos cartões do customer
+      operationId: getCustomerCards
+      parameters:
+      - name: customer_id
+        required: true
+        in: path
+        description: Id do customers que deseja alterar
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerCardList'
+              examples:
+                CustomerCardList:
+                  $ref: '#/components/examples/CustomerCardList'
+      tags:
+      - Customers
+components:
+  schemas:
+    Document:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Tipo de documento, consultar tabela de tipos suportados
+        number:
+          type: string
+          description: Número do documento formato conforme tipo selecionado
+        country:
+          type: string
+          description: Pais de emissão do documento, Padrão ISO 3166-1 alpha-2, consultar tabela de tipos suportados
+          default: BR
+          enum:
+          - AL
+          - AD
+          - AR
+          - AT
+          - AU
+          - BA
+          - BZ
+          - BE
+          - BG
+          - BR
+          - BY
+          - CA
+          - CU
+          - CY
+          - CZ
+          - CH
+          - CL
+          - CN
+          - CO
+          - CR
+          - DE
+          - DK
+          - DO
+          - EC
+          - EE
+          - SV
+          - GT
+          - FI
+          - FR
+          - GB
+          - GR
+          - HR
+          - HK
+          - HU
+          - IS
+          - ID
+          - IE
+          - IN
+          - IL
+          - IT
+          - LI
+          - LT
+          - LU
+          - LV
+          - MK
+          - MC
+          - MD
+          - MT
+          - MU
+          - JP
+          - KR
+          - MX
+          - ME
+          - MY
+          - NL
+          - NZ
+          - 'NO'
+          - PY
+          - PE
+          - PK
+          - PL
+          - PT
+          - RU
+          - RO
+          - SM
+          - RS
+          - SE
+          - SG
+          - TH
+          - TW
+          - TR
+          - SI
+          - SK
+          - ES
+          - UY
+          - UA
+          - US
+          - VE
+          - VN
+          - ZA
+      required:
+      - type
+      - number
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    MetaPagination:
+      properties:
+        itemCount:
+          type: integer
+          description: Quantidade de itens na página
+        totalItems:
+          type: integer
+          description: Quantidade total de itens na consulta (esse valor é mantido em cache por 5 minutos para melhorar a performance da API)
+        itemsPerPage:
+          type: integer
+          description: Quantidade de itens por página
+        totalPages:
+          type: integer
+          description: Quantidade total de páginas
+        currentPage:
+          type: integer
+          description: Página atual
+    BillingAddress:
+      type: object
+      properties:
+        street:
+          type: string
+          description: Nome da rua/avenida/travessa
+        streetNumber:
+          type: string
+          description: Número onde se localiza o endereço
+        complement:
+          type: string
+          description: Complemento onde se localiza o endereço, caso exista
+        zipCode:
+          type: string
+          description: Código postal CEP
+        country:
+          type: string
+          description: País onde se localiza o endereço - Padrão ISO 3166-1 alpha-2
+          default: BR
+          enum:
+          - AL
+          - AD
+          - AR
+          - AT
+          - AU
+          - BA
+          - BZ
+          - BE
+          - BG
+          - BR
+          - BY
+          - CA
+          - CU
+          - CY
+          - CZ
+          - CH
+          - CL
+          - CN
+          - CO
+          - CR
+          - DE
+          - DK
+          - DO
+          - EC
+          - EE
+          - SV
+          - GT
+          - FI
+          - FR
+          - GB
+          - GR
+          - HR
+          - HK
+          - HU
+          - IS
+          - ID
+          - IE
+          - IN
+          - IL
+          - IT
+          - LI
+          - LT
+          - LU
+          - LV
+          - MK
+          - MC
+          - MD
+          - MT
+          - MU
+          - JP
+          - KR
+          - MX
+          - ME
+          - MY
+          - NL
+          - NZ
+          - 'NO'
+          - PY
+          - PE
+          - PK
+          - PL
+          - PT
+          - RU
+          - RO
+          - SM
+          - RS
+          - SE
+          - SG
+          - TH
+          - TW
+          - TR
+          - SI
+          - SK
+          - ES
+          - UY
+          - UA
+          - US
+          - VE
+          - VN
+          - ZA
+        state:
+          type: string
+          description: Estado onde se localiza o endereço
+        city:
+          type: string
+          description: Cidade onde se localiza o endereço
+        district:
+          type: string
+          description: Bairro onde se localiza o endereço
+    DeliveryAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          description: País onde se localiza o endereço - Padrão ISO 3166-1 alpha-2
+          default: BR
+          enum:
+          - AL
+          - AD
+          - AR
+          - AT
+          - AU
+          - BA
+          - BZ
+          - BE
+          - BG
+          - BR
+          - BY
+          - CA
+          - CU
+          - CY
+          - CZ
+          - CH
+          - CL
+          - CN
+          - CO
+          - CR
+          - DE
+          - DK
+          - DO
+          - EC
+          - EE
+          - SV
+          - GT
+          - FI
+          - FR
+          - GB
+          - GR
+          - HR
+          - HK
+          - HU
+          - IS
+          - ID
+          - IE
+          - IN
+          - IL
+          - IT
+          - LI
+          - LT
+          - LU
+          - LV
+          - MK
+          - MC
+          - MD
+          - MT
+          - MU
+          - JP
+          - KR
+          - MX
+          - ME
+          - MY
+          - NL
+          - NZ
+          - 'NO'
+          - PY
+          - PE
+          - PK
+          - PL
+          - PT
+          - RU
+          - RO
+          - SM
+          - RS
+          - SE
+          - SG
+          - TH
+          - TW
+          - TR
+          - SI
+          - SK
+          - ES
+          - UY
+          - UA
+          - US
+          - VE
+          - VN
+          - ZA
+        state:
+          type: string
+          description: Estado onde se localiza o endereço
+        city:
+          type: string
+          description: Cidade onde se localiza o endereço
+        district:
+          type: string
+          description: Bairro onde se localiza o endereço
+        zipCode:
+          type: string
+          description: Código postal CEP
+        street:
+          type: string
+          description: Nome da rua/avenida/travessa
+        streetNumber:
+          type: string
+          description: Número onde se localiza o endereço
+        complement:
+          type: string
+          description: Complemento onde se localiza o endereço, caso exista
+    LinkCardRequest:
+      required:
+      - cardId
+      properties:
+        cardId:
+          type: string
+          description: Identificador do cartão a ser associado
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador do customer
+        createdAt:
+          type: string
+          description: Data de criação
+        clientId:
+          type: string
+          format: uuid
+          description: Identificador do client
+        name:
+          type: string
+          description: Nome do usuario
+        email:
+          type: string
+          description: Email do usuario
+        phoneNumber:
+          type: string
+          description: Telefones de contato do usuario
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+    UpdateCustomerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nome do usuario
+        phoneNumber:
+          type: string
+          description: Telefone de contato do usuario
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          description: Nome da rua/avenida/travessa
+        streetNumber:
+          type: string
+          description: Número onde se localiza o endereço
+        complement:
+          type: string
+          description: Complemento onde se localiza o endereço, caso exista
+        zipCode:
+          type: string
+          description: Codigo postal CEP
+        country:
+          type: string
+          description: Pais onde se localiza o endereço - Padrão ISO 3166-1 alpha-2
+          default: BR
+          enum:
+          - AL
+          - AD
+          - AR
+          - AT
+          - AU
+          - BA
+          - BZ
+          - BE
+          - BG
+          - BR
+          - BY
+          - CA
+          - CU
+          - CY
+          - CZ
+          - CH
+          - CL
+          - CN
+          - CO
+          - CR
+          - DE
+          - DK
+          - DO
+          - EC
+          - EE
+          - SV
+          - GT
+          - FI
+          - FR
+          - GB
+          - GR
+          - HR
+          - HK
+          - HU
+          - IS
+          - ID
+          - IE
+          - IN
+          - IL
+          - IT
+          - LI
+          - LT
+          - LU
+          - LV
+          - MK
+          - MC
+          - MD
+          - MT
+          - MU
+          - JP
+          - KR
+          - MX
+          - ME
+          - MY
+          - NL
+          - NZ
+          - 'NO'
+          - PY
+          - PE
+          - PK
+          - PL
+          - PT
+          - RU
+          - RO
+          - SM
+          - RS
+          - SE
+          - SG
+          - TH
+          - TW
+          - TR
+          - SI
+          - SK
+          - ES
+          - UY
+          - UA
+          - US
+          - VE
+          - VN
+          - ZA
+        state:
+          type: string
+          description: Estado onde se localiza o endereço
+        city:
+          type: string
+          description: Cidade onde se localiza o endereço
+        district:
+          type: string
+          description: Bairro onde se localiza o endereço
+      required:
+      - street
+      - streetNumber
+      - zipCode
+      - country
+      - state
+      - city
+      - district
+    CustomerCardList:
+      properties:
+        meta:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/MetaPagination'
+        items:
+          type: array
+          allOf:
+          - $ref: '#/components/schemas/Card'
+    NetworkToken:
+      properties:
+        id:
+          type: string
+          description: Identificador do token
+        status:
+          type: string
+          description: Status atual do token
+          enum:
+          - failed
+          - active
+          - suspended
+          - deleted
+        type:
+          type: string
+          description: Tipo de token externo
+          enum:
+          - network_token
+        providerType:
+          type: string
+          description: Provedor de tokenização usado
+        updatedAt:
+          type: string
+          description: Última data de atualização do token
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    CreateCustomerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nome do usuario
+        email:
+          type: string
+          description: Email do usuario
+        phoneNumber:
+          type: string
+          description: Telefone de contato do usuario
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+        billingAddress:
+          allOf:
+          - $ref: '#/components/schemas/BillingAddress'
+        deliveryAddress:
+          allOf:
+          - $ref: '#/components/schemas/DeliveryAddress'
+      required:
+      - name
+      - phoneNumber
+      - email
+      - document
+    Card:
+      properties:
+        id:
+          type: string
+          description: ID do cartão
+        expirationMonth:
+          type: string
+          description: Data de expiração MM
+        expirationYear:
+          type: string
+          description: Data de expiração YYYY
+        brand:
+          type: string
+          enum:
+          - American Express
+          - Mastercard
+          - Visa
+          - Elo
+          - Discover
+          - JCB
+          - Diners
+          description: Bandeira
+        cvvChecked:
+          type: boolean
+          description: Identifica se o CVV foi verificado
+        fingerprint:
+          type: string
+          description: Hash de identificação única do cartão com base nos dados sensíveis
+        first6digits:
+          type: string
+          description: Primeiros 6 digitos do cartão
+        last4digits:
+          type: string
+          description: Últimos 4 digitos do cartão
+        status:
+          type: string
+          enum:
+          - failed
+          - active
+          - pending
+          description: Status de validação dos dados cartões, failed (cartão inválido para uso), active (cartão válido para uso), pending (validação do cartão pendente, uso autorizado temporariamente)
+        statusReason:
+          type: string
+          description: Contém uma string com um breve descritivo informando o motivo do status do cartão. Em alguns casos uma string vazia é retornada.
+        createdAt:
+          type: string
+          description: Data de criação do cartão
+        updatedAt:
+          type: string
+          description: Data de atualização do cartão
+        customer:
+          allOf:
+          - $ref: '#/components/schemas/Customer'
+        tokens:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkToken'
+          description: Lista de tokens externos associados ao cartão
+  examples:
+    Customer:
+      value:
+        id: 82aba896-9e37-45b6-aa90-d510c9050596
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        createdAt: 2012-06-30 23:59:59 +0000
+        name: Customer test
+        email: jose2@gmail.com
+        document:
+          number: '97055503019'
+          type: cpf
+          country: BR
+        phoneNumber: 21 98889999099
+        address:
+          country: BR
+          state: Rio de Janeiro
+          city: Rio de Janeiro
+          district: Leblon
+          zipCode: '25650011'
+          street: Av Geraldo Cardoso
+          streetNumber: '205'
+          complement: Apto 203
+    CustomerRequest:
+      value:
+        name: Customer test
+        email: jose2@gmail.com
+        phoneNumber: 21 98889999099
+        document:
+          number: '97055503019'
+          type: cpf
+          country: BR
+        address:
+          country: BR
+          state: Rio de Janeiro
+          city: Rio de Janeiro
+          district: Leblon
+          zipCode: '25650011'
+          street: Av Geraldo Cardoso
+          streetNumber: '205'
+          complement: Apto 203
+        billingAddress:
+          country: BR
+          state: Rio de Janeiro
+          city: Rio de Janeiro
+          district: Leblon
+          zipCode: '25650011'
+          street: Av Geraldo Cardoso
+          streetNumber: '205'
+          complement: Apto 203
+        deliveryAddress:
+          country: BR
+          state: Rio de Janeiro
+          city: Rio de Janeiro
+          district: Leblon
+          zipCode: '25650011'
+          street: Av Geraldo Cardoso
+          streetNumber: '205'
+          complement: Apto 203
+    CustomerCardList:
+      value:
+        meta:
+          itemCount: 10
+          totalItems: 20
+          itemsPerPage: 10
+          totalPages: 5
+          currentPage: 2
+        items:
+        - id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+          customerId: 82aba896-9e37-45b6-aa90-d510c9050596
+          clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+          expirationMonth: '12'
+          expirationYear: '2026'
+          brand: Visa
+          cvvChecked: true
+          fingerprint: cbd4a441-c63c-4dee-ac6b-bfa7fa1df818
+          first6digits: '401959'
+          last4digits: '9339'
+          createdAt: 2012-06-30 23:59:59 +0000
+          status: active
+    LinkCardRequest:
+      value:
+        cardId: 82aba896-9e37-45b6-aa90-d510c9050596
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos

@@ -1,0 +1,4604 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Charges API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Charges
+  description: '
+
+    Para realizar uma cobrança deve criar um objeto `charge`. É possível recuperar detalhes de transações individuais ou listar todas as cobranças realizadas em um determinado `merchant`. Os `charges` são identificados a partir de um id ''único''.
+
+
+    **Dados básicos de um objeto do tipo charge**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Charge" exampleRef="#/components/examples/ChargeCard" />
+
+    '
+paths:
+  /v1/charges:
+    post:
+      tags:
+      - Charges
+      summary: Realizar nova cobrança
+      operationId: charge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeRequest'
+            examples:
+              ChargeCardExample:
+                $ref: '#/components/examples/ChargeCardRequest'
+              ChargePixExample:
+                $ref: '#/components/examples/ChargePixRequest'
+              ChargeBoletoExample:
+                $ref: '#/components/examples/ChargeBoletoRequest'
+              ChargeSplitExample:
+                $ref: '#/components/examples/ChargeSplitRequest'
+              ChargeSplitPixExample:
+                $ref: '#/components/examples/ChargeSplitRequestPix'
+              ChargeSplitBoletoExample:
+                $ref: '#/components/examples/ChargeSplitRequestBoleto'
+              ChargeVendorExample:
+                $ref: '#/components/examples/ChargeVendorExample'
+              Charge3DS2Example:
+                $ref: '#/components/examples/Charge3DS2Request'
+              Charge3DSMPIExterno:
+                $ref: '#/components/examples/Charge3DSMPIExterno'
+              Charge3DSMalgaExample:
+                $ref: '#/components/examples/Charge3DSMalgaRequest'
+              ChargeNupayExample:
+                $ref: '#/components/examples/ChargeNupayRequest'
+              ChargePicpayExample:
+                $ref: '#/components/examples/ChargePicpayRequest'
+              ChargeDripExample:
+                $ref: '#/components/examples/ChargeDripRequest'
+              ChargeVoucherExample:
+                $ref: '#/components/examples/ChargeVoucherRequest'
+              ChargeApplePayCardExample:
+                $ref: '#/components/examples/ChargeApplePayRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+              examples:
+                ChargeCard:
+                  $ref: '#/components/examples/ChargeCard'
+                ChargePix:
+                  $ref: '#/components/examples/ChargePix'
+                ChargeBoleto:
+                  $ref: '#/components/examples/ChargeBoleto'
+                ChargeSplit:
+                  $ref: '#/components/examples/ChargeSplit'
+                ChargeSplitPix:
+                  $ref: '#/components/examples/ChargeSplitPix'
+                ChargeSplitBoleto:
+                  $ref: '#/components/examples/ChargeSplitBoleto'
+                ChargeCard3DSecure2:
+                  $ref: '#/components/examples/ChargeCard3DSecure2'
+                ChargeCard3DSMalga:
+                  $ref: '#/components/examples/ChargeCard3DSMalga'
+                ChargeNupay:
+                  $ref: '#/components/examples/ChargeNupay'
+                ChargePicpay:
+                  $ref: '#/components/examples/ChargePicpay'
+                ChargeDrip:
+                  $ref: '#/components/examples/ChargeDrip'
+                ChargeVoucher:
+                  $ref: '#/components/examples/ChargeVoucher'
+                ChargeApplePayResponse:
+                  $ref: '#/components/examples/ChargeApplePayResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+      - Charges
+      summary: Listar cobranças
+      operationId: getCharges
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: number
+        required: false
+        description: Número da página ativa
+      - in: query
+        name: limit
+        schema:
+          type: number
+        required: false
+        description: Quantidade de registros por página 1-100
+      - in: query
+        name: sort
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+        required: false
+        description: Tipo de ordenação decrescente ou crescente
+      - in: query
+        name: merchantId
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: Id do merchant processado na cobrança
+      - in: query
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: Id da cobrança
+      - in: query
+        name: sessionId
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: Id da sessão vinculada à cobrança
+      - in: query
+        name: originalAmount
+        schema:
+          type: number
+        required: false
+        description: Valor em centavos da cobrança
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - pending
+          - pre_authorized
+          - authorized
+          - voided
+          - refund_pending
+          - canceled
+          - charged_back
+          - capture_pending
+        required: false
+        description: Status da cobrança
+      - in: query
+        name: paymentType
+        schema:
+          type: string
+          enum:
+          - credit
+          - pix
+          - boleto
+        required: false
+        description: Tipo de pagamento
+      - in: query
+        name: orderId
+        schema:
+          type: string
+        required: false
+        description: Id da cobrança gerado pelo cliente
+      - in: query
+        name: created
+        schema:
+          type: string
+        required: false
+        description: Registros criados em uma data específica
+        example: '2022-03-12T12:43:53'
+      - in: query
+        name: created.gt
+        schema:
+          type: string
+        required: false
+        description: Registros com data maior que
+        example: '2022-03-12T12:43:53'
+      - in: query
+        name: created.lt
+        schema:
+          type: string
+        required: false
+        description: Registros com data menor que
+        example: '2022-03-12T12:43:53'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeList'
+              examples:
+                ChargeList:
+                  $ref: '#/components/examples/ChargeList'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/charges/{id}:
+    get:
+      tags:
+      - Charges
+      summary: Recuperar detalhes de cobrança
+      operationId: getChargesByid
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+        description: Id da cobrança que deseja recuperar
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+              examples:
+                ChargeCard:
+                  $ref: '#/components/examples/ChargeCard'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - Charges
+      summary: Alterar o status de uma cobrança no ambiente de sandbox
+      operationId: changeStatusTransaction
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+        description: Id da cobrança que deseja alterar no sandbox
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeStatusTransaction'
+            example:
+              status: charged_back
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+              examples:
+                ChargeCard:
+                  $ref: '#/components/examples/ChargeCard'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/charges/{id}/antifraud:
+    patch:
+      tags:
+      - Charges
+      summary: Alterar o status do antifraude no ambiente de sandbox
+      operationId: changeAntifraudStatusTransaction
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+        description: Id da cobrança que deseja alterar no sandbox
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeAntifraudStatusTransaction'
+            example:
+              status: approved
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+              examples:
+                ChargeCard:
+                  $ref: '#/components/examples/ChargeCard'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/charges/{id}/capture:
+    post:
+      tags:
+      - Charges
+      summary: Capturar cobrança pre-autorizada
+      operationId: captureCharge
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+        description: Id da cobrança que deseja capturar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaptureRequest'
+            example:
+              amount: 150
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+              examples:
+                ChargeCard:
+                  $ref: '#/components/examples/ChargeCard'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/charges/{id}/void:
+    post:
+      tags:
+      - Charges
+      summary: Estornar cobrança aprovada
+      operationId: refundCharge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoidRequest'
+            example:
+              amount: 150
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+        description: Id da cobrança que deseja estornar
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+              examples:
+                ChargeCard:
+                  $ref: '#/components/examples/ChargeCard'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    VendorCharge:
+      type: object
+      description: Parâmetros adicionais para transacionar com `vendors`
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador do vendedor já cadastrado na API de [vendors](/api-reference/vendors/criacao-de-um-novo-vendedor)
+        paymentFacilitatorId:
+          type: string
+          description: Seu código de Subadquirente na respectiva bandeira. [Verifique a lista de provedores suportados](/documentations/vendors/provedores)
+          nullable: true
+      required:
+      - id
+      - paymentFacilitatorId
+    3DSecure2ShippingAddress:
+      type: object
+      properties:
+        city:
+          type: string
+          description: Cidade
+        country:
+          type: string
+          description: Padrão ISO 3166-1 alpha-2
+        streetNumber:
+          type: string
+          description: Número da rua
+        zipCode:
+          type: string
+          description: Codigo postal CEP
+        state:
+          type: string
+          description: Estado
+        street:
+          type: string
+          description: Rua
+      required:
+      - city
+      - country
+      - streetNumber
+      - zipCode
+      - state
+      - street
+    3DSecure2Request:
+      type: object
+      properties:
+        setupId:
+          type: string
+          description: Id da sessão de autenticação Malga, utilizado somente para 3DS2 Malga
+        dataOnly:
+          type: boolean
+          description: Quando true, apenas coleta os dados 3DS sem realizar a autenticação
+        requiresLiabilityShift:
+          type: boolean
+          description: Indica a ocorrência de mudança de responsabilidade
+        redirectURL:
+          type: string
+          description: URL para redirecionamento de autenticação. Este campo não é obrigatório caso o objeto MPI seja enviado.
+        requestorURL:
+          type: string
+          description: URL de origem da requisição. Este campo não é obrigatório caso o objeto MPI seja enviado.
+        browser:
+          description: Informações sobre o navegador do usuário. Este campo não é obrigatório caso o objeto MPI seja enviado.
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2browser'
+        billingAddress:
+          description: Endereço de cobrança
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2BillingAddress'
+        shippingAddress:
+          description: Endereço para envio
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2ShippingAddress'
+        cardHolder:
+          description: Dados do portador do cartão
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2CardHolder'
+        mpi:
+          description: Campo usado para autenticação com mpi externa
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2MPI'
+      required:
+      - redirectURL
+      - requestorURL
+      - browser
+    PixItem:
+      properties:
+        id:
+          type: string
+          description: Id do item a ser pago com Pix
+        title:
+          type: string
+          description: Descrição do item a ser pago com Pix
+        unitPrice:
+          type: string
+          description: Valor do item a ser pago com Pix
+        quantity:
+          type: array
+          description: Quantidade de itens a serem pagos com Pix
+    FraudAnalysisCustomerBrowser:
+      type: object
+      properties:
+        browserFingerprint:
+          type: string
+          description: Fingerprint gerado do navegador
+        cookiesAccepted:
+          type: boolean
+          description: Indica se os cookies foram aceitados
+        email:
+          type: string
+          description: E-mail logado no navegador
+        hostName:
+          type: string
+          description: Nome do host do usuário
+        ipAddress:
+          type: string
+          description: Endereço de ip do usuário
+        type:
+          type: string
+          description: User-agent do browser
+    PaymentMethodCardObject:
+      title: Cartão de crédito
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - credit
+          - debit
+          description: Método da cobrança via Cartão Crédito/Débito
+        installments:
+          type: number
+          description: Quantidade de parcelas para cobrança do tipo credito
+        recurrence:
+          type: string
+          enum:
+          - initial
+          - subsequent
+          - unscheduled
+          description: Indica se a transação é recorrente. Pode assumir o valor `initial` (primeira transação recorrente), `subsequent` (transação recorrente que não é a primeira) ou `unscheduled` (cobrança avulsa dentro de contexto de assinatura recorrente para ajustar débitos).
+        threeDS:
+          type: object
+          description: Informações sobre o 3DS2
+          properties:
+            enabled:
+              type: boolean
+              description: Indica se o 3DS2 deve ser utilizado
+            liabilityShiftRequired:
+              type: boolean
+              default: true
+              description: Se verdadeiro, só continuará a cobrança caso haja transferência de responsabilidade pro banco emissor
+      required:
+      - paymentType
+    PaymentMethodDrip:
+      type: object
+      title: Drip
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - drip
+          description: Método da cobrança via Drip
+        maxInstallments:
+          type: number
+          description: Quantidade de parcelas máxima a serem pagos com a Drip
+        browser:
+          description: Informações sobre o navegador do usuário
+          allOf:
+          - $ref: '#/components/schemas/DripBrowser'
+        items:
+          type: array
+          description: Informações sobre itens que estão sendo pagos
+          items:
+            $ref: '#/components/schemas/DripItem'
+        cancelRedirectUrl:
+          type: string
+          description: Link de redirecionamento em caso de cancelamento do pagamento no ambiente de checkout da Drip
+        successRedirectUrl:
+          type: string
+          description: Link de redirecionamento em caso de aprovação do pagamento no ambiente de checkout da Drip
+        firstInstallmentsDate:
+          type: string
+          description: Data para realizar o pagamento da primeira parcela
+        totalInstallments:
+          type: number
+          description: Número total de parcelas para o pagamento
+        finePercentage:
+          type: number
+          description: Porcentagem da multa
+        interestPercentage:
+          type: number
+          description: Porcentagem do juros
+        cancellationFeePercentage:
+          type: number
+          description: Porcentagem para a taxa de cancelamento
+        minutesToExpire:
+          type: integer
+          description: Tempo em minutos para expiração da transação após sua criação
+      required:
+      - paymentType
+    PaymentMethodPicpay:
+      type: object
+      title: Picpay
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - picpay
+          description: Método da cobrança via Picpay
+      required:
+      - paymentType
+    SourceTypeCardCvv:
+      title: Cartão com tokenCvv
+      type: object
+      description: Dados para cobrança por cartão de crédito passando o tokenCvv
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `card` para cobrança em cartão tokenizado
+          enum:
+          - card
+        cardId:
+          type: string
+          format: uuid
+          description: Identificador do cartão quando source tipo card (opcional)
+        tokenCvv:
+          type: string
+          description: Código de verificação da tokenização do cvv do cartão
+      required:
+      - sourceType
+      - cardId
+      - tokenCvv
+    3DSecure2browserResponse:
+      type: object
+      properties:
+        acceptBrowserValue:
+          type: string
+          description: O valor do cabeçalho Accept para o navegador
+        acceptContent:
+          type: string
+          description: O tipo de conteúdo que o navegador aceita
+        acceptHeader:
+          type: string
+          description: O Accept do cabeçalho de requisição HTTP
+        colorDepth:
+          type: number
+          description: A profundidade de cores da tela
+        javaEnabled:
+          type: boolean
+          description: Se Java está habilitado
+        javaScriptEnabled:
+          type: boolean
+          description: Se javaScript está habilitado
+        language:
+          type: string
+          description: A linguagem utilizada pelo sistema do usuário
+        screenHeight:
+          type: number
+          description: Altura da tela
+        screenWidth:
+          type: number
+          description: Largura da tela
+        timeZoneOffset:
+          type: string
+          description: Diferença em minutos do deslocamento de fuso horário entre o UTC e a localidade atual
+        userAgent:
+          type: string
+          description: O User-Agent do cabeçalho de requisição  HTTP
+        ip:
+          type: string
+          description: Endereço de ip do usuário
+    3DSecure2AuthResponse:
+      type: object
+      properties:
+        action:
+          type: string
+          enum:
+          - REDIRECT
+          description: Tipo de ação exigida pelo provedor
+        providerType:
+          type: string
+          enum:
+          - ADYEN
+          description: Nome do provedor
+        responseType:
+          type: string
+          enum:
+          - AUTHENTICATION
+          - AUTHORIZATION
+          description: Identifica a etapa do desafio
+        response:
+          type: object
+          description: O object retornado do provedor com dados para autenticação ou autorização
+    FraudAnalysisMetadata:
+      type: object
+      properties:
+        sla:
+          type: number
+          description: Valor em Minutos de SLA máximo de Análise do Pedido, se houver
+        customer:
+          description: Dados do comprador
+          type: object
+          properties:
+            name:
+              type: string
+              description: Nome do usuario
+            email:
+              type: string
+              description: E-mail do usuario
+            phone:
+              type: string
+              description: Telefone de contato do usuario
+            identityType:
+              type: string
+              description: Tipo de documento, consultar tabela de tipos suportados
+            identity:
+              type: string
+              description: Número do documento formato conforme tipo selecionado
+            registrationDate:
+              type: string
+              description: Data de registro do cliente
+            deliveryAddress:
+              description: Endereço de entrega
+              allOf:
+              - $ref: '#/components/schemas/FraudAnalysisAddress'
+            billingAddress:
+              description: Endereço de cobrança
+              allOf:
+              - $ref: '#/components/schemas/FraudAnalysisAddress'
+        cart:
+          description: Detalhe do carrinho de produtos
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Nome do item/evento
+                  quantity:
+                    type: integer
+                    description: Quantidade de itens do pedido
+                  sku:
+                    type: string
+                    description: Identificador único do item na loja
+                  unitPrice:
+                    type: integer
+                    description: Valor unitário do item/evento em centavos
+                  risk:
+                    type: string
+                    description: Definição do indice de risco do item
+                    enum:
+                    - High
+                    - Low
+                  description:
+                    type: string
+                    description: Descrição do item/evento
+                  categoryId:
+                    type: string
+                    description: Categoria a qual o item/evento pertence
+                  locality:
+                    type: string
+                    description: Definição de local, em caso de evento
+                  date:
+                    type: string
+                    description: Definição de data, em caso de evento
+                  type:
+                    type: number
+                    description: Definição de tipo, em caso de evento
+                  genre:
+                    type: string
+                    description: Definição do gênero, em caso de evento
+                  tickets:
+                    type: object
+                    description: Informações relacionadas aos ingressos, em caso de evento
+                    properties:
+                      quantityTicketSale:
+                        type: number
+                        description: Quantidade total de ingressos à venda
+                      quantityEventHouse:
+                        type: number
+                        description: Quantidade de vezes que o evento será realizado na casa
+                      convenienceFeeValue:
+                        type: number
+                        description: Taxa de Conveniência
+                      quantityFull:
+                        type: number
+                        description: Quantidade de ingressos com valor integral
+                      quantityHalf:
+                        type: number
+                        description: Quantidade de ingresso com desconto (meia entrada)
+                      batch:
+                        type: number
+                        description: Lote do Ingresso
+                  location:
+                    description: Definição de endereço, em caso de evento
+                    allOf:
+                    - $ref: '#/components/schemas/FraudAnalysisAddress'
+    PaymentMethodVoucher:
+      type: object
+      title: Voucher
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - voucher
+          description: Método da cobrança via Voucher
+        items:
+          type: array
+          description: Informações sobre itens do pedido
+          items:
+            $ref: '#/components/schemas/VoucherItem'
+        customer:
+          type: object
+          description: Informações sobre o cliente
+          allOf:
+          - $ref: '#/components/schemas/VoucherCustomer'
+      required:
+      - paymentType
+    PaymentMethodApplePay:
+      title: Apple Pay
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - apple_pay
+          description: Método da cobrança via Apple Pay
+        installments:
+          type: number
+          description: Quantidade de parcelas para cobrança do tipo Apple Pay crédito
+      required:
+      - paymentType
+    CaptureRequest:
+      properties:
+        amount:
+          type: number
+          description: Valor da captura em centavos não podendo ser maior que o valor da transação, exemplo 100 para cobrar R$ 1,00
+    PaymentMethodCard:
+      type: object
+      title: Cartão
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - credit
+          - voucher
+          description: Método da cobrança via Cartão Crédito/Débito/Voucher
+        installments:
+          type: number
+          description: Quantidade de parcelas para cobrança do tipo credito
+        recurrence:
+          type: string
+          enum:
+          - initial
+          - subsequent
+          - unscheduled
+          description: Indica se a transação é recorrente. Pode assumir o valor `initial` (primeira transação recorrente), `subsequent` (transação recorrente que não é a primeira) ou `unscheduled` (cobrança avulsa dentro de contexto de assinatura recorrente para ajustar débitos).
+      required:
+      - paymentType
+    PaymentMethodDripObject:
+      title: Drip
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - drip
+          description: Método da cobrança via Drip
+        browser:
+          description: Informações sobre o navegador do usuário
+          allOf:
+          - $ref: '#/components/schemas/DripBrowser'
+        items:
+          type: array
+          description: Informações sobre itens que estão sendo pagos
+          items:
+            $ref: '#/components/schemas/DripItem'
+        cancelRedirectUrl:
+          type: string
+          description: Link de redirecionamento em caso de cancelamento do pagamento no ambiente de checkout da Drip
+        successRedirectUrl:
+          type: string
+          description: Link de redirecionamento em caso de aprovação do pagamento no ambiente de checkout da Drip
+        paymentUrl:
+          type: string
+          description: URL para pagamento da cobrança Drip
+      required:
+      - paymentType
+    SourceTypeCard:
+      title: Cartão tokenizado
+      type: object
+      description: Dados para cobrança por cartão de crédito salve
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `card` para cobrança em cartão tokenizado
+          enum:
+          - card
+        cardId:
+          type: string
+          format: uuid
+          description: Identificador do cartão quando source tipo card
+        cardCvv:
+          type: string
+          description: Código de verificação cobrança sem tokenização, deve ser enviado sempre que o comprador estiver presente no momento da compra (opcional)
+      required:
+      - sourceType
+      - cardId
+    Charge:
+      properties:
+        id:
+          type: string
+          description: Identificador da transação
+        clientId:
+          type: string
+          format: uuid
+          description: Identificador do cliente na Malga
+        merchantId:
+          type: string
+          format: uuid
+          description: Identificador do merchant id utilizado na transação
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador do customer id
+        description:
+          type: string
+          description: Descrição da cobrança para consulta futura
+        amount:
+          type: number
+          description: Valor da transação em centavos, exemplo 100 para cobrar R$ 1,00
+        originalAmount:
+          type: number
+          description: Valor da transação em centavos, exemplo 100 para cobrar R$ 1,00
+        currency:
+          type: string
+          description: Identificador da moeda para processamento da cobrança, formato ISO 4217.
+          default: BRL
+        statementDescriptor:
+          type: string
+          description: Descrição a ser exibida na fatura do comprador
+        capture:
+          type: boolean
+          description: Determina se a transação deve ser capturada automaticamente
+        isDispute:
+          type: boolean
+          description: Determina se a transação está em disputa
+        status:
+          type: string
+          description: Status da transação na Malga
+          enum:
+          - pending
+          - pre_authorized
+          - authorized
+          - failed
+          - canceled
+          - voided
+          - charged_back
+          - refund_pending
+          - capture_pending
+        orderId:
+          type: string
+          description: Identificador único da cobrança do lado do cliente para conciliação futura
+        responsibleProviderType:
+          type: string
+          description: Nome do provedor de pagamento responsável pela transação
+        paymentMethod:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodCardObject'
+          - $ref: '#/components/schemas/PaymentMethodPixObject'
+          - $ref: '#/components/schemas/PaymentMethodBoletoObject'
+          - $ref: '#/components/schemas/PaymentMethodNuPayObject'
+          - $ref: '#/components/schemas/PaymentMethodDripObject'
+          - $ref: '#/components/schemas/PaymentMethodVoucherObject'
+          - $ref: '#/components/schemas/PaymentMethodApplePayObject'
+        paymentSource:
+          oneOf:
+          - $ref: '#/components/schemas/SourceTypeCardObject'
+          - $ref: '#/components/schemas/SourceTypeTokenObject'
+          - $ref: '#/components/schemas/SourceTypeCustomerObject'
+          - $ref: '#/components/schemas/SourceTypeWalletObject'
+        createdAt:
+          type: string
+          description: Data de criação do cartão
+        updatedAt:
+          type: string
+          description: Data de atualização do cartão
+        fraudAnalysisMetadata:
+          description: Parâmetros adicionais para analise de fraude
+          allOf:
+          - $ref: '#/components/schemas/FraudAnalysisMetadata'
+        paymentFlow:
+          type: object
+          description: Campos adicionais para uso em condicionais dos fluxos inteligentes
+          properties:
+            metadata:
+              type: object
+              description: Campos adicionais da transação enviados na criação da mesma
+          required:
+          - metadata
+        transactionRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionRequest'
+        threeDSecure2:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2Response'
+        appInfo:
+          type: object
+          description: Informações sobre a rastreabilidade da cobrança
+          allOf:
+          - $ref: '#/components/schemas/AppInfoObject'
+        splitRules:
+          type: array
+          description: Parâmetros adicionais para transacionar com `Split`
+          items:
+            $ref: '#/components/schemas/ChargeSplitRules'
+        platformFee:
+          allOf:
+          - $ref: '#/components/schemas/PlatformFeeAppliedOutput'
+          description: 'Detalhes da taxa de plataforma aplicada na cobrança quando há `splitRules` e o merchant tem platform fee habilitado. Ausente quando não há aplicação de platform fee.
+
+            '
+    VoidRequest:
+      properties:
+        amount:
+          type: number
+          description: Valor do estorno em centavos não podendo ser maior que o valor da transação, exemplo 100 para cobrar R$ 1,00
+        delayToCompose:
+          type: number
+          description: Número de dias para compor o valor a ser estornado. Utilizado apenas pela NuPay.
+        splitRules:
+          type: array
+          description: Parâmetro que indica o valor a ser estornado e seu respectivo recebedor
+          items:
+            $ref: '#/components/schemas/SplitRulesVoid'
+    FraudAnalysisRequest:
+      properties:
+        sla:
+          type: number
+          description: Valor em Minutos de SLA máximo de Análise do Pedido, se houver
+        customer:
+          description: Dados do comprador
+          type: object
+          properties:
+            name:
+              type: string
+              description: Nome do usuario
+            email:
+              type: string
+              description: Email do usuario
+            phone:
+              type: string
+              description: Telefone de contato do usuario
+            identityType:
+              type: string
+              description: Tipo de documento, consultar tabela de tipos suportados
+            identity:
+              type: string
+              description: Número do documento formato conforme tipo selecionado
+            maritalStatus:
+              type: string
+              description: Estado civil do usuario
+            education:
+              type: string
+              description: Nível de escolaridade do usuario
+            registrationDate:
+              type: string
+              description: Data de registro do cliente
+            deliveryAddress:
+              description: Endereço de entrega
+              allOf:
+              - $ref: '#/components/schemas/FraudAnalysisAddress'
+            billingAddress:
+              description: Endereço de cobrança
+              allOf:
+              - $ref: '#/components/schemas/FraudAnalysisAddress'
+            browser:
+              description: Informações sobre o navegador do usuário
+              allOf:
+              - $ref: '#/components/schemas/FraudAnalysisCustomerBrowser'
+        mfa:
+          description: Dados de Multi factor authentication
+          type: object
+          properties:
+            smsOtpUsed:
+              type: boolean
+              description: Usuario utilizou OTP via SMS
+            emailOtpUsed:
+              type: boolean
+              description: Usuario utilizou OTP via email
+        cart:
+          description: Detalhe do carrinho de produtos
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Nome do item/evento
+                  quantity:
+                    type: integer
+                    description: Quantidade de itens do pedido
+                  sku:
+                    type: string
+                    description: Identificador único do item na loja
+                  unitPrice:
+                    type: integer
+                    description: Valor unitário do item/evento em centavos
+                  risk:
+                    type: string
+                    description: Definição do indice de risco do item
+                    enum:
+                    - High
+                    - Low
+                  description:
+                    type: string
+                    description: Descrição do item/evento
+                  categoryId:
+                    type: string
+                    description: Categoria a qual o item/evento pertence
+                  locality:
+                    type: string
+                    description: Definição de local, em caso de evento
+                  date:
+                    type: string
+                    description: Definição de data, em caso de evento
+                  type:
+                    type: number
+                    description: Definição de tipo, em caso de evento
+                  genre:
+                    type: string
+                    description: Definição de gênero, em caso de evento
+                  tickets:
+                    type: object
+                    description: Informações relacionadas aos ingressos, em caso de evento
+                    properties:
+                      quantityTicketSale:
+                        type: number
+                        description: Quantidade total de ingressos à venda
+                      quantityEventHouse:
+                        type: number
+                        description: Quantidade de vezes que o evento será realizado na casa
+                      convenienceFeeValue:
+                        type: number
+                        description: Taxa de Conveniência
+                      quantityFull:
+                        type: number
+                        description: Quantidade de ingressos com valor integral
+                      quantityHalf:
+                        type: number
+                        description: Quantidade de ingresso com desconto (meia entrada)
+                      batch:
+                        type: number
+                        description: Lote do Ingresso
+                  location:
+                    description: Definição de endereço, em caso de evento
+                    allOf:
+                    - $ref: '#/components/schemas/FraudAnalysisAddress'
+        device:
+          description: Detalhes do aparelho do consumidor
+          type: object
+          properties:
+            id:
+              type: string
+              description: Id do dispositivo
+            sessionId:
+              type: string
+              description: ID da sessão
+            os:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Tipo do sistema operacional
+                version:
+                  type: string
+                  description: Versão do sistema operacional
+            model:
+              type: string
+              description: Modelo do aparelho
+            ramCapacity:
+              type: integer
+              description: Capacidade da memória RAM do aparelho
+            diskCapacity:
+              type: integer
+              description: Capacidade de armazenamento do aparelho
+            freeDiskSpace:
+              type: integer
+              description: Quantidade de memória livre
+            resolution:
+              type: integer
+              description: Resolução do aparelho
+            vendors:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name do atributo do fornecedor
+                  value:
+                    type: string
+                    description: Valor do atributo do fornecedor
+            vendorAttributes:
+              description: Atributos do aparelho fornecidos pelo fornecedor
+              type: object
+              properties:
+                flash:
+                  type: boolean
+                  description: Aparelho possui flash
+                phoneCalls:
+                  type: boolean
+                  description: Aparelho pode realizar chamadas
+                sendSms:
+                  type: boolean
+                  description: Aparelho pode enviar sms
+                videoCamera:
+                  type: boolean
+                  description: Aparelho possui camera de video
+                cpuCount:
+                  type: integer
+                  description: Quantidade de cpus
+                simulator:
+                  type: boolean
+                  description: Aparelho possui simulador
+                language:
+                  type: string
+                  description: Lingua do aparelho
+                idiom:
+                  type: string
+                  description: Idioma do aparelho
+                platform:
+                  type: string
+                  description: Plataforma do sistema
+                name:
+                  type: string
+                  description: Nome do aparelho
+                family:
+                  type: string
+                  description: Família do aparelho
+                retinaDisplay:
+                  type: boolean
+                  description: Aparelho possui display de retina
+                camera:
+                  type: boolean
+                  description: Aparelho possui camera
+                model:
+                  type: string
+                  description: Modelo do aparelho
+                frontCamera:
+                  type: boolean
+                  description: Aparelho possui camera frontal
+        airline:
+          description: Detalhes da reserva de passagem aérea
+          type: object
+          properties:
+            passengers:
+              type: array
+              description: Informações sobre os passageiros
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Nome do passageiro
+                  companyMileCard:
+                    type: string
+                    description: Cartão de Milhas da empresa
+                  mileCard:
+                    type: string
+                    description: Cartão de Milhas
+                  identityType:
+                    type: string
+                    description: Tipo de identidade
+                  identityNumber:
+                    type: string
+                    description: Número de identidade
+                  gender:
+                    type: string
+                    description: Gênero do passageiro
+                    enum:
+                    - male
+                    - female
+                  birthdate:
+                    type: string
+                    description: Data de nascimento do passageiro
+            connections:
+              type: array
+              description: Detalhes das conexões de voo
+              items:
+                type: object
+                properties:
+                  company:
+                    type: string
+                    description: Companhia aérea
+                  identificationNumber:
+                    type: integer
+                    description: Número de identificação do voo
+                  date:
+                    type: string
+                    description: Data do voo
+                  seatClass:
+                    type: string
+                    description: Classe do assento
+                  origin:
+                    type: string
+                    description: Aeroporto de origem
+                  destination:
+                    type: string
+                    description: Aeroporto de destino
+                  boarding:
+                    type: string
+                    description: Data de embarque
+                  arriving:
+                    type: string
+                    description: Data de chegada
+                  fareClass:
+                    type: string
+                    description: Classe tarifária
+            reservation:
+              type: string
+              description: Data da reserva de passagem aérea
+        orderOrigin:
+          type: string
+          description: Origem do pedido
+          enum:
+          - app
+          - web
+          - telesales
+          - social_network
+          - other
+        operationalSystem:
+          type: string
+          description: Tipo de sistema operacional do cliente
+        marketplaceType:
+          type: string
+          description: Tipo de mercado
+          enum:
+          - b2b
+          - b2c
+        purchaseInformation:
+          type: object
+          description: Informações sobre o canal de compra
+          properties:
+            lastDateInsertedMail:
+              type: string
+              description: Última data de inserção de e-mail
+            lastDateChangePassword:
+              type: string
+              description: Última data de alteração de senha
+            lastDateChangePhone:
+              type: string
+              description: Última data de alteração de telefone
+            lastDateChangeMobilePhone:
+              type: string
+              description: Última data de alteração de telefone móvel
+            lastDateInsertedAddress:
+              type: string
+              description: Última data de inserção de endereço
+            purchaseLogged:
+              type: boolean
+              description: Indica se a compra foi registrada
+            email:
+              type: string
+              description: Endereço de e-mail do comprador
+            login:
+              type: string
+              description: Nome de usuário do comprador
+        socialNetwork:
+          type: object
+          description: Informações da rede social do comprador
+          properties:
+            optInCompreConfie:
+              type: boolean
+              description: Opt-in para Compre Confie
+            socialNetworkType:
+              type: string
+              description: Tipo de rede social
+              enum:
+              - facebook
+              - twitter
+              - linkedin
+              - google
+              - other
+            authenticationToken:
+              type: string
+              description: Token de autenticação
+        giftList:
+          type: object
+          description: Lista de presentes
+          properties:
+            type:
+              type: string
+              description: Tipo de lista
+              enum:
+              - wishlist
+              - wedding_list
+              - birthday_list
+              - other
+            id:
+              type: string
+              description: Identificador da lista de presentes
+        hotels:
+          type: array
+          description: Informações sobre reservas de hotéis
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Nome do hotel
+              city:
+                type: string
+                description: Cidade do hotel
+              state:
+                type: string
+                description: Estado do hotel
+              country:
+                type: string
+                description: País do hotel
+              reservationDate:
+                type: string
+                description: Data da reserva
+              reserveExpirationDate:
+                type: string
+                description: Data de expiração da reserva
+              checkInDate:
+                type: string
+                description: Data de check-in
+              checkOutDate:
+                type: string
+                description: Data de check-out
+    3DSecure2Response:
+      type: object
+      properties:
+        setupId:
+          type: string
+          description: Id da sessão de autenticação Malga, utilizado somente para 3DS2 Malga
+        dataOnly:
+          type: boolean
+          description: Indica se a transação foi processada apenas para coleta de dados 3DS
+        requiresLiabilityShift:
+          type: boolean
+          description: Indica a ocorrência de mudança de responsabilidade
+        redirectURL:
+          type: string
+          description: URL para redirecionamento de autenticação
+        requestorURL:
+          type: string
+          description: URL de origem da requisição
+        browser:
+          description: Informações sobre o navegador do usuário
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2browserResponse'
+        billingAddress:
+          description: Endereço de cobrança
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2BillingAddressResponse'
+        shippingAddress:
+          description: Endereço para envio
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2ShippingAddressResponse'
+        cardHolder:
+          description: Dados do portador do cartão
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2CardHolderResponse'
+        authData:
+          description: Dados de autenticação do provedor
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2AuthResponse'
+    SourceTypeCardObject:
+      title: Cartão de crédito
+      type: object
+      description: Dados para cobrança por cartão de crédito salve
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança
+          enum:
+          - card
+        cardId:
+          type: string
+          format: uuid
+          description: Identificador do cartão quando source tipo card
+      required:
+      - sourceType
+      - cardId
+    DripBrowser:
+      properties:
+        ipAddress:
+          type: string
+          description: IP do usuário
+        browserFingerprint:
+          type: string
+          description: Fingerprint do navegador utilizado pelo usuário
+    ChargeList:
+      properties:
+        meta:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/MetaPaginationCache'
+        items:
+          type: array
+          allOf:
+          - $ref: '#/components/schemas/Charge'
+    PaymentMethodPix:
+      title: Pix
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - pix
+          description: Método da cobrança via PIX, o source deve ser um customer válido
+        expiresIn:
+          type: number
+          description: Tempo em segundos que define a validade da cobrança
+        additionalInfo:
+          type: array
+          description: Informações adicionais sobre o pagamento
+          items:
+            $ref: '#/components/schemas/PixAdditionalInfo'
+        items:
+          type: array
+          description: Informações sobre itens que estão sendo pagos
+          items:
+            $ref: '#/components/schemas/PixItem'
+      required:
+      - paymentType
+      - expiresIn
+    ChangeAntifraudStatusTransaction:
+      properties:
+        status:
+          type: string
+          description: Status do antifraude
+          enum:
+          - approved
+          - reproved
+          - failed
+    3DSecure2CardHolder:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email
+        mobilePhone:
+          type: string
+          description: Telefone celular
+      required:
+      - email
+    SourceTypeCustomer:
+      title: Cartão com Customer salvo
+      type: object
+      description: Identificador do comprador para cobrança
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `customer` para cobrança no cartão default do comprador
+          enum:
+          - customer
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador do cliente quando source tipo customer, debitando o cartão default do comprador
+        cardCvv:
+          type: string
+          description: Código de verificação cobrança sem tokenização, deve ser enviado sempre que o comprador estiver presente no momento da compra (opcional)
+      required:
+      - sourceType
+      - customerId
+    ChargeRequest:
+      properties:
+        merchantId:
+          type: string
+          format: uuid
+          description: Identificação do merchant id a ser utilizado
+        amount:
+          type: number
+          description: Valor da transação em centavos, exemplo 100 para cobrar R$ 1,00
+        currency:
+          type: string
+          description: Identificador da moeda para processamento da cobrança, formato ISO 4217.
+          default: BRL
+        statementDescriptor:
+          type: string
+          description: Descrição a ser exibida fatura do comprador
+        capture:
+          type: boolean
+          description: Determina se a transação deve ser capturada automaticamente
+          default: false
+        orderId:
+          type: string
+          description: Identificador único da cobrança do lado do cliente para conciliação futura
+        description:
+          type: string
+          description: Descrição da cobrança para consulta futura
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador de comprador para consulta futura
+        paymentMethod:
+          description: Define o método de cobrança
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodCard'
+          - $ref: '#/components/schemas/PaymentMethodPix'
+          - $ref: '#/components/schemas/PaymentMethodBoleto'
+          - $ref: '#/components/schemas/PaymentMethodNuPay'
+          - $ref: '#/components/schemas/PaymentMethodDrip'
+          - $ref: '#/components/schemas/PaymentMethodVoucher'
+          - $ref: '#/components/schemas/PaymentMethodPicpay'
+          - $ref: '#/components/schemas/PaymentMethodApplePay'
+          - $ref: '#/components/schemas/PaymentMethodClickToPay'
+        paymentSource:
+          oneOf:
+          - $ref: '#/components/schemas/SourceTypeCard'
+          - $ref: '#/components/schemas/SourceTypeCardOneShot'
+          - $ref: '#/components/schemas/SourceTypeToken'
+          - $ref: '#/components/schemas/SourceTypeCustomer'
+          - $ref: '#/components/schemas/SourceTypeCustomerData'
+          - $ref: '#/components/schemas/SourceTypeCardCvv'
+          - $ref: '#/components/schemas/SourceTypeApplePay'
+          - $ref: '#/components/schemas/SourceTypeClickToPay'
+        fraudAnalysis:
+          description: Parâmetros adicionais para análise de fraude, necessários para processamento com provedores específicos
+          allOf:
+          - $ref: '#/components/schemas/FraudAnalysisRequest'
+        splitRules:
+          description: Parâmetros adicionais para transacionar com `Split`
+          type: array
+          items:
+            $ref: '#/components/schemas/SplitRule'
+        vendor:
+          allOf:
+          - $ref: '#/components/schemas/VendorCharge'
+        paymentFlow:
+          type: object
+          description: Campos adicionais para uso em condicionais dos fluxos inteligentes
+          properties:
+            metadata:
+              type: object
+              description: Campos adicionais da transação enviados na criação da mesma
+          required:
+          - metadata
+        threeDSecure2:
+          type: object
+          description: Parâmetros adicionais para transacionar com 3D Secure 2
+          allOf:
+          - $ref: '#/components/schemas/3DSecure2Request'
+        appInfo:
+          type: object
+          description: Informações sobre a rastreabilidade da cobrança
+          allOf:
+          - $ref: '#/components/schemas/AppInfoObject'
+      required:
+      - amount
+      - merchantId
+      - paymentMethod
+      - paymentSource
+    PixAdditionalInfo:
+      properties:
+        name:
+          type: string
+          description: Nome da propriedade adicional
+        value:
+          type: string
+          description: Valor da propriedade declarada em `name`
+    PaymentMethodPixObject:
+      title: Pix
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - pix
+          description: Método da cobrança via PIX, o source deve ser um customer válido.
+        expiresIn:
+          type: number
+          description: Tempo em segundos que define a validade da cobrança.
+        qrCodeData:
+          type: string
+          description: Código copia e cola para o QR code dinâmico gerado, pronto para ser pago.
+        qrCodeImageUrl:
+          type: string
+          description: Link para download da imagem do QR code dinâmico gerado, pronto para ser scaneado e pago.
+      required:
+      - paymentType
+      - expiresIn
+      - qrCodeData
+      - qrCodeImageUrl
+    PaymentMethodNuPay:
+      title: NuPay
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - nupay
+          description: Método da cobrança via NuPay
+        delayToAutoCancel:
+          type: integer
+          default: 30
+          description: Tempo em minutos para a expiração de uma cobrança criada que não tenha sido paga
+        orderUrl:
+          type: string
+          description: URL da cobrança
+        returnUrl:
+          type: string
+          description: URL para a qual o cliente será redirecionado após finalizar o pagamento
+        cancelUrl:
+          type: string
+          description: URL para onde o cliente será direcionado caso escolha não finalizar o pagamento e cancele o pedido
+        taxValue:
+          type: integer
+          description: Montante do total de taxas aplicadas em centavos
+        recipients:
+          type: array
+          description: Beneficiários finais da transação NuPay (PLDFT). Campo opcional.
+          items:
+            $ref: '#/components/schemas/NupayRecipient'
+      required:
+      - paymentType
+    3DSecure2CardHolderResponse:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email
+        mobilePhone:
+          type: string
+          description: Telefone celular
+    NupayRecipient:
+      title: Beneficiário final NuPay
+      type: object
+      properties:
+        referenceId:
+          type: string
+          description: Identificador único do beneficiário final
+        name:
+          type: string
+          description: Nome ou razão social do beneficiário final
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+        amount:
+          type: integer
+          description: Valor atribuído ao beneficiário final, em centavos
+      required:
+      - referenceId
+      - name
+      - document
+      - amount
+    PaymentMethodApplePayObject:
+      title: ApplePay
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - apple_pay
+          description: Método da cobrança via Apple Pay
+        installments:
+          type: number
+          description: Quantidade de parcelas para cobrança do tipo apple pay crédito
+      required:
+      - paymentType
+    MetaPaginationCache:
+      properties:
+        itemCount:
+          type: integer
+          description: Quantidade de itens na página
+        totalItems:
+          type: integer
+          description: Quantidade total de itens na consulta (esse valor é cacheado por 5 minutos para melhorar a performance da API)
+        itemsPerPage:
+          type: integer
+          description: Quantidade de itens por página
+        totalPages:
+          type: integer
+          description: Quantidade total de páginas
+        currentPage:
+          type: integer
+          description: Página atual
+    VoucherItem:
+      properties:
+        id:
+          type: string
+          description: Id do item a ser pago com Voucher
+        title:
+          type: string
+          description: Descrição do item a ser pago com Voucher
+        unitPrice:
+          type: string
+          description: Valor unitário do item a ser pago com Voucher
+        quantity:
+          type: array
+          description: Quantidade de itens a serem pagos com Voucher
+    AppInfoPlatform:
+      properties:
+        integrator:
+          type: string
+          description: Nome do parceiro que implementou a integração
+        name:
+          type: string
+          description: Nome do produto
+        version:
+          type: string
+          description: Versão do produto
+      required:
+      - name
+      - version
+    VoucherAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          description: Padrão ISO 3166-1 alpha-2
+        state:
+          type: string
+          description: Estado
+        city:
+          type: string
+          description: Cidade
+        district:
+          type: string
+          description: Bairro
+        zipCode:
+          type: string
+          description: Código postal CEP
+        street:
+          type: string
+          description: Nome da rua/avenida/travessa
+        number:
+          type: string
+          description: Número da rua
+        complement:
+          type: string
+          description: Complemento caso exista
+    SourceTypeCustomerData:
+      title: Pagamentos com dados de Customer
+      type: object
+      description: Dados do customer para cobrança via Cartão, Pix ou Boleto
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `customer` para cobrança via Cartão, Pix ou Boleto
+          enum:
+          - customer
+        customer:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Nome do usuario
+            email:
+              type: string
+              description: Email do usuario
+            phoneNumber:
+              type: string
+              description: Telefone de contato do usuario
+            document:
+              allOf:
+              - $ref: '#/components/schemas/Document'
+            address:
+              allOf:
+              - $ref: '#/components/schemas/Address'
+          required:
+          - email
+          - phoneNumber
+          - document
+      required:
+      - sourceType
+      - customer
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          description: Nome da rua/avenida/travessa
+        streetNumber:
+          type: string
+          description: Número onde se localiza o endereço
+        complement:
+          type: string
+          description: Complemento onde se localiza o endereço, caso exista
+        zipCode:
+          type: string
+          description: Codigo postal CEP
+        country:
+          type: string
+          description: Pais onde se localiza o endereço - Padrão ISO 3166-1 alpha-2
+          default: BR
+          enum:
+          - AL
+          - AD
+          - AR
+          - AT
+          - AU
+          - BA
+          - BZ
+          - BE
+          - BG
+          - BR
+          - BY
+          - CA
+          - CU
+          - CY
+          - CZ
+          - CH
+          - CL
+          - CN
+          - CO
+          - CR
+          - DE
+          - DK
+          - DO
+          - EC
+          - EE
+          - SV
+          - GT
+          - FI
+          - FR
+          - GB
+          - GR
+          - HR
+          - HK
+          - HU
+          - IS
+          - ID
+          - IE
+          - IN
+          - IL
+          - IT
+          - LI
+          - LT
+          - LU
+          - LV
+          - MK
+          - MC
+          - MD
+          - MT
+          - MU
+          - JP
+          - KR
+          - MX
+          - ME
+          - MY
+          - NL
+          - NZ
+          - 'NO'
+          - PY
+          - PE
+          - PK
+          - PL
+          - PT
+          - RU
+          - RO
+          - SM
+          - RS
+          - SE
+          - SG
+          - TH
+          - TW
+          - TR
+          - SI
+          - SK
+          - ES
+          - UY
+          - UA
+          - US
+          - VE
+          - VN
+          - ZA
+        state:
+          type: string
+          description: Estado onde se localiza o endereço
+        city:
+          type: string
+          description: Cidade onde se localiza o endereço
+        district:
+          type: string
+          description: Bairro onde se localiza o endereço
+      required:
+      - street
+      - streetNumber
+      - zipCode
+      - country
+      - state
+      - city
+      - district
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    SourceTypeToken:
+      title: Token
+      type: object
+      description: Dados para cobrança única de token de cartão
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `token` para cobrança no token gerado
+          enum:
+          - token
+        tokenId:
+          type: string
+          format: uuid
+          description: Identificador do token quando source tipo token (opcional)
+      required:
+      - sourceType
+      - tokenId
+    SplitRulesVoid:
+      type: object
+      properties:
+        sellerId:
+          type: string
+          format: uuid
+          description: Identificador do recebedor que participou da transação
+        amount:
+          type: number
+          description: Valor de estorno do recebedor informado
+    PaymentMethodClickToPay:
+      title: Click to Pay
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - click_to_pay
+          description: Método da cobrança via Click to Pay
+        installments:
+          type: number
+          description: Quantidade de parcelas para cobrança do tipo Click to Pay
+      required:
+      - paymentType
+    Document:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Tipo de documento, consultar tabela de tipos suportados
+        number:
+          type: string
+          description: Número do documento formato conforme tipo selecionado
+        country:
+          type: string
+          description: Pais de emissão do documento, Padrão ISO 3166-1 alpha-2, consultar tabela de tipos suportados
+          default: BR
+          enum:
+          - AL
+          - AD
+          - AR
+          - AT
+          - AU
+          - BA
+          - BZ
+          - BE
+          - BG
+          - BR
+          - BY
+          - CA
+          - CU
+          - CY
+          - CZ
+          - CH
+          - CL
+          - CN
+          - CO
+          - CR
+          - DE
+          - DK
+          - DO
+          - EC
+          - EE
+          - SV
+          - GT
+          - FI
+          - FR
+          - GB
+          - GR
+          - HR
+          - HK
+          - HU
+          - IS
+          - ID
+          - IE
+          - IN
+          - IL
+          - IT
+          - LI
+          - LT
+          - LU
+          - LV
+          - MK
+          - MC
+          - MD
+          - MT
+          - MU
+          - JP
+          - KR
+          - MX
+          - ME
+          - MY
+          - NL
+          - NZ
+          - 'NO'
+          - PY
+          - PE
+          - PK
+          - PL
+          - PT
+          - RU
+          - RO
+          - SM
+          - RS
+          - SE
+          - SG
+          - TH
+          - TW
+          - TR
+          - SI
+          - SK
+          - ES
+          - UY
+          - UA
+          - US
+          - VE
+          - VN
+          - ZA
+      required:
+      - type
+      - number
+    PlatformFeeAppliedOutput:
+      type: object
+      description: Snapshot da platform fee aplicada em uma cobrança (retorno transacional).
+      required:
+      - ruleId
+      - paymentMethod
+      - amount
+      - appliedAt
+      properties:
+        ruleId:
+          type: string
+          format: uuid
+          description: Identificador da regra de platform fee aplicada
+        percentage:
+          type: number
+          format: float
+          nullable: true
+          description: Percentual da regra no momento da aplicação (quando houver)
+        fixedAmount:
+          type: integer
+          nullable: true
+          description: Valor fixo da regra em centavos no momento da aplicação (quando houver)
+        paymentMethod:
+          type: string
+          description: Método de pagamento associado à regra aplicada (`credit`, `pix`, `boleto`, `default`, etc.)
+        installment:
+          type: integer
+          minimum: 1
+          maximum: 24
+          nullable: true
+          description: Parcelas informadas na regra aplicável; geralmente preenchido apenas para `credit`
+        amount:
+          type: integer
+          description: Valor calculado da platform fee para a transação, em centavos
+          example: 500
+        appliedAt:
+          type: string
+          format: date-time
+          description: Momento ISO 8601 em que a taxa foi aplicada no transacional
+    ChangeStatusTransaction:
+      properties:
+        status:
+          type: string
+          description: Status da transação
+          enum:
+          - authorized
+          - voided
+          - charged_back
+          - refund_pending
+          - failed
+    3DSecure2BillingAddress:
+      type: object
+      properties:
+        city:
+          type: string
+          description: Cidade
+        country:
+          type: string
+          description: Padrão ISO 3166-1 alpha-2
+        streetNumber:
+          type: string
+          description: Número da rua
+        zipCode:
+          type: string
+          description: Codigo postal CEP
+        state:
+          type: string
+          description: Estado
+        street:
+          type: string
+          description: Rua
+      required:
+      - city
+      - country
+      - streetNumber
+      - zipCode
+      - state
+      - street
+    PaymentMethodBoleto:
+      title: Boleto
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - boleto
+          description: Método da cobrança via Boleto, o source deve ser um customer válido
+        expiresDate:
+          type: string
+          description: Data de vencimento do boleto em ISO-Date, ex 2017-01-31
+          default: 7 dias contados da data atual
+        instructions:
+          type: string
+          nullable: true
+          maxLength: 255
+          description: 'Campo instruções do boleto. Opcional. Quando informado, deve ter entre 1 e 255 caracteres (não é permitida string vazia). Utilize `\n` para quebra de linha. Valores em branco ou acima do limite retornam `400 Bad Request`.
+
+            '
+        interest:
+          type: object
+          description: Informações opcionais da condição de juros para pagamento em atraso
+          properties:
+            days:
+              type: integer
+              description: Dias após a expiração do boleto quando o juros deve ser cobrado.
+            amount:
+              type: integer
+              description: Valor em centavos da taxa de juros que será cobrado ao dia.
+            percentage:
+              type: number
+              description: Valor em porcentagem da taxa de juros que será cobrado ao mês.
+        fine:
+          type: object
+          description: Informações opcionais da condição de multa para pagamento em atraso
+          properties:
+            days:
+              type: integer
+              description: Dias após a expiração do boleto quando a multa deve ser cobrada.
+            amount:
+              type: integer
+              description: Valor em centavos da multa.
+            percentage:
+              type: number
+              description: Valor em porcentagem da multa.
+        items:
+          type: object
+          description: Informações dos itens de pedido
+          properties:
+            id:
+              type: string
+              description: Identificador do item
+            title:
+              type: string
+              description: Descrição do item
+            unitPrice:
+              type: integer
+              description: Valor unitário do item.
+            quantity:
+              type: integer
+              description: Quantidade do item
+      required:
+      - paymentType
+    3DSecure2browser:
+      type: object
+      properties:
+        acceptBrowserValue:
+          type: string
+          description: O valor do cabeçalho Accept para o navegador
+        acceptContent:
+          type: string
+          description: O tipo de conteúdo que o navegador aceita
+        acceptHeader:
+          type: string
+          description: O Accept do cabeçalho de requisição HTTP
+        colorDepth:
+          type: number
+          description: A profundidade de cores da tela
+        javaEnabled:
+          type: boolean
+          description: Se Java está habilitado
+        javaScriptEnabled:
+          type: boolean
+          description: Se javaScript está habilitado
+        language:
+          type: string
+          description: A linguagem utilizada pelo sistema do usuário
+        screenHeight:
+          type: number
+          description: Altura da tela
+        screenWidth:
+          type: number
+          description: Largura da tela
+        timeZoneOffset:
+          type: string
+          description: Diferença em minutos do deslocamento de fuso horário entre o UTC e a localidade atual
+        userAgent:
+          type: string
+          description: O User-Agent do cabeçalho de requisição  HTTP
+        ip:
+          type: string
+          description: Endereço de ip do usuário
+      required:
+      - acceptBrowserValue
+      - acceptContent
+      - acceptHeader
+      - colorDepth
+      - javaEnabled
+      - language
+      - screenHeight
+      - screenWidth
+      - timeZoneOffset
+      - userAgent
+      - ip
+    AppInfoDevice:
+      properties:
+        sessionId:
+          type: string
+          description: ID da sessão
+        name:
+          type: string
+          description: Nome do sistema operacional
+        version:
+          type: string
+          description: Versão do sistema operacional
+      required:
+      - name
+      - version
+    ChargeSplitRules:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador da regra de split
+        createdAt:
+          type: string
+          description: Data de criação da regra de split
+        sellerId:
+          type: string
+          format: uuid
+          description: Identificador do recebedor já cadastrado na API de [sellers](/api-reference/sellers/criacao-de-um-novo-recebedor)
+        percentage:
+          type: number
+          description: Porcentagem do valor da transação que será enviada ao recebedor
+        amount:
+          type: number
+          description: Valor que será enviado ao recebedor
+        processingFee:
+          type: boolean
+          description: Indica se o recebedor vinculado à regra será cobrado pelas taxas da transação
+        chargeEntireFee:
+          type: boolean
+          description: Indica se o recebedor será cobrado pela taxa inteira da transação
+        chargeRemainderFee:
+          type: boolean
+          description: Indica se o recebedor será cobrado pela taxa restante da transação
+        fareFee:
+          type: boolean
+          description: Indica valor em centavos a ser cobrado por transação capturada. É descontado no momento da “montagem” da agenda financeira
+        fareMdr:
+          type: number
+          description: Indica o percentual a ser descontado do valor de uma transação, definido por produto (crédito/débito/boleto), bandeira e faixa de parcelamento
+    AppInfoObject:
+      properties:
+        platform:
+          description: Informações sobre produto das transações (checkout-sdk, vtex, etc..)
+          allOf:
+          - $ref: '#/components/schemas/AppInfoPlatform'
+        device:
+          description: Informações sobre o dispositivo (ios, android, windows, linux)
+          allOf:
+          - $ref: '#/components/schemas/AppInfoDevice'
+        system:
+          description: Informações sobre o sistema proprietário de captura do merchant
+          allOf:
+          - $ref: '#/components/schemas/AppInfoSystem'
+    PaymentMethodVoucherObject:
+      title: Voucher
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - voucher
+          description: Método da cobrança via Voucher
+        items:
+          type: array
+          description: Informações sobre itens do pedido
+          items:
+            $ref: '#/components/schemas/VoucherItem'
+        customer:
+          type: object
+          description: Informações sobre o cliente
+          allOf:
+          - $ref: '#/components/schemas/VoucherCustomer'
+      required:
+      - paymentType
+    SourceTypeWalletObject:
+      title: Wallet
+      type: object
+      description: Dados para cobrança por apple pay
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança
+          enum:
+          - wallet
+        walletPayment:
+          type: string
+          description: Forma de cobrança
+          enum:
+          - credit
+        paymentData:
+          type: object
+          description: Dados da wallet para cobrança
+          properties:
+            data:
+              type: string
+              description: Dados para pagamento em base64
+            signature:
+              type: string
+              description: Assinatura para os dados de pagamento e header
+            version:
+              type: string
+              description: Versão da criptografia
+            header:
+              type: object
+              properties:
+                ephemeralPublicKey:
+                  type: string
+                  description: Chave x.509 em base64
+      required:
+      - sourceType
+      - paymentData
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    PaymentMethodNuPayObject:
+      title: NuPay
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - nupay
+          description: Método da cobrança via NuPay, o source deve ser um customer válido
+        taxValue:
+          type: integer
+          description: Montante do total de taxas aplicadas em centavos
+        delayToAutoCancel:
+          type: integer
+          default: 30
+          description: Tempo em minutos para a expiração de uma cobrança criada que não tenha sido paga
+        orderUrl:
+          type: string
+          description: URL da cobrança
+        returnUrl:
+          type: string
+          description: URL para a qual o cliente será redirecionado após finalizar o pagamento
+        cancelUrl:
+          type: string
+          description: URL para onde o cliente será direcionado caso escolha não finalizar o pagamento e cancele o pedido
+      required:
+      - paymentType
+    TransactionRequest:
+      properties:
+        id:
+          type: string
+          description: Identificador único do request feito ao provedor
+        providerId:
+          type: string
+          format: uuid
+          description: Identificador do provider que processou a requisiçao, consulte a lista de providers configurados na sua conta
+        providerType:
+          type: string
+          description: Código que identifica o provedor, consultar tabela de provedores suportados pela Malga
+        idempotencyKey:
+          type: string
+          description: Chave única de referência gerada pela Malga para cada requisição, utilizada para garantir idempotência e evitar duplicidade no provedor, pode ser também consultada na API ou dashboard do provedor como orderId ou referenceKey no provedor.
+        authorizationNsu:
+          type: string
+          description: Identificador único da transação retornado pelo provider
+        transactionId:
+          type: string
+          description: Identificador único da transação retornado pelo provider, txId, pode ser usado para recuperar a transação nas APIs ou dashboard do provedor
+        requestStatus:
+          type: string
+          enum:
+          - running
+          - failed
+          - success
+          - timeout
+          - internal_error
+          - processing
+          description: Status do processamento da requisição no provider
+        requestType:
+          type: string
+          enum:
+          - pending
+          - authorization
+          - pre_authorization
+          - void
+          - capture
+          - probe
+          - charge_back
+          - zero_dollar
+          - anti_fraud
+          - dispute
+          description: Identifica o tipo da requisição feita para o provider
+        tokenizedPayment:
+          type: boolean
+          description: Identifica se a transação foi processada usando um token externo
+        amount:
+          type: number
+          description: Valor da transação enviada para processamento do provider, em casos de estorno ou captura parcial o valor pode ser diferente do amount original da transação
+        responseTs:
+          type: string
+          description: Tempo de duração do processamento da requisição no provider
+        providerError:
+          type: object
+          description: Detalhes do erro em caso de falha no processamento da transação
+          properties:
+            message:
+              type: string
+              description: Mensagem de erro mapeado pela Malga que descreve o motivo de rejeição retornad
+            declinedCode:
+              type: string
+              description: Codigo de erro mapeado pela Malga com base no tipo de erro apresentado pelo provedor
+            retryable:
+              type: boolean
+              description: Identifica se o tipo de erro permite ou não retentativa
+            networkDeniedReason:
+              type: string
+              description: Código retornado pelo provider que identitifica o motivo da rejeição, consultar o provedor
+            networkDeniedMessage:
+              type: string
+              description: Mensagem de erro retornado pelo provider, consultar o provedor
+        providerAuthorization:
+          type: object
+          description: Dados adicionais do retorno da autorização do provider no processamento da transação
+          properties:
+            networkAuthorizationCode:
+              type: string
+              description: Código de autorização da transação conforme retornado pelo provider
+            networkResponseCode:
+              type: string
+              description: Código de resposta da requisição conforme retornado pelo provider
+        createdAt:
+          type: string
+          description: Data de criação do request feito ao provedor
+        updatedAt:
+          type: string
+          description: Data de atualização do request feito ao provedor
+    SourceTypeTokenObject:
+      title: Cartão tokenizado
+      type: object
+      description: Dados para cobrança única de token de cartão
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `token` para cobrança no token gerado
+          enum:
+          - token
+        tokenId:
+          type: string
+          format: uuid
+          description: Identificador do token quando source tipo token (opcional)
+      required:
+      - sourceType
+      - tokenId
+    AppInfoSystem:
+      properties:
+        name:
+          type: string
+          description: Nome da empresa e/ou plataforma
+        version:
+          type: string
+          description: Versão do software da plataforma
+      required:
+      - name
+      - version
+    VoucherCustomer:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nome do usuário
+        email:
+          type: string
+          description: Email do usuário
+        phone:
+          type: string
+          description: Telefone de contato do usuário
+        identityType:
+          type: string
+          description: Tipo de documento, consultar tabela de tipos suportados
+        identity:
+          type: string
+          description: Número do documento formato conforme tipo selecionado
+        billingAddress:
+          description: Endereço de cobrança
+          allOf:
+          - $ref: '#/components/schemas/VoucherAddress'
+    PaymentMethodBoletoObject:
+      title: Boleto
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - boleto
+          description: Método da cobrança via Boleto, o source deve ser um customer válido
+        expiresDate:
+          type: string
+          description: Data de vencimento do boleto em ISO-Date, ex 2017-01-31
+          default: 7 dias contados da data atual
+        instructions:
+          type: string
+          nullable: true
+          maxLength: 255
+          description: Campo instruções do boleto. Máximo de 255 caracteres. Obs. Utilizar \\n para quebra de linha
+        barcodeData:
+          type: string
+          description: Código copia e cola do boleto registrado gerado, pronto para pagamento;
+        barcodeImageUrl:
+          type: string
+          description: Link para download do do boleto registrado gerado, pronto para pagamento;
+      required:
+      - paymentType
+      - expiresDate
+      - barcodeData
+      - barcodeImageUrl
+    SourceTypeApplePay:
+      title: Apple Pay
+      type: object
+      description: Dados para cobrança por Apple Pay
+      properties:
+        sourceType:
+          type: string
+          description: Origem da cobrança, usar "wallet" para cobrança com carteiras
+          enum:
+          - wallet
+        walletPayment:
+          type: string
+          description: Tipo de pagamento, usar `credit` para cobrança por cartão de crédito
+          enum:
+          - credit
+        paymentData:
+          type: object
+          description: Dados do pagamento disponibilizados pela carteira digital
+          properties:
+            data:
+              type: string
+              description: Base64 com os dados do pagamento criptografados
+            signature:
+              type: string
+              description: Assinatura do pagamento
+            header:
+              type: object
+              description: Cabeçalho do pagamento
+              properties:
+                ephemeralPublicKey:
+                  type: string
+                  description: Ephemeral Public Key
+            version:
+              type: string
+              description: Versão dos tokens de pagamento
+    DripItem:
+      properties:
+        id:
+          type: string
+          description: Id do item a ser pago com Drip
+        title:
+          type: string
+          description: Descrição do item a ser pago com Drip
+        unitPrice:
+          type: string
+          description: Valor do item a ser pago com Drip
+        quantity:
+          type: array
+          description: Quantidade de itens a serem pagos com Drip
+    FraudAnalysisAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          description: Padrão ISO 3166-1 alpha-2
+        state:
+          type: string
+          description: Estado
+        city:
+          type: string
+          description: Cidade
+        district:
+          type: string
+          description: Bairro
+        zipCode:
+          type: string
+          description: Codigo postal CEP
+        street:
+          type: string
+          description: Nome da rua/avenida/travessa
+        number:
+          type: string
+          description: Número da rua
+        complement:
+          type: string
+          description: Complemento caso exista
+    SourceTypeClickToPay:
+      title: Click to Pay
+      type: object
+      description: Dados do Click to Pay
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `click_to_pay` para cobrança via Click to Pay
+          enum:
+          - wallet
+        walletPayment:
+          type: string
+          description: Tipo de pagamento, usar `credit` para cobrança por cartão de crédito
+          enum:
+          - credit
+        walletClickToPay:
+          type: object
+          description: Informações sobre o Click to Pay obtidas pelo SDK da Mastercard
+          properties:
+            dpaId:
+              type: string
+              description: Identificador do Click to Pay
+            correlationId:
+              type: string
+              description: Identificador da correlação do Click to Pay
+            flowId:
+              type: string
+              description: Identificador do fluxo do Click to Pay
+            merchantTransactionId:
+              type: string
+              description: Identificador da transação do Click to Pay
+      required:
+      - sourceType
+      - walletPayment
+      - walletClickToPay
+    SourceTypeCustomerObject:
+      title: Customer
+      type: object
+      description: Identificador do comprador para cobrança
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `customer` para cobrança no cartão default do comprador
+          enum:
+          - customer
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador do cliente quando source tipo customer, debitando o cartão default do comprador
+      required:
+      - sourceType
+      - customerId
+    3DSecure2ShippingAddressResponse:
+      type: object
+      properties:
+        city:
+          type: string
+          description: Cidade
+        country:
+          type: string
+          description: Padrão ISO 3166-1 alpha-2
+        streetNumber:
+          type: string
+          description: Número da rua
+        zipCode:
+          type: string
+          description: Codigo postal CEP
+        state:
+          type: string
+          description: Estado
+        street:
+          type: string
+          description: Rua
+    3DSecure2BillingAddressResponse:
+      type: object
+      properties:
+        city:
+          type: string
+          description: Cidade
+        country:
+          type: string
+          description: Padrão ISO 3166-1 alpha-2
+        streetNumber:
+          type: string
+          description: Número da rua
+        zipCode:
+          type: string
+          description: Codigo postal CEP
+        state:
+          type: string
+          description: Estado
+        street:
+          type: string
+          description: Rua
+    3DSecure2MPI:
+      type: object
+      properties:
+        acsTransactionId:
+          type: string
+          description: ID da transação ACS
+        cavv:
+          type: string
+          description: Cardholder Authentication Verification Value
+        challenged:
+          type: boolean
+          description: Indica se houve challenge
+        directoryServerTransactionId:
+          type: string
+          description: ID da transação do Directory Server
+        eci:
+          type: string
+          description: Electronic Commerce Indicator
+        threeDSServerTransactionId:
+          type: string
+          description: ID da transação do 3DS Server
+        transStatus:
+          type: string
+          description: Status da transação
+        version:
+          type: string
+          description: Versão do protocolo 3DS
+        xid:
+          type: string
+          description: Transaction ID (XID)
+    SplitRule:
+      type: object
+      properties:
+        sellerId:
+          type: string
+          format: uuid
+          description: Identificador do recebedor já cadastrado na API de [sellers](/api-reference/sellers/criacao-de-um-novo-recebedor).
+          example: 5323ece6-816d-11ed-a1eb-0242ac120002
+        percentage:
+          type: integer
+          minimum: 1
+          maximum: 100
+          description: Campo condicional. Percentual do valor da transação que será enviado ao recebedor. Envie exatamente um dos campos, `percentage` ou `amount`, nunca ambos.
+          example: 70
+        amount:
+          type: integer
+          minimum: 1
+          description: Campo condicional. Valor em centavos que será enviado ao recebedor. Envie exatamente um dos campos, `amount` ou `percentage`, nunca ambos.
+          example: 5000
+        processingFee:
+          type: boolean
+          description: Indica se o recebedor vinculado à regra será cobrado pelas taxas da transação.
+          example: false
+        chargeEntireFee:
+          type: boolean
+          description: Indica se o recebedor será cobrado pela taxa inteira da transação. Não pode ser verdadeiro junto com `chargeRemainderFee`.
+          example: false
+        chargeRemainderFee:
+          type: boolean
+          description: Indica se o recebedor será cobrado pela taxa restante da transação.
+          example: false
+        liable:
+          type: boolean
+          description: Indica se o recebedor atrelado assumirá os riscos de chargeback da transação.
+          example: true
+        transactionOwner:
+          type: boolean
+          description: Indica se o recebedor é o responsável pela transação.
+          example: true
+        fares:
+          type: object
+          description: Informações sobre as taxas que serão cobradas do recebedor.
+          properties:
+            mdr:
+              type: number
+              minimum: 0
+              description: Percentual de MDR que será aplicado ao recebedor.
+              example: 2.5
+            fee:
+              type: number
+              minimum: 0
+              description: Taxa fixa que será aplicada ao recebedor.
+              example: 0.3
+      required:
+      - sellerId
+    SourceTypeCardOneShot:
+      title: Cartão one shot
+      type: object
+      description: Dados do cartão para cobrança direta
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `card` para cobrança direta no cartão
+          enum:
+          - card
+        card:
+          type: object
+          properties:
+            cardHolderName:
+              type: string
+              description: Nome do portador do cartão quando cobrança sem tokenização
+            cardNumber:
+              type: string
+              description: Número do cartão quando cobrança sem tokenização
+            cardCvv:
+              type: string
+              description: Código de verificação cobrança sem tokenização
+            cardExpirationDate:
+              type: string
+              description: Mês e ano de validade no formato MM/YYYY quando cobrança sem tokenização
+      required:
+      - sourceType
+      - cardHolderName
+      - cardNumber
+      - cardCvv
+      - cardExpirationDate
+  examples:
+    ChargeCardRequest:
+      summary: Exemplo cobrança Cartão
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: false
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+        paymentSource:
+          sourceType: card
+          card:
+            cardNumber: '5261424250184574'
+            cardCvv: '321'
+            cardExpirationDate: 06/2028
+            cardHolderName: JOAO DA SILVA
+    ChargeBoleto:
+      summary: Exemplo resposta cobrança Boleto
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        createdAt: 2012-06-30 23:59:59 +0000
+        amount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: true
+        status: pending
+        paymentMethod:
+          paymentType: boleto
+          expiresDate: '2021-12-31'
+          barcodeData: '412343241324321431241341'
+          barcodeImageUrl: https://....
+        paymentSource:
+          sourceType: customer
+          customerId: 1cdcf0c9-eb04-4e43-b9b2-b7a4acdead1f
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+          providerType: STRIPE
+          transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+          amount: 1500
+          authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+          providerAuthorization:
+            networkAuthorizationCode: '00'
+            networkResponseCode: ''
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+    ChargeSplitRequestBoleto:
+      summary: Exemplo de cobrança Boleto com Split
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        statementDescriptor: 'Pedido #231 loja joão'
+        description: Descrição longa da cobrança
+        capture: false
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: boleto
+          expiresDate: '2022-12-31'
+          instructions: Instruções para pagamento do boleto
+          interest:
+            days: 1
+            amount: 100
+            percentage: 0.2
+          fine:
+            days: 2
+            amount: 200
+            percentage: 0
+        paymentSource:
+          sourceType: customer
+          customer:
+            name: Customer test
+            email: jose2@gmail.com
+            document:
+              number: '97055503019'
+              type: cpf
+            phoneNumber: 21 98889999099
+        splitRules:
+        - sellerId: 32c68557-902c-408b-b464-cf487c7cda97
+          percentage: 10
+          liable: true
+          processingFee: false
+          chargeEntireFee: true
+          chargeRemainderFee: false
+        - sellerId: 50c68557-802c-408b-b464-cf487c7cda97
+          percentage: 40
+          liable: true
+          processingFee: false
+          chargeEntireFee: false
+          chargeRemainderFee: true
+    ChargeVoucher:
+      summary: Exemplo resposta cobrança Voucher
+      value:
+        id: e98d9db9-5c8e-4aa4-b408-7f0e8c53b4d1
+        clientId: 8b8ef36b-575f-4c74-8642-99e7d1a4b769
+        merchantId: a29d40e6-49d3-4f17-9a2e-20bd96f6b6d3
+        description: Charge description
+        orderId: b7e59eeb-8e23-41d1-99d4-6b7c61a5d8e3
+        createdAt: '2023-11-13T16:54:00.645Z'
+        amount: 100
+        originalAmount: 100
+        currency: BRL
+        statementDescriptor: Voucher
+        capture: false
+        isDispute: false
+        status: authorized
+        paymentMethod:
+          name: Customer test
+          identity: '11111111111'
+          billingAddress:
+            city: São Paulo
+            state: SP
+            country: BR
+            zipCode: '01714140'
+            complement: complement
+          items:
+            id: '123'
+            title: ItemTeste1
+            quantity: 1
+            unitPrice: 100
+          paymentType: voucher
+        paymentSource:
+          sourceType: card
+        transactionRequests:
+          id: b7e59eeb-8e23-41d1-99d4-6b7c61a5d8e3
+          createdAt: '2023-11-13T16:54:00.671Z'
+          updatedAt: '2023-11-13T16:54:01.554Z'
+          idempotencyKey: 43ebbbf7-64ec-4f87-91c0-63a8e3eb12a6
+          providerId: 32c68ff7-902c-408b-b464-cf487c7cda97
+          providerType: PAGARME_V5
+          transactionId: or_lka6LLKSflfOD5z2m
+          amount: 100
+          authorizationCode: '704'
+          authorizationNsu: '88571'
+          requestStatus: success
+          requestType: authorization
+          responseTs: 795ms
+    ChargeSplitRequest:
+      summary: Exemplo de cobrança Cartão com Split
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        statementDescriptor: 'Pedido #231 loja joão'
+        description: Descrição longa da cobrança
+        capture: false
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+        paymentSource:
+          sourceType: card
+          card:
+            cardHolderName: JOAO DA SILVA
+            cardNumber: '5261424250184574'
+            cardCvv: '321'
+            cardExpirationDate: 06/2028
+        splitRules:
+        - sellerId: 32c68557-902c-408b-b464-cf487c7cda97
+          percentage: 10
+          liable: true
+          processingFee: false
+          chargeEntireFee: true
+          chargeRemainderFee: true
+        - sellerId: 50c68557-802c-408b-b464-cf487c7cda97
+          percentage: 40
+          liable: true
+          processingFee: false
+          chargeEntireFee: false
+          chargeRemainderFee: true
+    ChargeDrip:
+      summary: Exemplo resposta cobrança Drip
+      value:
+        id: 4cbF2516-b8c0-4222-a28d-2c7e22a9ebe1
+        clientId: 290f9fcc-2d89-11ee-be56-0242ac120002
+        merchantId: ba3f0dba-905d-4705-9e61-a75d6a6eca5d
+        description: null
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        createdAt: '2022-09-30T21:33:42.955Z'
+        amount: 150
+        originalAmount: 150
+        currency: BRL
+        statementDescriptor: null
+        status: pending
+        paymentMethod:
+          paymentType: drip
+          maxInstallments: 4
+          paymentUrl: https://sandbox-portal.dripapp.com.br/checkouts/75624dd2-a897-4bb7-8f00-b959eb00b38d
+          items:
+          - id": '12345'
+            quantity": 1
+            title": title item
+            unitPrice": 150
+          browser:
+            ipAddress: 127.0.0.1
+            browserFingerprint: cbd4a441-c63c-4dee-ac6b-bfa7fa1df818
+          cancelRedirectUrl: https://service-example.com/cancel
+          successRedirectUrl: https://service-example.com/success
+        paymentSource:
+          sourceType: customer
+          customerId: ae1b1f52-ee01-4014-9eb6-e529dd6d3f5f
+        transactionRequests:
+        - id: 1c57caad-136d-4bc4-a265-c72d408d5ef7
+          createdAt: '2022-09-30T21:33:42.969Z'
+          updatedAt: '2022-09-30T21:33:44.105Z'
+          idempotencyKey: 84d0ed42-0239-4618-b3b9-e31114bba17b
+          providerId: 72cecc64-2079-4128-8cb0-c5a4ed8fa995
+          providerType: DRIP
+          transactionId: 2c57caad-136d-4bc4-a265-c72d408d5ef8
+          amount: 150
+          authorizationCode: 4a87109c-80bc-44da-8170-87bb7d2c52be
+          authorizationNsu: null
+          requestStatus: success
+          requestType: pending
+          responseTs: 1084ms
+          drip:
+            paymentUrl: https://sandbox-portal.dripapp.com.br/checkouts/75624dd2-a897-4bb7-8f00-b959eb00b38d
+            items:
+            - id": '12345'
+              quantity": 1
+              title": title item
+              unitPrice": 150
+            browser:
+              ipAddress: 127.0.0.1
+              browserFingerprint: cbd4a441-c63c-4dee-ac6b-bfa7fa1df818
+            cancelRedirectUrl: https://service-example.com/cancel
+            successRedirectUrl: https://service-example.com/success
+    ChargeSplitBoleto:
+      summary: Exemplo resposta cobrança Boleto e Split
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        description: Descrição longa da cobrança
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        createdAt: '2022-10-04T21:36:21.093Z'
+        amount: 150
+        originalAmount: 150,
+        currency: BRL
+        statementDescriptor: 'Pedido #231 loja joão'
+        capture: false
+        isDispute: false
+        status: pre_authorized
+        paymentMethod:
+          paymentType: boleto
+          expiresDate: '2021-12-31'
+          barcodeData: '412343241324321431241341'
+          barcodeImageUrl: https://....
+        paymentSource:
+          sourceType: customer
+          customerId: 1cdcf0c9-eb04-4e43-b9b2-b7a4acdead1f
+        splitRules:
+        - id: 759af8a1-6f5c-4caf-ae79-98e6aa27b7e9
+          updatedAt: '2022-10-04T20:31:46.776Z'
+          createdAt": '2022-10-04T20:31:46.776Z'
+          sellerId": 32c68557-902c-408b-b464-cf487c7cda97
+          percentage": 10
+          amount": null
+          processingFee": false
+          chargeEntireFee: false
+          chargeRemainderFee: false
+          liable: true
+          fareMdr: null
+          fareFee: null
+        - id: 9873712a-3c3a-49ea-a4b1-c6c167c352c3
+          updatedAt: '2023-10-04T20:31:46.776Z'
+          createdAt": '2023-10-04T20:31:46.776Z'
+          sellerId": 50c68557-802c-408b-b464-cf487c7cda97
+          percentage": 40
+          amount": null
+          processingFee": false
+          chargeEntireFee: true
+          chargeRemainderFee: true
+          liable: true
+          fareMdr: null
+          fareFee: null
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+          providerType: STRIPE
+          transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+          amount: 150
+          authorizationCode: '1560708'
+          authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          providerAuthorization:
+            networkAuthorizationCode: '00'
+            networkResponseCode: ''
+        appInfo:
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+          platform:
+            name: pluging-vtex-ppp
+            version: '1.12'
+            integrator: malga
+    ChargeCard3DSecure2:
+      summary: Exemplo resposta cobrança por cartão 3D Secure 2
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        createdAt: 2012-06-30 23:59:59 +0000
+        amount: 150
+        currency: BRL
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: false
+        isDispute: false
+        status: pre_authorized
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+        paymentSource:
+          sourceType: card
+          cardId: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+          providerType: STRIPE
+          transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+          amount: 1500
+          authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+          providerAuthorization:
+            networkAuthorizationCode: '00'
+            networkResponseCode: ''
+        threeDSecure2:
+          redirectURL: https://your-company.com/receive
+          requestorURL: https://api/your-company.com
+          browser:
+            acceptHeader: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+            colorDepth: 24
+            javaEnabled: true
+            javaScriptEnabled: true
+            language: BR
+            screenHeight: 1080
+            screenWidth: 1920
+            timeZoneOffset: '180'
+            userAgent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36
+            ip: 0.0.0.0
+          cardHolder:
+            email: cardHolder@email.com
+            mobilePhone: 11 99329899
+          billingAddress:
+            city: Rio de Janeiro
+            country: BR
+            streetNumber: 159
+            zipCode: '2547896'
+            state: RJ
+            street: Av Brasil
+          shippingAddress:
+            city: São Paulo
+            country: BR
+            streetNumber: 59
+            zipCode: '2547896'
+            state: SP
+            street: Rua das Flores
+          authData:
+            action: REDIRECT
+            providerType: ADYEN
+            responseType: AUTHENTICATION
+            response:
+              md: M2RzMi5lZTBiZTgzZTdmZDBlZDk...AkHGAAAA
+              url: https://checkoutshopper.adyen.com/checkoutshopper/threeDS2.shtml?pspReference=863677264398111
+              paReq: BQABAgB-MNl4GsRJSf5EmZE8guLfFQX7Q5Q...L_dRprriZL72QXGCtIPK-Hd
+              termUrl: https://checkoutshopper.adyen.com/checkoutshopper/threeDS/return/H4sIAA...Hf
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+    Charge3DSMalgaRequest:
+      summary: Exemplo cobrança Cartão e 3D Secure 2
+      value:
+        merchantId: b669086b-68b1-4f55-95bd-8ab45e48d670
+        amount: 150
+        statementDescriptor: Teste Card Adyen
+        capture: true
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+        paymentSource:
+          sourceType: card
+          cardId: f01044c6-1452-43bc-8492-29a17d58ba9d
+        vendor:
+          id: c0a7f5fa-4a8a-48ef-9f46-7727ca2d75b4
+        threeDSecure2:
+          setupId: 05ee0280-afe2-4b81-991b-383a7feaae5f
+          requiresLiabilityShift: false,
+          redirectURL: https://www.google.com
+          requestorURL: https://localhost
+          browser:
+            acceptBrowserValue: v1
+            acceptContent: v2
+            acceptHeader: '*/*'
+            colorDepth: 24
+            javaEnabled: true
+            javaScriptEnabled: true
+            language: pt-BR
+            screenHeight: 1080
+            screenWidth: 1920
+            timeZoneOffset: '180'
+            userAgent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36
+            ip: 127.0.0.1
+          cardHolder:
+            email: email@gmail.com
+            mobilePhone: '123456789'
+    Charge3DSMPIExterno:
+      summary: Exemplo cobrança Cartão e 3D Secure Com MPI Externo
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: false
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+        paymentSource:
+          sourceType: card
+          card:
+            cardNumber: '5261424250184574'
+            cardCvv: '321'
+            cardExpirationDate: 06/2028
+            cardHolderName: JOAO DA SILVA
+        threeDSecure2:
+          mpi:
+            acsTransactionId: 9502fcb2-f483-4e4f-b9c9-70e01d8f49e2
+            cavv: AAIBBYNoEwAAACcKhAJkdQAAAAA=
+            challenged: true
+            directoryServerTransactionId: 4e8567db-2f9e-4c9d-9d8c-3da3c2f7ed32
+            eci: '05'
+            threeDSServerTransactionId: 4830a4b7-b80e-4eeb-bff2-d21699e771f0
+            transStatus: Y
+            version: 2.2.0
+            xid: AAIBBYNoEwAAACcKhAJkdQAAAAA=
+    Charge3DS2Request:
+      summary: Exemplo cobrança Cartão e 3D Secure 2
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: false
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+        paymentSource:
+          sourceType: card
+          card:
+            cardNumber: '5261424250184574'
+            cardCvv: '321'
+            cardExpirationDate: 06/2028
+            cardHolderName: JOAO DA SILVA
+        threeDSecure2:
+          redirectURL: https://your-company.com/receive
+          requestorURL: https://api/your-company.com
+          browser:
+            acceptHeader: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+            colorDepth: 24
+            javaEnabled: true
+            javaScriptEnabled: true
+            language: BR
+            screenHeight: 1080
+            screenWidth: 1920
+            timeZoneOffset: '180'
+            userAgent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36
+            ip: 0.0.0.0
+          cardHolder:
+            email: cardHolder@email.com
+            mobilePhone: 11 99329899
+          billingAddress:
+            city: Rio de Janeiro
+            country: BR
+            streetNumber: 159
+            zipCode: '2547896'
+            state: RJ
+            street: Av Brasil
+          shippingAddress:
+            city: São Paulo
+            country: BR
+            streetNumber: 59
+            zipCode: '2547896'
+            state: SP
+            street: Rua das Flores
+    ChargeList:
+      value:
+        meta:
+          itemCount: 10
+          totalItems: 20
+          itemsPerPage: 10
+          totalPages: 5
+          currentPage: 2
+        items:
+        - id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+          customerId: 82aba896-9e37-45b6-aa90-d510c9050596
+          clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+          createdAt: 2012-06-30 23:59:59 +0000
+          amount: 150
+          currency: BRL
+          statementDescriptor: LOJA JOAO
+          description: Descrição longa da cobrança
+          capture: false
+          isDispute: false
+          orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+          paymentMethod:
+            paymentType: credit
+            installments: 1
+          paymentSource:
+            sourceType: card
+            cardId: 148d5db0-f1c3-439f-902d-f1f268086e1d
+          transactionRequests:
+          - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+            idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+            providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+            providerType: STRIPE
+            transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+            amount: 1500
+            authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+            requestStatus: success
+            requestType: authorization
+            responseTs: 2633ms
+            createdAt: '2021-08-12T16:08:39.536Z'
+            updatedAt: '2021-08-12T16:08:42.212Z'
+            providerAuthorization:
+              networkAuthorizationCode: '00'
+              networkResponseCode: ''
+          appInfo:
+            platform:
+              integrator: malga
+              name: pluging-vtex-ppp
+              version: '1.12'
+            device:
+              name: iOS
+              version: '10.12'
+            system:
+              name: VTEX
+              version: '13.12'
+    ChargeSplitPix:
+      summary: Exemplo resposta cobrança Pix com Split
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        description: Descrição longa da cobrança
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        createdAt: '2022-10-04T21:36:21.093Z'
+        amount: 150
+        originalAmount: 150,
+        currency: BRL
+        statementDescriptor: 'Pedido #231 loja joão'
+        capture: false
+        isDispute: false
+        status: pre_authorized
+        paymentMethod:
+          paymentType: pix
+          expiresIn: 3600
+          qrCodeData: 00020101021126510014BR.GOV.BCB.PIX0129K89VdiUgWN1B3p0IHrgHkNHg9tX5F52040000530398654040.155802BR5913Customer test600062070503***630431C0
+          qrCodeImageUrl: https://....
+        paymentSource:
+          sourceType: customer
+          customerId: 1cdcf0c9-eb04-4e43-b9b2-b7a4acdead1f
+        splitRules:
+        - id: 759af8a1-6f5c-4caf-ae79-98e6aa27b7e9
+          updatedAt: '2022-10-04T20:31:46.776Z'
+          createdAt": '2022-10-04T20:31:46.776Z'
+          sellerId": 32c68557-902c-408b-b464-cf487c7cda97
+          percentage": 10
+          amount": null
+          processingFee": false
+          chargeEntireFee: true
+          chargeRemainderFee: true
+          liable: true
+          fareMdr: null
+          fareFee: null
+        - id: 9873712a-3c3a-49ea-a4b1-c6c167c352c3
+          updatedAt: '2023-10-04T20:31:46.776Z'
+          createdAt": '2023-10-04T20:31:46.776Z'
+          sellerId": 50c68557-802c-408b-b464-cf487c7cda97
+          percentage": 40
+          amount": null
+          processingFee": false
+          chargeEntireFee: false
+          chargeRemainderFee: true
+          liable: true
+          fareMdr: null
+          fareFee: null
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+          providerType: STRIPE
+          transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+          amount: 150
+          authorizationCode: '1560708'
+          authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          providerAuthorization:
+            networkAuthorizationCode: '00'
+            networkResponseCode: ''
+        appInfo:
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+          platform:
+            name: pluging-vtex-ppp
+            version: '1.12'
+            integrator: malga
+    ChargeCard3DSMalga:
+      summary: Exemplo resposta cobrança por cartão 3D Secure 2
+      value:
+        id: cfaf805f-e4b3-4c2b-bceb-031f61e24806
+        clientId: e234eeb3-483d-4df2-87eb-1e2be5cdaccd
+        merchantId: 1cce7844-d804-451f-ab40-63bff9bf8fcb
+        description: null
+        orderId: null
+        createdAt: '2024-10-01T16:40:35.139Z'
+        amount: 100
+        originalAmount: 100
+        currency: BRL
+        statementDescriptor: teste123
+        capture: true
+        isDispute: false
+        status: authorized
+        responsibleProviderType: SANDBOX
+        paymentFlow:
+          id: 12345fc0-238e-4fd6-af96-8cab57fd6edc
+        paymentMethod:
+          installments: 1
+          paymentType: credit
+        paymentSource:
+          sourceType: card
+          cardId: a7f3ace8-16ec-4299-9bd4-34219739c7cc
+        fraudAnalysisMetadata:
+          sla: null
+          customer:
+            name: User Username
+            email: user@email.co
+            identity: '45762964850'
+            identityType: CPF
+            birthdate: null
+            phone: '+5511998326199'
+            billingAddress:
+              country: BR
+              street: Rua General nestor passos
+              number: 226
+              complement: ap 107
+              zipCode: '02417140'
+              city: Sao Paulo
+              state: SP
+              district: Jardim Paraiso
+            deliveryAddress:
+              country: BR
+              street: Rua General nestor passos
+              number: 226
+              complement: ap 107
+              zipCode: '02417140'
+              city: Sao Paulo
+              state: SP
+              district: Jardim Paraiso
+          cart:
+            items:
+            - name: ItemTeste1
+              quantity: 1
+              sku: '20170511'
+              unitPrice: 50
+              risk: High
+              locality: null
+              date: null
+              type: null
+              genre: null
+              tickets: null
+              location: null
+          orderOrigin: null
+          operationalSystem: null
+          country: null
+        transactionRequests:
+        - id: ae383789-7608-4c57-ab01-721f722e98e3
+          createdAt: '2024-10-01T16:40:44.993Z'
+          updatedAt: '2024-10-01T16:40:44.993Z'
+          idempotencyKey: 3356a581-14b3-43f4-9cfe-0ba39b7d9a1a
+          providerId: 56746c7b-c5ac-4ab6-8513-94fa00fa5064
+          providerType: SANDBOX
+          transactionId: f5d4cfd6-6813-4ec1-bdfa-8ae4d5d69135
+          amount: 100
+          authorizationCode: '6480680'
+          authorizationNsu: '2806774'
+          requestStatus: success
+          requestType: authorization
+          requestStatusReason: null
+          responseTs: 35ms
+          providerAuthorization:
+            networkAuthorizationCode: '2139951'
+            networkResponseCode: '4496916'
+          threeds:
+            authenticated: false
+        - id: d22753f0-2089-49a7-9b03-b11b2eeeb796
+          createdAt: '2024-10-01T16:40:44.743Z'
+          updatedAt: '2024-10-01T16:40:44.743Z'
+          idempotencyKey: 2bca8426-8857-4d8c-b3d3-464faf26077e
+          providerId: null
+          providerType: CYBERSOURCE
+          transactionId: '7278008445356393004951'
+          amount: 100
+          authorizationCode: null
+          authorizationNsu: null
+          requestStatus: success
+          requestType: 3DS_authentication_validate
+          requestStatusReason: null
+          responseTs: null
+          threeds:
+            liabilityShift: true
+        - id: 10e80b19-09e7-423e-aaff-57168df78040
+          createdAt: '2024-10-01T16:40:36.884Z'
+          updatedAt: '2024-10-01T16:40:36.884Z'
+          idempotencyKey: 2bca8426-8857-4d8c-b3d3-464faf26077e
+          providerId: null
+          providerType: CYBERSOURCE
+          transactionId: '7278008364396297404953'
+          amount: 100
+          authorizationCode: null
+          authorizationNsu: null
+          requestStatus: success
+          requestType: 3DS_authentication_enroll
+          requestStatusReason: null
+          responseTs: null
+          threeds:
+            cardEnrolled: true
+            challenged: true
+        - id: 29945667-094a-4934-898a-8b2713eccbba
+          createdAt: '2024-10-01T16:40:36.859Z'
+          updatedAt: '2024-10-01T16:40:36.859Z'
+          idempotencyKey: 2bca8426-8857-4d8c-b3d3-464faf26077e
+          providerId: null
+          providerType: CYBERSOURCE
+          transactionId: '7278008315186292704953'
+          amount: 100
+          authorizationCode: null
+          authorizationNsu: null
+          requestStatus: success
+          requestType: 3DS_authentication_setup
+          requestStatusReason: null
+          responseTs: null
+        threeDSecure2:
+          requiresLiabilityShift: true
+          authenticated: false
+          version: 2.1.0
+          offered: true
+          liabilityShift: true
+          cardEnrolled: true
+          cardTokenId: null
+          offeredType: Unknown
+          challenged: true
+          redirectURL: https://localhost:3000/checkout.html
+          requestorURL: https://localhost:3000
+          networkTransactionId: null
+          browser:
+            acceptBrowserValue: null
+            acceptContent: null
+            acceptHeader: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+            colorDepth: 30
+            javaEnabled: false
+            javaScriptEnabled: true
+            language: en-US
+            screenHeight: 900
+            screenWidth: 1440
+            timeZoneOffset: '240'
+            userAgent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36
+            ip: 200.53.196.214
+          billingAddress:
+            city: Aracaju
+            country: BR
+            streetNumber: '177'
+            zipCode: '49089185'
+            state: Sergipe
+            street: Rua J
+          shippingAddress: null
+          cardHolder: null
+          authData:
+            action: REDIRECT
+            providerType: CYBERSOURCE
+            responseType: AUTHENTICATION
+            response:
+              pareq: eyJtZXNzYWdlVHlwZSI6IkNSZXEiLCJtZXNzYWdlVmVyc2lvbiI6IjIuMS4wIiwidGhyZWVEU1NlcnZlclRyYW5zSUQiOiI3ZGViNWZhYS1lM2NkLTRjZDgtYjUxZC1hNmQ5OWQyMWY0YmIiLCJhY3NUcmFuc0lEIjoiM2U0NjZkMjMtMzk5Yy00OWRkLTlhNzItZTk0ZDY0MWM2NTdiIiwiY2hhbGxlbmdlV2luZG93U2l6ZSI6IjAyIn0
+              token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYjY4NjM5Yi0zMGUwLTRiZDUtYjE0ZC0xYzQ4NjAxNWI2NTMiLCJpYXQiOjE3Mjc4MDA4MzYsImlzcyI6IjVkZDgzYmYwMGU0MjNkMTQ5OGRjYmFjYSIsImV4cCI6MTcyNzgwNDQzNiwiT3JnVW5pdElkIjoiNjU0NDUzNzkzZDJmNTM1NWE3YjljN2IxIiwiUGF5bG9hZCI6eyJBQ1NVcmwiOiJodHRwczovLzBtZXJjaGFudGFjc3N0YWcuY2FyZGluYWxjb21tZXJjZS5jb20vTWVyY2hhbnRBQ1NXZWIvY3JlcS5qc3AiLCJQYXlsb2FkIjoiZXlKdFpYTnpZV2RsVkhsd1pTSTZJa05TWlhFaUxDSnRaWE56WVdkbFZtVnljMmx2YmlJNklqSXVNUzR3SWl3aWRHaHlaV1ZFVTFObGNuWmxjbFJ5WVc1elNVUWlPaUkzWkdWaU5XWmhZUzFsTTJOa0xUUmpaRGd0WWpVeFpDMWhObVE1T1dReU1XWTBZbUlpTENKaFkzTlVjbUZ1YzBsRUlqb2lNMlUwTmpaa01qTXRNems1WXkwME9XUmtMVGxoTnpJdFpUazBaRFkwTVdNMk5UZGlJaXdpWTJoaGJHeGxibWRsVjJsdVpHOTNVMmw2WlNJNklqQXlJbjAiLCJUcmFuc2FjdGlvbklkIjoiSDdocndJaFRLS3ZMbHJHWVN2OTAifSwiT2JqZWN0aWZ5UGF5bG9hZCI6dHJ1ZSwiUmV0dXJuVXJsIjoiaHR0cHM6Ly9hcGkuZGV2Lm1hbGdhLmlvL3YxL2NoYXJnZXMvY2ZhZjgwNWYtZTRiMy00YzJiLWJjZWItMDMxZjYxZTI0ODA2LzNkcy1hdXRob3JpemF0aW9uP2hhc2g9cG4taWNkcHlWaFVJaVowbmppbVdFYVVFeGxGeHFlX3kwVlkxT0lqMlphYyZjbGllbnRJZD1lMjM0ZWViMy00ODNkLTRkZjItODdlYi0xZTJiZTVjZGFjY2QifQ.DzUlK4UPFakvWW_alV0DvtnNSDaJPMBDzWXGX07nTe8
+              stepUrl: https://centinelapistag.cardinalcommerce.com/V2/Cruise/StepUp
+            networkTransactionId: '7278008364396297404953'
+        appInfo: null
+    ChargeNupayRequest:
+      summary: Exemplo cobrança Nupay
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: nupay
+          taxValue: 1
+          delayToAutoCancel: 200
+          orderUrl: https://order.com.br
+          returnUrl: https://return-url.com.br
+          cancelUrl: https://cancel-url.com.br
+          recipients:
+          - referenceId: 550e8400-e29b-41d4-a716-446655440000
+            name: Example Company LTDA
+            document:
+              country: BR
+              type: cnpj
+              number: '12345678000195'
+            amount: 100
+        paymentSource:
+          sourceType: customer
+          customer:
+            name: Customer test
+            email: customer@gmail.com
+            document:
+              number: '97055503019'
+              type: cpf
+            phoneNumber: 21 98889999099
+            address:
+              street: Rua 1
+              streetNumber: '120'
+              zipCode: '01714140'
+              state: SP
+              city: São Paulo
+        fraudAnalysis:
+          customer:
+            browser:
+              ipAddress: 127.0.0.1
+          cart:
+            items:
+            - sku: '123'
+              name: desc
+              quantity: 1
+              unitPrice: 1
+              risk: Low
+    ChargePicpay:
+      summary: Exemplo resposta cobrança Picpay
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        createdAt: 2012-06-30 23:59:59 +0000
+        amount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: false
+        isDispute: false
+        status: pending
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: picpay
+          expiresIn: 1722971550
+          qrCodeData: 00020101021226860014COM.PICPAY.P2B0164https://app.picpay.com/checkout/NjY4YmZhNjA5OTdhNTU2YTNmMGRmZTIy5204000053039865802BR5906PICPAY6009SAO PAULO62280524668bfa60997a556a3f0dfe2280580020COM.PICPAY.ECOMMERCE0107nc=true0219checkout=stepbystep6304B9EE
+          qrCodeImageUrl: https://....
+        paymentSource:
+          sourceType: customer
+          customerId: 1cdcf0c9-eb04-4e43-b9b2-b7a4acdead1f
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 72cecc64-2079-4128-8cb0-c5a4ed8fa995
+          providerType: PICPAY
+          transactionId: 84d0ed42-0239-4618-b3b9-e31114bba17b
+          amount: 150
+          authorizationNsu: null
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+    ChargeSplit:
+      summary: Exemplo resposta de cobrança Cartão com Split
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        description: Descrição longa da cobrança
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        createdAt: '2022-10-04T21:36:21.093Z'
+        amount: 150
+        originalAmount: 150,
+        currency: BRL
+        statementDescriptor: 'Pedido #231 loja joão'
+        capture: false
+        isDispute: false
+        status: pre_authorized
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+        paymentSource:
+          sourceType: card
+          cardId: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        splitRules:
+        - id: 759af8a1-6f5c-4caf-ae79-98e6aa27b7e9
+          updatedAt: '2022-10-04T20:31:46.776Z'
+          createdAt": '2022-10-04T20:31:46.776Z'
+          sellerId": 32c68557-902c-408b-b464-cf487c7cda97
+          percentage": 10
+          amount": null
+          processingFee": false
+          chargeEntireFee: true
+          chargeRemainderFee: true
+          liable: true
+          fareMdr: null
+          fareFee: null
+        - id: 9873712a-3c3a-49ea-a4b1-c6c167c352c3
+          updatedAt: '2023-10-04T20:31:46.776Z'
+          createdAt": '2023-10-04T20:31:46.776Z'
+          sellerId": 50c68557-802c-408b-b464-cf487c7cda97
+          percentage": 40
+          amount": null
+          processingFee": false
+          chargeEntireFee: false
+          chargeRemainderFee: false
+          liable: true
+          fareMdr: null
+          fareFee: null
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+          providerType: STRIPE
+          transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+          amount: 150
+          authorizationCode: '1560708'
+          authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          providerAuthorization:
+            networkAuthorizationCode: '00'
+            networkResponseCode: ''
+        appInfo:
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+          platform:
+            name: pluging-vtex-ppp
+            version: '1.12'
+            integrator: malga
+    ChargeDripRequest:
+      summary: Exemplo cobrança Drip
+      value:
+        merchantId: ba3f0dba-905d-4705-9e61-a75d6a6eca5d
+        amount: 150
+        currency: BRL
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        capture: true
+        description: Descrição cobrança
+        statementDescriptor: Descrição cobrança
+        paymentMethod:
+          paymentType: drip
+          maxInstallments: 4
+          items:
+          - id": '12345'
+            quantity": 1
+            title": title item
+            unitPrice": 150
+          browser:
+            ipAddress: 127.0.0.1
+            browserFingerprint: cbd4a441-c63c-4dee-ac6b-bfa7fa1df818
+          cancelRedirectUrl: https://service-example.com/cancel
+          successRedirectUrl: https://service-example.com/success
+        paymentSource:
+          sourceType: customer
+          customer:
+            name: Customer test
+            email: customer@gmail.com
+            document:
+              number: '97055503019'
+              type: cpf
+            phoneNumber: 21 98889999099
+            address:
+              street: Rua 1
+              streetNumber: '120'
+              zipCode: '01714140'
+              state: SP
+              city: São Paulo
+              country: BR
+              district: Moema
+    ChargeBoletoRequest:
+      summary: Exemplo cobrança Boleto
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: true
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: boleto
+          expiresDate: '2022-12-31'
+          instructions: Instruções para pagamento do boleto
+          interest:
+            days: 1
+            amount: 100
+            percentage: 0.2
+          fine:
+            days: 2
+            amount: 200
+            percentage: 0
+        paymentSource:
+          sourceType: customer
+          customer:
+            name: Customer test
+            email: jose2@gmail.com
+            document:
+              number: '97055503019'
+              type: cpf
+            phoneNumber: 21 98889999099
+    ChargeCard:
+      summary: Exemplo resposta cobrança por cartão
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        createdAt: 2012-06-30 23:59:59 +0000
+        amount: 150
+        currency: BRL
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: false
+        isDispute: false
+        status: pre_authorized
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+        paymentSource:
+          sourceType: card
+          cardId: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+          providerType: STRIPE
+          transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+          amount: 1500
+          authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+          providerAuthorization:
+            networkAuthorizationCode: '00'
+            networkResponseCode: ''
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+    ChargeApplePayRequest:
+      summary: Exemplo cobrança Apple Pay
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: false
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: apple_pay
+          installments: 1
+        paymentSource:
+          sourceType: wallet
+          walletPayment: credit
+          paymentData:
+            data: /ZCUzCmr236kDnnXb9cZsvG1JJOqe8GOuRDfCgJ...7haAXX9ml5c7eCIf+IQa1MSGUZYgawepPy
+            signature: MIAGCSqGSIb3DQEHAqCAMIACAQExDTAL...s9BerKDnL1zoEcmcybKzgAAAAAAAA==
+            header:
+              ephemeralPublicKey: MFkwEwYHKoZIzj0CAQYIKo...ixBMa1KGjnGapsQih+Kdbg2fA==
+            version: EC_v1
+    ChargeNupay:
+      summary: Exemplo resposta cobrança nupay
+      value:
+        id: 4cbF2516-b8c0-4222-a28d-2c7e22a9ebe1
+        clientId: 11111111-36dc-4654-9dba-e7167d0e5e2d
+        merchantId: 7cCf07e8-9798-4bf6-a97e-7f0e0822c176
+        description: null
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        createdAt: '2022-09-30T21:33:42.955Z'
+        amount: 100
+        originalAmount: 100
+        currency: BRL
+        statementDescriptor: null
+        status: pending
+        paymentMethod:
+          paymentType: nupay
+        paymentSource:
+          sourceType: customer
+          customerId: ae1b1f52-ee01-4014-9eb6-e529dd6d3f5f
+        transactionRequests:
+        - id: 1c57caad-136d-4bc4-a265-c72d408d5ef7
+          createdAt: '2022-09-30T21:33:42.969Z'
+          updatedAt: '2022-09-30T21:33:44.105Z'
+          idempotencyKey: 84d0ed42-0239-4618-b3b9-e31114bba17b
+          providerId: 72cecc64-2079-4128-8cb0-c5a4ed8fa995
+          providerType: NUPAY
+          transactionId: 2c57caad-136d-4bc4-a265-c72d408d5ef8
+          amount: 100
+          authorizationCode: null
+          authorizationNsu: null
+          requestStatus: success
+          requestType: pending
+          responseTs: 1084ms
+          nupay:
+            expiresIn: 200
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+    ChargeApplePayResponse:
+      summary: Exemplo resposta cobrança Apple Pay crédito
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        createdAt: 2012-06-30 23:59:59 +0000
+        amount: 150
+        currency: BRL
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: false
+        isDispute: false
+        responsibleProviderType: CIELO
+        status: pre_authorized
+        paymentMethod:
+          paymentType: apple_pay
+          installments: 1
+        paymentSource:
+          sourceType: wallet
+          cardId: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+          providerType: CIELO
+          transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+          amount: 1500
+          authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+          providerAuthorization:
+            networkAuthorizationCode: '00'
+            networkResponseCode: ''
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+    ChargePixRequest:
+      summary: Exemplo cobrança PIX
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: true
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: pix
+          expiresIn: 3600
+        paymentSource:
+          sourceType: customer
+          customer:
+            name: Customer test
+            email: jose2@gmail.com
+            document:
+              number: '97055503019'
+              type: cpf
+            phoneNumber: 21 98889999099
+    ChargePix:
+      summary: Exemplo resposta cobrança PIX
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        createdAt: 2012-06-30 23:59:59 +0000
+        amount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        capture: true
+        isDispute: false
+        status: pending
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: pix
+          expiresIn: 3600
+          qrCodeData: 00020101021126510014BR.GOV.BCB.PIX0129K89VdiUgWN1B3p0IHrgHkNHg9tX5F52040000530398654040.155802BR5913Customer test600062070503***630431C0
+          qrCodeImageUrl: https://....
+        paymentSource:
+          sourceType: customer
+          customerId: 1cdcf0c9-eb04-4e43-b9b2-b7a4acdead1f
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+          providerType: STRIPE
+          transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+          amount: 1500
+          authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+          providerAuthorization:
+            networkAuthorizationCode: '00'
+            networkResponseCode: ''
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+    ChargeVoucherRequest:
+      summary: Exemplo cobrança Voucher
+      value:
+        paymentMethod:
+          customer:
+            name: Customer test
+            identity: '11111111111'
+          paymentType: voucher
+          items:
+          - id: '12345'
+            title: ItemTeste1
+            quantity: 1
+            unitPrice: 100
+        paymentSource:
+          sourceType: card
+          card:
+            cardHolderName: Customer test
+            cardNumber: '6370360004577166'
+            cardCvv: '527'
+            cardExpirationDate: 12/2024
+        merchantId: ba3f0dba-905d-4705-9e61-a75d6a6eca5d
+        amount: 100
+        currency: BRL
+        statementDescriptor: Voucher
+        orderId: 15ad136a-520b-40d0-9c0e-05ff008b0fa7
+        description: 15ad136a-520b-40d0-9c0e-05ff008b0fa7
+    ChargeVendorExample:
+      summary: Exemplo de cobrança Cartão com vendedor
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        statementDescriptor: 'Pedido #231 loja joão'
+        description: Descrição longa da cobrança
+        capture: false
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+        paymentSource:
+          sourceType: card
+          card:
+            cardHolderName: JOAO DA SILVA
+            cardNumber: '5261424250184574'
+            cardCvv: '321'
+            cardExpirationDate: 06/2028
+        vendor:
+          id: d36274c9-9675-4093-8ef5-cd84bc4a7c5d
+          paymentFacilitatorID: null
+    ChargeSplitRequestPix:
+      summary: Exemplo de cobrança Pix com Split
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        statementDescriptor: 'Pedido #231 loja joão'
+        description: Descrição longa da cobrança
+        capture: false
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: pix
+          expiresIn: 3600
+        paymentSource:
+          sourceType: customer
+          customer:
+            name: Customer test
+            email: jose2@gmail.com
+            document:
+              number: '97055503019'
+              type: cpf
+            phoneNumber: 21 98889999099
+        splitRules:
+        - sellerId: 32c68557-902c-408b-b464-cf487c7cda97
+          percentage: 10
+          liable: true
+          processingFee: false
+          chargeEntireFee: true
+          chargeRemainderFee: true
+        - sellerId: 50c68557-802c-408b-b464-cf487c7cda97
+          percentage: 40
+          liable: true
+          processingFee: false
+          chargeEntireFee: false
+          chargeRemainderFee: true
+    ChargePicpayRequest:
+      summary: Exemplo cobrança Picpay
+      value:
+        appInfo:
+          platform:
+            integrator: malga
+            name: pluging-vtex-ppp
+            version: '1.12'
+          device:
+            name: iOS
+            version: '10.12'
+          system:
+            name: VTEX
+            version: '13.12'
+        merchantId: 7f8870a2-71c9-4ef0-a531-82000e00b7e1
+        amount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        description: Descrição longa da cobrança
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        paymentMethod:
+          paymentType: picpay
+        paymentSource:
+          sourceType: customer
+          customer:
+            name: Customer test
+            email: jose2@gmail.com
+            document:
+              number: '97055503019'
+              type: cpf
+            phoneNumber: 21 98889999099
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos

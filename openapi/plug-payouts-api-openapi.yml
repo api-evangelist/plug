@@ -1,0 +1,803 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Payouts API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Payouts
+  description: '
+
+    Através das APIs de `payouts` é possível consultar o saldo disponível, listar repasses e visualizar as ordens de pagamento liquidadas para um cliente.
+
+
+    Esses endpoints são read-only e atendem a fluxos de conciliação financeira de Split de pagamentos. As consultas são restritas ao `X-Client-Id` autenticado e podem ser filtradas por `sellerId` quando aplicável.
+
+
+    **Status possíveis de repasse:** `pending`, `paid`, `failed`, `offset`.
+
+    '
+paths:
+  /v1/payouts/balance:
+    get:
+      operationId: getPayoutBalance
+      summary: Consultar saldo
+      description: 'Retorna o saldo disponível e a receber da nossa subadquirente
+
+        '
+      parameters:
+      - name: sellerId
+        in: query
+        required: false
+        description: Filtra o saldo por seller específico
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Saldo retornado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutBalanceResponse'
+              examples:
+                PayoutBalanceResponse:
+                  $ref: '#/components/examples/PayoutBalanceResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Payouts
+  /v1/payouts/payment-batches:
+    get:
+      operationId: listPayoutPaymentBatches
+      summary: Listar repasses
+      description: 'Listagem paginada dos repasses realizados na subadquirente
+
+        '
+      parameters:
+      - name: page
+        in: query
+        required: false
+        description: Número da página
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        required: false
+        description: Quantidade de itens por página (máx. 100)
+        schema:
+          type: integer
+          default: 10
+      - name: order
+        in: query
+        required: false
+        description: Ordenação por data de criação
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: sellerId
+        in: query
+        required: false
+        description: Filtra por seller
+        schema:
+          type: string
+          format: uuid
+      - name: status
+        in: query
+        required: false
+        description: Status separados por vírgula (ex. `pending,paid`)
+        schema:
+          type: string
+          example: pending,paid
+      - name: startDate
+        in: query
+        required: false
+        description: Data inicial em RFC 3339 (ex. `2026-04-01T00:00:00Z`)
+        schema:
+          type: string
+          format: date-time
+      - name: endDate
+        in: query
+        required: false
+        description: Data final em RFC 3339 (ex. `2026-04-30T23:59:59Z`)
+        schema:
+          type: string
+          format: date-time
+      - name: paymentDate
+        in: query
+        required: false
+        description: Data de pagamento no formato `YYYY-MM-DD`
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: Lista paginada de repasses
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutPaymentBatchListResponse'
+              examples:
+                PayoutPaymentBatchListResponse:
+                  $ref: '#/components/examples/PayoutPaymentBatchListResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Payouts
+  /v1/payouts/payment-batches/{id}:
+    get:
+      operationId: getPayoutPaymentBatch
+      summary: Consultar repasse pelo ID
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Identificador do repasse
+        schema:
+          type: string
+          format: uuid
+      - name: sellerId
+        in: query
+        required: false
+        description: Filtra o repasse por seller
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Detalhes do repasse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutPaymentBatchResponse'
+              examples:
+                PayoutPaymentBatchResponse:
+                  $ref: '#/components/examples/PayoutPaymentBatchResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Repasse não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Payouts
+  /v1/payouts/payment-batches/{id}/orders:
+    get:
+      operationId: listPayoutPaymentBatchOrders
+      summary: Listar ordens de pagamento de um repasse
+      description: Lista paginada das ordens de pagamento que compõem um repasse.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Identificador do repasse
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        required: false
+        description: Quantidade de itens por página (máx. 100)
+        schema:
+          type: integer
+          default: 10
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      responses:
+        '200':
+          description: Lista paginada de ordens de pagamento do repasse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutOrderListResponse'
+              examples:
+                PayoutOrderListResponse:
+                  $ref: '#/components/examples/PayoutOrderListResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Payouts
+  /v1/payouts/orders:
+    get:
+      operationId: listPayoutOrders
+      summary: Listar ordens de pagamento
+      description: 'Lista paginada das ordens de pagamento da nossa subadquirente.
+
+        '
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        required: false
+        description: Quantidade de itens por página (máx. 100)
+        schema:
+          type: integer
+          default: 10
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: sellerId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: startDate
+        in: query
+        required: false
+        description: Data inicial em RFC 3339 (ex. `2026-04-01T00:00:00Z`)
+        schema:
+          type: string
+          format: date-time
+      - name: endDate
+        in: query
+        required: false
+        description: Data final em RFC 3339 (ex. `2026-04-30T23:59:59Z`)
+        schema:
+          type: string
+          format: date-time
+      - name: chargeId
+        in: query
+        required: false
+        description: Filtra ordens de pagamento por cobrança específica
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Lista paginada das ordens de pagamento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutOrderListResponse'
+              examples:
+                PayoutOrderListResponse:
+                  $ref: '#/components/examples/PayoutOrderListResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Payouts
+  /v1/payouts/orders/{id}:
+    get:
+      operationId: getPayoutOrder
+      summary: Consultar ordem de pagamento pelo ID
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Identificador da ordem de pagamento
+        schema:
+          type: string
+          format: uuid
+      - name: sellerId
+        in: query
+        required: false
+        description: Filtra a ordem de pagamento por seller
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Detalhes da ordem de pagamento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutOrderResponse'
+              examples:
+                PayoutOrderResponse:
+                  $ref: '#/components/examples/PayoutOrderResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Ordem de pagamento não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Payouts
+components:
+  schemas:
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    PayoutPaginationMeta:
+      type: object
+      properties:
+        itemCount:
+          type: integer
+          description: Quantidade de itens na página
+        totalItems:
+          type: integer
+          description: Quantidade total de itens na consulta
+        itemsPerPage:
+          type: integer
+          description: Quantidade de itens por página
+        totalPages:
+          type: integer
+          description: Quantidade total de páginas
+        currentPage:
+          type: integer
+          description: Página atual
+    PayoutBalanceResponse:
+      type: object
+      properties:
+        available:
+          type: integer
+          description: Saldo disponível para repasse, em centavos
+        receivable:
+          type: integer
+          description: Saldo a receber em datas futuras, em centavos
+    PayoutOrderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador único da ordem
+        chargeId:
+          type: string
+          format: uuid
+          description: Identificador da cobrança na Malga que originou a ordem
+        amount:
+          type: integer
+          description: Valor líquido conciliado da ordem em centavos
+        grossAmount:
+          type: integer
+          description: Valor bruto da ordem em centavos
+        totalFeeAmount:
+          type: integer
+          description: Total de taxas aplicadas à ordem, em centavos
+        currency:
+          type: string
+          description: Moeda da ordem no formato ISO 4217
+          example: BRL
+        installment:
+          type: integer
+          nullable: true
+          description: Número da parcela representada pela ordem
+        totalInstallments:
+          type: integer
+          nullable: true
+          description: Total de parcelas da cobrança original
+        paymentMethod:
+          type: string
+          enum:
+          - credit
+          - pix
+          - nupay
+          description: Meio de pagamento da ordem
+        type:
+          type: string
+          enum:
+          - authorization
+          - void
+          - charge_back
+          description: 'Tipo da operação financeira que a ordem representa:
+
+            - `authorization`: autorização da transação
+
+            - `void`: cancelamento antes da liquidação
+
+            - `charge_back`: estorno pós-liquidação
+
+            '
+        paymentArrangement:
+          type: string
+          nullable: true
+          description: Arranjo de pagamento associado à ordem
+        paymentScheduledAt:
+          type: string
+          format: date
+          nullable: true
+          description: Data programada para liquidação da ordem no formato `YYYY-MM-DD`
+        paymentBatchId:
+          type: string
+          format: uuid
+          nullable: true
+          description: Identificador do repasse que liquidou esta ordem
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação da ordem em RFC 3339
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data da última atualização da ordem em RFC 3339
+    PayoutOrderListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: Lista de ordens retornadas na página
+          items:
+            $ref: '#/components/schemas/PayoutOrderResponse'
+        meta:
+          $ref: '#/components/schemas/PayoutPaginationMeta'
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    PayoutPaymentBatchResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador único do repasse
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação do repasse em RFC 3339
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data da última atualização do repasse em RFC 3339
+        amount:
+          type: integer
+          description: Valor bruto do repasse em centavos
+        feeAmount:
+          type: integer
+          description: Total de taxas do provedor aplicadas em centavos
+        totalFeeAmount:
+          type: integer
+          description: Total geral de taxas aplicadas em centavos
+        balanceAmount:
+          type: integer
+          description: Saldo negativo remanescente em centavos que foi compensado neste repasse
+        creditAmount:
+          type: integer
+          description: Total de créditos manuais aplicados em centavos
+        refundAmount:
+          type: integer
+          description: Total de estornos descontados do repasse, em centavos
+        debitAdjustmentAmount:
+          type: integer
+          description: Total de ajustes a débito aplicados em centavos
+        creditAdjustmentAmount:
+          type: integer
+          description: Total de ajustes a crédito aplicados em centavos
+        finalBalance:
+          type: integer
+          description: Saldo final liquidado para o cliente, em centavos
+        withdrawalFeeAmount:
+          type: integer
+          description: Tarifa de saque/transferência aplicada em centavos
+        reportUrl:
+          type: string
+          nullable: true
+          description: URL do relatório detalhado do repasse, quando disponível
+        paymentDate:
+          type: string
+          format: date
+          description: Data programada para liquidação do repasse no formato `YYYY-MM-DD`
+        payoutDate:
+          type: string
+          format: date
+          nullable: true
+          description: Data efetiva em que o repasse foi pago no formato `YYYY-MM-DD`
+        status:
+          type: string
+          enum:
+          - pending
+          - paid
+          - failed
+          - offset
+          description: 'Status atual do repasse:
+
+            - `pending`: aguardando processamento
+
+            - `paid`: liquidado com sucesso
+
+            - `failed`: falhou no processamento
+
+            - `offset`: compensado com saldo de outro repasse
+
+            '
+        feature:
+          type: string
+          enum:
+          - subacquirer
+          - nupay
+          - general
+          description: Tipo de operação que originou o repasse
+        paymentMethod:
+          type: string
+          nullable: true
+          enum:
+          - credit
+          - pix
+          - nupay
+          description: Meio de pagamento das ordens que compõem o repasse
+        paymentArrangement:
+          type: string
+          nullable: true
+          description: Arranjo de pagamento associado
+        error:
+          type: object
+          nullable: true
+          description: Detalhe do erro, presente quando o repasse está em status `failed`
+          properties:
+            reason:
+              type: string
+              description: Motivo do erro
+    PayoutPaymentBatchListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: Lista de repasses retornados na página
+          items:
+            $ref: '#/components/schemas/PayoutPaymentBatchResponse'
+        meta:
+          $ref: '#/components/schemas/PayoutPaginationMeta'
+  examples:
+    PayoutOrderListResponse:
+      summary: Exemplo de listagem de ordens
+      value:
+        items:
+        - id: 0f3d5b1a-7c89-4f23-9bd6-aabbccddeeff
+          chargeId: 1c1e6a87-44ab-44d9-9311-9876543210ab
+          amount: 9700
+          grossAmount: 10000
+          totalFeeAmount: 300
+          currency: BRL
+          installment: 1
+          totalInstallments: 1
+          paymentMethod: credit
+          type: capture
+          paymentArrangement: VCC
+          paymentScheduledAt: '2026-04-28'
+          paymentBatchId: 9b1a3a3e-2f87-4b2f-ae59-1234567890ab
+          createdAt: '2026-04-20T15:30:00.000Z'
+          updatedAt: '2026-04-20T15:30:00.000Z'
+        meta:
+          totalItems: 1
+          itemCount: 1
+          itemsPerPage: 10
+          totalPages: 1
+          currentPage: 1
+    PayoutPaymentBatchResponse:
+      summary: Exemplo de repasse
+      value:
+        id: 9b1a3a3e-2f87-4b2f-ae59-1234567890ab
+        createdAt: '2026-04-25T18:00:00.000Z'
+        updatedAt: '2026-04-25T18:00:00.000Z'
+        amount: 250000
+        feeAmount: 5000
+        totalFeeAmount: 7500
+        balanceAmount: 0
+        creditAmount: 0
+        refundAmount: 0
+        debitAdjustmentAmount: 0
+        creditAdjustmentAmount: 0
+        finalBalance: 242500
+        withdrawalFeeAmount: 0
+        reportUrl: null
+        paymentDate: '2026-04-28'
+        payoutDate: '2026-04-28'
+        status: paid
+        feature: subacquirer
+        paymentMethod: credit
+        paymentArrangement: VCC
+        error: null
+    PayoutBalanceResponse:
+      summary: Exemplo de saldo de payouts
+      value:
+        available: 1500000
+        receivable: 320000
+    PayoutOrderResponse:
+      summary: Exemplo de ordem
+      value:
+        id: 0f3d5b1a-7c89-4f23-9bd6-aabbccddeeff
+        chargeId: 1c1e6a87-44ab-44d9-9311-9876543210ab
+        amount: 9700
+        grossAmount: 10000
+        totalFeeAmount: 300
+        currency: BRL
+        installment: 1
+        totalInstallments: 1
+        paymentMethod: credit
+        type: capture
+        paymentArrangement: VCC
+        paymentScheduledAt: '2026-04-28'
+        paymentBatchId: 9b1a3a3e-2f87-4b2f-ae59-1234567890ab
+        createdAt: '2026-04-20T15:30:00.000Z'
+        updatedAt: '2026-04-20T15:30:00.000Z'
+    PayoutPaymentBatchListResponse:
+      summary: Exemplo de listagem de repasses
+      value:
+        items:
+        - id: 9b1a3a3e-2f87-4b2f-ae59-1234567890ab
+          createdAt: '2026-04-25T18:00:00.000Z'
+          updatedAt: '2026-04-25T18:00:00.000Z'
+          amount: 250000
+          feeAmount: 5000
+          totalFeeAmount: 7500
+          balanceAmount: 0
+          creditAmount: 0
+          refundAmount: 0
+          debitAdjustmentAmount: 0
+          creditAdjustmentAmount: 0
+          finalBalance: 242500
+          withdrawalFeeAmount: 0
+          reportUrl: null
+          paymentDate: '2026-04-28'
+          payoutDate: '2026-04-28'
+          status: paid
+          feature: subacquirer
+          paymentMethod: credit
+          paymentArrangement: VCC
+          error: null
+        meta:
+          totalItems: 1
+          itemCount: 1
+          itemsPerPage: 10
+          totalPages: 1
+          currentPage: 1
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos

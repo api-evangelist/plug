@@ -1,0 +1,386 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Settings API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Settings
+  description: '
+
+    Através da API de `settings` é possível recuperar, criar e atualizar configurações de personalização de link de pagamento de um determinado `clientId`. É possível também configurar branding específico por merchant, enviando o header opcional `X-Merchant-Id`. Quando o header é enviado no **GET**, o sistema busca primeiro a configuração do merchant; se não existir, retorna a configuração padrão do cliente (fallback automático). Em **POST/PATCH**, o escopo é exato (sem fallback).
+
+
+    **PATCH:** aceita `multipart/form-data` (inclui upload de logo) ou `application/json` (somente campos textuais). Campos vazios são ignorados no update. Se nenhum campo efetivo for enviado, a API retorna `422`.
+
+    '
+paths:
+  /v1/settings:
+    post:
+      tags:
+      - Settings
+      summary: Configurações da empresa para personalização do checkout do link de pagamento, com imagem. O body deve ser enviado com form-data. Todos os campos são string com exceção do campo logo que é do tipo File.
+      operationId: createSettings
+      parameters:
+      - in: header
+        name: X-Merchant-Id
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: Identificador do merchant. Quando informado, cria configuração específica para o merchant. Se omitido, cria a configuração padrão do cliente.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSettingsWithImage'
+            examples:
+              SettingsRequest:
+                $ref: '#/components/examples/SettingsRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
+              examples:
+                UserSettings:
+                  $ref: '#/components/examples/UserSettings'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags:
+      - Settings
+      summary: Atualiza configurações do link de pagamento (form-data ou JSON)
+      description: 'Atualiza a configuração do escopo informado (`X-Client-Id` e, opcionalmente, `X-Merchant-Id`).
+
+
+        - **`multipart/form-data`:** todos os campos textuais e upload opcional de `logo` (File).
+
+        - **`application/json`:** apenas campos textuais (sem upload de logo).
+
+
+        Campos vazios (`""`) não são persistidos. Se nenhum campo efetivo for enviado (por exemplo `{}` ou somente `companyUrl` vazio) e não houver logo, retorna **422**.
+
+        '
+      operationId: updateSettings
+      parameters:
+      - in: header
+        name: X-Merchant-Id
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: Identificador do merchant. Quando informado, atualiza a configuração específica do merchant. Se omitido, atualiza a configuração padrão do cliente.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSettingsWithImage'
+            examples:
+              SettingsRequest:
+                $ref: '#/components/examples/SettingsRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSettingsPatch'
+            examples:
+              SettingsPatchCompanyUrl:
+                $ref: '#/components/examples/SettingsPatchCompanyUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
+              examples:
+                UserSettings:
+                  $ref: '#/components/examples/UserSettings'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Configuração não encontrada para o escopo informado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Nenhum campo efetivo para atualizar (body vazio ou apenas campos ignorados)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+      - Settings
+      summary: Recupera configuração do link de pagamento personalizado do cliente
+      operationId: getSetting
+      parameters:
+      - in: header
+        name: X-Merchant-Id
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: Identificador do merchant. Quando informado, busca primeiro a configuração do merchant; se não existir, retorna a configuração padrão do cliente (fallback automático).
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
+              examples:
+                UserSettings:
+                  $ref: '#/components/examples/UserSettings'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  examples:
+    UserSettings:
+      value:
+        id: id da setting
+        clientId: id da setting
+        mainColor: '#000000'
+        SecondaryColor: '#FFFFFF'
+        attentionColor: '#FF0000'
+        errorColor: '#FF0000'
+        successColor: '#00FF00'
+        backgroundColor: '#FFFFFF'
+        logo: https://url.com/logo.jpg
+        companyUrl: https://www.company.com
+        mastercardClickToPayDpaid: 223efa95-a0bc-43d6-aea9-715281b6b062
+        merchantId: df601922-e024-6394-8f12-af21ec4218b1
+    SettingsPatchCompanyUrl:
+      summary: Atualizar apenas companyUrl via JSON
+      value:
+        companyUrl: https://www.company.com
+    SettingsRequest:
+      summary: Exemplo de requisição de settings
+      value:
+        mainColor: '#000000'
+        SecondaryColor: '#FFFFFF'
+        attentionColor: '#FF0000'
+        errorColor: '#FF0000'
+        successColor: '#00FF00'
+        backgroundColor: '#FFFFFF'
+        logo: '@"/C:/Users/caminho/para/a/imagem/logo.jpg"'
+        companyUrl: https://www.company.com
+  schemas:
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    UserSettings:
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador das configurações da empresa
+        logo:
+          type: string
+          format: uri
+          description: URL do logo da empresa
+        mainColor:
+          type: string
+          description: Cor primária
+        secondaryColor:
+          type: string
+          description: Cor secundária
+        attentionColor:
+          type: string
+          description: Cor utilizada para alertas
+        errorColor:
+          type: string
+          description: Cor utilizada para as mensagens de erro
+        successColor:
+          type: string
+          description: Cor utilizada nas mensagens de sucesso
+        backgroundColor:
+          type: string
+          description: Cor de fundo
+        clientId:
+          type: string
+          description: Identificador do cliente na Malga
+        companyUrl:
+          type: string
+          description: 'Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com'
+        mastercardClickToPayDpaid:
+          type: string
+          description: Digital Payment Application ID (dpaId) para habilitar Mastercard Click to Pay no Link de Pagamento. Campo opcional.
+        merchantId:
+          type: string
+          description: Indica se a configuração retornada é específica de um merchant (id do merchant) ou a configuração padrão do cliente (nesse caso sem valor).
+    UserSettingsPatch:
+      description: 'Body JSON para PATCH /v1/settings (sem upload de logo). Todos os campos são opcionais;
+
+        campos omitidos não são alterados. Campos enviados vazios (`""`) são ignorados e não persistidos.
+
+        '
+      type: object
+      properties:
+        mainColor:
+          type: string
+          description: Cor primária
+        secondaryColor:
+          type: string
+          description: Cor secundária
+        attentionColor:
+          type: string
+          description: Cor utilizada para alertas
+        errorColor:
+          type: string
+          description: Cor utilizada para as mensagens de erro
+        successColor:
+          type: string
+          description: Cor utilizada nas mensagens de sucesso
+        backgroundColor:
+          type: string
+          description: Cor de fundo
+        companyUrl:
+          type: string
+          description: 'Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com'
+        mastercardClickToPayDpaid:
+          type: string
+          description: Digital Payment Application ID (dpaId) para habilitar Mastercard Click to Pay no Link de Pagamento. Campo opcional.
+    UserSettingsWithImage:
+      description: Configurações da empresa com imagem. Esse body deve ser enviado com form-data. Todos os campos são string (Text) com excessão do campo logo que é do tipo File.
+      properties:
+        logo:
+          type: string
+          format: binary
+          description: Arquivo de imagem do logo da empresa. Esse campo é do tipo "File" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg
+        mainColor:
+          type: string
+          description: Cor primária
+        secondaryColor:
+          type: string
+          description: Cor secundária
+        attentionColor:
+          type: string
+          description: Cor utilizada para alertas
+        errorColor:
+          type: string
+          description: Cor utilizada para as mensagens de erro
+        successColor:
+          type: string
+          description: Cor utilizada nas mensagens de sucesso
+        backgroundColor:
+          type: string
+          description: Cor de fundo
+        companyUrl:
+          type: string
+          description: 'Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com'
+        mastercardClickToPayDpaid:
+          type: string
+          description: Digital Payment Application ID (dpaId) para habilitar Mastercard Click to Pay no Link de Pagamento. Campo opcional.
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos

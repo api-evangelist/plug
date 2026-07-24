@@ -1,0 +1,274 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Flows API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Flows
+  description: '
+
+    Através da API de `flows` é possível recuperar detalhes de um Fluxo ou listar todas os Fluxos cadastrados em determinado `clientId`.
+
+
+    Os fluxos inteligentes são um recurso disponibilizado pela Malga para gestão dos pagamentos, possibilitando a configuração e a inserção de regras e condicionais personalizados para processamento das cobranças. Para mais informações, consulte a documentação [link](https://docs.malga.io/documentations/flow-guide/introduction).
+
+    '
+paths:
+  /v1/flows:
+    get:
+      summary: Recuperar todos os fluxos paginado
+      operationId: getAllFlows
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: number
+        required: false
+        description: Número da página
+      - in: query
+        name: limit
+        schema:
+          type: number
+        required: false
+        description: Quantidade de itens por página
+      - in: query
+        name: merchantId
+        schema:
+          type: string
+        required: false
+        description: Usado para filtrar os fluxos por merchantId
+      - in: query
+        name: paymentMethod
+        schema:
+          type: string
+        required: false
+        description: Usado para filtrar os fluxos por método de pagamento
+      responses:
+        '200':
+          description: Response de flow
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllFlowResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Flows
+  /v1/flows/{id}:
+    get:
+      operationId: getFlowById
+      summary: Consultar um fluxo pelo id
+      parameters:
+      - name: id
+        required: true
+        description: Flow id
+        in: path
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Response de flow
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Flows
+components:
+  schemas:
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    MetaPagination:
+      properties:
+        itemCount:
+          type: integer
+          description: Quantidade de itens na página
+        totalItems:
+          type: integer
+          description: Quantidade total de itens na consulta (esse valor é mantido em cache por 5 minutos para melhorar a performance da API)
+        itemsPerPage:
+          type: integer
+          description: Quantidade de itens por página
+        totalPages:
+          type: integer
+          description: Quantidade total de páginas
+        currentPage:
+          type: integer
+          description: Página atual
+    FlowResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador único do fluxo
+        paymentMethod:
+          type: string
+          description: Método de pagamento a qual aquele fluxo é relacionado
+        clientId:
+          type: string
+          description: Identificador do cliente dono do fluxo
+        merchants:
+          type: array
+          items:
+            type: object
+            properties:
+              merchantId:
+                type: string
+                description: Identificador do merchant relacionado ao fluxo
+        parentId:
+          type: string
+          description: Identificador do fluxo que originou o novo
+        restoredFrom:
+          type: string
+          description: Identificador do fluxo do qual este foi restaurado
+        createdAt:
+          type: string
+          description: Data e hora em que o fluxo foi criado (UTC)
+        flow:
+          type: object
+          description: Dados do fluxo que será cadastrado
+      example:
+        id: b4ced0dd-2136-4bce-a231-364e93554073
+        merchants:
+        - merchantId: z1babb21-6a4c-987d-89db-11d3af737ee1
+        paymentMethod: credit
+        clientId: f1babb21-6a4c-323d-12db-69d3af407ee1
+        parentId: g1babb21-6a4c-987d-89db-11d3af737ee1
+        createdAt: '2023-03-22T20:45:06.020Z'
+        flow:
+          version: 0.0.0
+          root:
+          - rule: provider
+            id: z1babb21-6a4c-987d-89db-11d3af737ee1
+        restoredFrom: df601922-e024-6394-8f12-af21ec4218b1
+    AllFlowResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/FlowResponse'
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/MetaPagination'
+      example:
+        items:
+        - id: b4ced0dd-2136-4bce-a231-364e93554073
+          paymentMethod: credit
+          clientId: f1babb21-6a4c-323d-12db-69d3af407ee1
+          merchants:
+          - merchantId: z1babb21-6a4c-987d-89db-11d3af737ee1
+          parentId: g1babb21-6a4c-987d-89db-11d3af737ee1
+          createdAt: '2023-03-22T20:45:06.020Z'
+          flow:
+            version: 0.0.0
+            root:
+            - rule: provider
+              id: z1babb21-6a4c-987d-89db-11d3af737ee1
+          restoredFrom: df601922-e024-6394-8f12-af21ec4218b1
+        meta:
+          itemCount: 10
+          totalItems: 20
+          itemsPerPage: 10
+          totalPages: 5
+          currentPage: 2
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos

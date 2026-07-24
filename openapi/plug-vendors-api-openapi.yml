@@ -1,0 +1,597 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Vendors API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Vendors
+paths:
+  /v1/vendors:
+    get:
+      operationId: getVendorPaginate
+      summary: Listagem de vendedores paginada
+      parameters:
+      - name: limit
+        description: Limite de itens retornados na consulta
+        in: query
+        schema:
+          type: number
+          default: 10
+      - name: page
+        description: Páginas da consulta
+        in: query
+        schema:
+          type: number
+          default: 1
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorResponse'
+              examples:
+                VendorPaginatedResponse:
+                  $ref: '#/components/examples/VendorPaginatedResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Vendors
+    post:
+      summary: Criação de um novo vendedor
+      operationId: postVendors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorRequest'
+            examples:
+              VendorRequest:
+                $ref: '#/components/examples/VendorRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorResponse'
+              examples:
+                VendorResponse:
+                  $ref: '#/components/examples/VendorResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Vendors
+  /v1/vendors/{id}:
+    get:
+      summary: Recuperar detalhes de um vendedor
+      parameters:
+      - name: id
+        required: true
+        description: Id do vendedor
+        in: path
+        schema:
+          type: string
+          format: uuid
+      operationId: getVendor
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorResponse'
+              examples:
+                VendorResponse:
+                  $ref: '#/components/examples/VendorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Vendors
+    patch:
+      summary: Atualizar um vendedor
+      operationId: updateVendor
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+        description: Id do vendedor que deseja alterar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorUpdateRequest'
+            examples:
+              VendorUpdateRequest:
+                $ref: '#/components/examples/VendorUpdateRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorResponse'
+              examples:
+                VendorResponse:
+                  $ref: '#/components/examples/VendorResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Vendors
+    delete:
+      summary: Deletar vededor pelo id
+      operationId: deleteVendor
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id do vendedor
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Nenhum conteúdo
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Vendors
+components:
+  examples:
+    VendorUpdateRequest:
+      summary: Exemplo de atualização de vendor
+      value:
+        referenceId: '12345'
+        name: Empresa Exemplo Ltda
+    VendorRequest:
+      summary: Exemplo de requisição de vendor
+      value:
+        referenceId: '12345'
+        identityType: CNPJ
+        identity: 12.345.678/0001-99
+        mcc: '1234'
+        name: Empresa Exemplo Ltda
+        email: contato@empresaexemplo.com
+        phoneNumber: '5511999999999'
+        website: https://www.empresaexemplo.com
+        address:
+          country: BR
+          state: SP
+          city: São Paulo
+          district: Centro
+          zipCode: 01001-000
+          street: Avenida Paulista
+          streetNumber: '1000'
+          complement: Apto 101
+    VendorPaginatedResponse:
+      summary: Exemplo resposta paginada de vendor
+      value:
+        items:
+        - id: db56bd6a-10d7-4039-9c68-fc4405a1a3e1
+          referenceId: '12345'
+          identityType: CNPJ
+          identity: 12.345.678/0001-99
+          mcc: '1234'
+          name: Empresa Exemplo Ltda
+          email: contato@empresaexemplo.com
+          phoneNumber: '5511999999999'
+          website: https://www.empresaexemplo.com
+          address:
+            country: BR
+            state: SP
+            city: São Paulo
+            district: Centro
+            zipCode: 01001-000
+            street: Avenida Paulista
+            streetNumber: '1000'
+            complement: Apto 101
+          updatedAt: '2024-06-26T12:34:56Z'
+          createdAt: '2024-06-01T08:00:00Z'
+        meta:
+          totalItems: 16
+          itemCount: 1
+          itemsPerPage: 1
+          totalPages: 2
+          currentPage: 1
+    VendorResponse:
+      summary: Exemplo resposta de vendor
+      value:
+        id: db56bd6a-10d7-4039-9c68-fc4405a1a3e1
+        referenceId: '12345'
+        identityType: CNPJ
+        identity: 12.345.678/0001-99
+        mcc: '1234'
+        name: Empresa Exemplo Ltda
+        email: contato@empresaexemplo.com
+        phoneNumber: '5511999999999'
+        website: https://www.empresaexemplo.com
+        address:
+          country: BR
+          state: SP
+          city: São Paulo
+          district: Centro
+          zipCode: 01001-000
+          street: Avenida Paulista
+          streetNumber: '1000'
+          complement: Apto 101
+        updatedAt: '2024-06-26T12:34:56Z'
+        createdAt: '2024-06-01T08:00:00Z'
+  schemas:
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    VendorAddress:
+      type: object
+      required:
+      - country
+      - state
+      - city
+      - district
+      - zipCode
+      - street
+      - streetNumber
+      properties:
+        country:
+          type: string
+          description: Pais onde se localiza o endereço - Padrão ISO 3166-1 alpha-2
+          enum:
+          - AL
+          - AD
+          - AR
+          - AT
+          - AU
+          - BA
+          - BZ
+          - BE
+          - BG
+          - BR
+          - BY
+          - CA
+          - CU
+          - CY
+          - CZ
+          - CH
+          - CL
+          - CN
+          - CO
+          - CR
+          - DE
+          - DK
+          - DO
+          - EC
+          - EE
+          - SV
+          - GT
+          - FI
+          - FR
+          - GB
+          - GR
+          - HR
+          - HK
+          - HU
+          - IS
+          - ID
+          - IE
+          - IN
+          - IL
+          - IT
+          - LI
+          - LT
+          - LU
+          - LV
+          - MK
+          - MC
+          - MD
+          - MT
+          - MU
+          - JP
+          - KR
+          - MX
+          - ME
+          - MY
+          - NL
+          - NZ
+          - 'NO'
+          - PY
+          - PE
+          - PK
+          - PL
+          - PT
+          - RU
+          - RO
+          - SM
+          - RS
+          - SE
+          - SG
+          - TH
+          - TW
+          - TR
+          - SI
+          - SK
+          - ES
+          - UY
+          - UA
+          - US
+          - VE
+          - VN
+          - ZA
+        state:
+          type: string
+          description: Estado
+        city:
+          type: string
+          description: Cidade
+        district:
+          type: string
+          description: Bairro
+        zipCode:
+          type: string
+          description: Código postal CEP
+        street:
+          type: string
+          description: Nome da rua/avenida/travessa
+        streetNumber:
+          type: string
+          description: Número da rua
+        complement:
+          type: string
+          description: Complemento caso exista
+    VendorResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador do vendedor na malga
+        referenceId:
+          type: string
+          description: Identificador do vendedor no seu sistema
+        identityType:
+          type: string
+          description: Tipo de documento
+          enum:
+          - CPF
+          - CNPJ
+        identity:
+          type: string
+          description: Número do documento formato conforme tipo selecionado
+        mcc:
+          type: string
+          description: Código de segmento do lojista no adquirente, solicite ao seu provedor caso não saiba qual o seu Merchant Category Code.
+        name:
+          type: string
+          description: Nome Completo / Razão Social
+        email:
+          type: string
+          description: Email do vendedor
+        phoneNumber:
+          type: string
+          description: Telefone de contato do vendedor
+        website:
+          type: string
+          description: Identificação do merchant id a ser utilizado
+        address:
+          allOf:
+          - $ref: '#/components/schemas/VendorAddress'
+        updatedAt:
+          type: string
+          description: Data de alteração do vendedor
+        createdAt:
+          type: string
+          description: Data de criação do vendedor
+    VendorRequest:
+      type: object
+      required:
+      - referenceId
+      - identityType
+      - identity
+      - mcc
+      - name
+      - address
+      properties:
+        referenceId:
+          type: string
+          description: Identificador do vendedor no seu sistema. (Número máximo de caracteres 15)
+          maxLength: 15
+        identityType:
+          type: string
+          description: Tipo de documento
+          enum:
+          - CPF
+          - CNPJ
+        identity:
+          type: string
+          description: Número do documento formato conforme tipo selecionado
+        mcc:
+          type: string
+          description: Código de segmento do lojista no adquirente, solicite ao seu provedor caso não saiba qual o seu Merchant Category Code.
+        name:
+          type: string
+          description: Nome Completo / Razão Social
+        email:
+          type: string
+          nullable: true
+          description: Email do vendedor
+        phoneNumber:
+          type: string
+          nullable: true
+          description: Telefone de contato do vendedor
+        website:
+          type: string
+          nullable: true
+          description: Identificação do merchant id a ser utilizado
+        address:
+          allOf:
+          - $ref: '#/components/schemas/VendorAddress'
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    VendorUpdateRequest:
+      type: object
+      properties:
+        referenceId:
+          type: string
+          description: Identificador do vendedor no seu sistema
+        identityType:
+          type: string
+          description: Tipo de documento
+          enum:
+          - CPF
+          - CNPJ
+        identity:
+          type: string
+          description: Número do documento formato conforme tipo selecionado
+        mcc:
+          type: string
+          description: Código de segmento do lojista no adquirente, solicite ao seu provedor caso não saiba qual o seu Merchant Category Code.
+        name:
+          type: string
+          description: Nome Completo / Razão Social
+        email:
+          type: string
+          description: Email do vendedor
+        phoneNumber:
+          type: string
+          description: Telefone de contato do vendedor
+        website:
+          type: string
+          description: Identificação do merchant id a ser utilizado
+        address:
+          allOf:
+          - $ref: '#/components/schemas/VendorAddress'
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos

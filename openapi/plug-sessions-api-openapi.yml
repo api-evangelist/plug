@@ -1,0 +1,3460 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Sessions API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Sessions
+  description: '
+
+    Através da API de sessões é possível criar um pedido, composto por itens, métodos de pagamento e outros atributos, que pode ser pago através de um endpoint ou integrado ao MalgaCheckout.
+
+
+    # Fluxo de criação e de pagamento de uma sessão
+
+    - Crie uma `sessão` informando os dados básicos necessários
+
+    - Utilize a `publicKey` retornada na criação ou recuperada na rota de detalhes no `X-Api-Key` para autenticar o pagamento
+
+
+    **Dados básicos de um objeto do tipo session**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Session" exampleRef="#/components/examples/Session" />
+
+    '
+paths:
+  /v1/sessions:
+    get:
+      summary: Listar sessões
+      operationId: listSessions
+      description: 'Lista as sessões do cliente autenticado, com paginação e filtros opcionais.
+
+
+        Sem o header `X-Client-Id`, a API responde `200` com `items` vazio e metadados de paginação padrão (não retorna erro).
+
+        '
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        required: false
+        description: Número da página a ser listada (mínimo 1)
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+        required: false
+        description: Quantidade de registros por página (padrão 10; máximo 100)
+      - in: query
+        name: order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        required: false
+        description: 'Aceito como `asc` ou `desc` (padrão `desc`; valores inválidos caem para `desc`).
+
+          A listagem atual ordena sempre por `createdAt` decrescente.
+
+          '
+      - in: query
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: Filtra pelo identificador da sessão
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - created
+          - paid
+          - canceled
+          - voided
+        required: false
+        description: Filtra por status da sessão. Aceita múltiplos valores separados por vírgula
+      - in: query
+        name: isActive
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+        required: false
+        description: Filtra sessões ativadas ou desativadas. Aceita múltiplos valores separados por vírgula (`true` e/ou `false`)
+      - in: query
+        name: merchantId
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: Filtra pelo identificador do merchant
+      - in: query
+        name: orderId
+        schema:
+          type: string
+          minLength: 2
+        required: false
+        description: Filtra pelo identificador do pedido. Se informado, deve ter no mínimo 2 caracteres Unicode após o trim
+      - in: query
+        name: multiplePayments.status
+        schema:
+          type: string
+          enum:
+          - active
+          - disabled
+          - canceled
+        required: false
+        description: 'Filtra pela disponibilidade agregada do link (`multiplePayments.status`). Aceita múltiplos valores separados por vírgula.
+
+          `disabled` cobre links temporariamente indisponíveis, incluindo expiração por `dueDate`.
+
+          '
+      - in: query
+        name: created.gt
+        schema:
+          type: string
+          format: date-time
+        required: false
+        description: Filtra sessões com `createdAt` estritamente maior que o instante informado (RFC 3339 ou RFC 3339 com fração de segundos)
+        example: '2026-03-24T03:00:00.000Z'
+      - in: query
+        name: created.lt
+        schema:
+          type: string
+          format: date-time
+        required: false
+        description: Filtra sessões com `createdAt` estritamente menor que o instante informado (RFC 3339 ou RFC 3339 com fração de segundos)
+        example: '2026-04-01T02:59:00.000Z'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionList'
+              examples:
+                SessionList:
+                  $ref: '#/components/examples/SessionList'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Sessions
+    post:
+      summary: Criar nova sessão
+      operationId: createSession
+      description: 'Cria uma sessão de pagamento. Quando `maxPayments` é omitido, a sessão segue o fluxo 1:1 legado. Quando `maxPayments` é enviado, a sessão opera como link 1:N e a resposta completa retorna `multiplePayments` com a disponibilidade agregada para próximas cobranças.
+
+
+        **Restrição pix/boleto em 1:N:** métodos `pix` e `boleto` não podem ser combinados com `maxPayments` finito maior que `1`. Nesse caso a API retorna `422` com `businessCode: "pix_boleto_multiple_payments_not_allowed"`. `maxPayments` omitido, `null`, `1` ou `-1` (ilimitado) continua permitido para pix/boleto. O bloqueio não se aplica a cartão de crédito.
+
+        '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSession'
+            examples:
+              CreateSessionRequest:
+                $ref: '#/components/examples/CreateSessionRequest'
+              CreateSessionRequest1NFixed:
+                $ref: '#/components/examples/CreateSessionRequest1NFixed'
+              CreateSessionRequest1NUnlimited:
+                $ref: '#/components/examples/CreateSessionRequest1NUnlimited'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'
+              examples:
+                Session:
+                  $ref: '#/components/examples/Session'
+                Session1N:
+                  $ref: '#/components/examples/Session1N'
+        '422':
+          description: 'Unprocessable Entity. Regras de negócio bloquearam a criação da sessão. O envelope segue o formato padrão de erro, com `businessCode` identificando a regra violada.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                PixBoletoMultiplePaymentsNotAllowed:
+                  summary: Pix/boleto com maxPayments > 1
+                  value:
+                    error:
+                      type: bad_request
+                      code: 422
+                      message: PIX and boleto payment methods do not support maxPayments greater than 1.
+                      businessCode: pix_boleto_multiple_payments_not_allowed
+                      details: []
+                PlatformFeeExceedsLinkAmount:
+                  summary: Taxa de plataforma maior ou igual ao valor do link
+                  value:
+                    error:
+                      type: bad_request
+                      code: 422
+                      message: Calculated platform fee must be less than the link total amount.
+                      businessCode: platform_fee_exceeds_link_amount
+                      details: []
+      tags:
+      - Sessions
+  /v1/sessions/{id}:
+    get:
+      summary: Recuperar detalhes de uma sessão
+      operationId: getSession
+      description: 'Retorna a sessão completa. Use este endpoint como fonte do estado agregado de `multiplePayments` após criação, pagamento, atualização, cancelamento ou consulta de histórico.
+
+        '
+      parameters:
+      - name: id
+        required: true
+        description: Identificação da sessão a ser recuperada
+        in: path
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'
+              examples:
+                Session:
+                  $ref: '#/components/examples/Session'
+      tags:
+      - Sessions
+    patch:
+      summary: Atualizar relevância de uma sessão
+      operationId: patchSession
+      description: 'Atualiza campos de relevância da sessão: `isActive` (obrigatório), `dueDate` e `maxPayments` (sessões 1:N). A resposta é parcial e devolve apenas `id` e `isActive`; após a atualização, consulte `GET /v1/sessions/{id}` para obter o estado completo (`status`, `dueDate`, `maxPayments`, `multiplePayments`, etc.).
+
+
+        **Restrição de reativação pix/boleto 1:1 consumida:** `isActive: true` em uma sessão pix ou boleto 1:1 já paga (`maxPayments = 1` com `paymentCount = 1`, ou sessão legada sem `maxPayments` já `paid` com `paymentCount = 1`) retorna `422` com `businessCode: "pix_boleto_one_to_one_reactivation_blocked"`. O bloqueio ignora `maxPayments` enviado no PATCH.
+
+        '
+      parameters:
+      - name: id
+        required: true
+        description: Identificação da sessão a ser alterada
+        in: path
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchSessionRequest'
+            examples:
+              PatchSessionRequest:
+                $ref: '#/components/examples/PatchSessionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatchSession200Response'
+              examples:
+                PatchSession200Response:
+                  $ref: '#/components/examples/PatchSession200Response'
+        '422':
+          description: 'Unprocessable Entity. Regras de negócio bloquearam a atualização da sessão. O envelope segue o formato padrão de erro, com `businessCode` identificando a regra violada.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                PixBoletoOneToOneReactivationBlocked:
+                  summary: Reativação de sessão pix/boleto 1:1 já consumida
+                  value:
+                    error:
+                      type: bad_request
+                      code: 422
+                      message: Consumed one-to-one PIX or boleto sessions cannot be reactivated.
+                      businessCode: pix_boleto_one_to_one_reactivation_blocked
+                      details: []
+      tags:
+      - Sessions
+  /v1/sessions/{id}/charge:
+    post:
+      summary: Pagar uma sessão
+      operationId: paySession
+      description: 'Inicia uma cobrança para a sessão. Em sessões 1:N, cada chamada aceita representa uma tentativa individual dentro da capacidade configurada em `maxPayments`. A resposta é a cobrança criada e não retorna `multiplePayments`; consulte `GET /v1/sessions/{id}` para acompanhar o estado agregado atualizado.
+
+        '
+      parameters:
+      - name: id
+        required: true
+        description: Identificação da sessão a ser paga
+        in: path
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaySessionRequest'
+            examples:
+              PaySessionCardRequest:
+                $ref: '#/components/examples/PaySessionCardRequest'
+              PaySessionCardRequestWithRecurrence:
+                $ref: '#/components/examples/PaySessionCardRequestWithRecurrence'
+              PaySessionPixRequest:
+                $ref: '#/components/examples/PaySessionPixRequest'
+              PaySessionDripRequest:
+                $ref: '#/components/examples/PaySessionDripRequest'
+              PaySessionBoletoRequest:
+                $ref: '#/components/examples/PaySessionBoletoRequest'
+              PaySessionNupayRequest:
+                $ref: '#/components/examples/PaySessionNupayRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaySession201Response'
+              examples:
+                PaySession201CardResponse:
+                  $ref: '#/components/examples/PaySession201CardResponse'
+                PaySession201PixResponse:
+                  $ref: '#/components/examples/PaySession201PixResponse'
+                PaySession201DripResponse:
+                  $ref: '#/components/examples/PaySession201DripResponse'
+                PaySession201BoletoResponse:
+                  $ref: '#/components/examples/PaySession201BoletoResponse'
+                PaySession201NupayResponse:
+                  $ref: '#/components/examples/PaySession201NupayResponse'
+        '404':
+          description: 'Sessão não encontrada ou não pertencente ao cliente informado em `X-Client-Id`.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: 'Unprocessable Entity. A cobrança não pode ser processada: sellers de split inválidos, ou sessão 1:N indisponível (link desativado ou limite de pagamentos atingido). Nos casos de indisponibilidade 1:N, o `businessCode` é `session_disabled` ou `multiple_payments_limit_reached`. O envelope segue o formato padrão de erro.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                InvalidSellers:
+                  summary: Sellers de split inválidos
+                  value:
+                    error:
+                      type: bad_request
+                      code: 422
+                      message: 'session cannot be charged: sellers not found [9f8b2c1a-4d3e-4a2b-8c7d-1e2f3a4b5c6d]'
+                      details: []
+                MultiplePaymentsLimitReached:
+                  summary: Limite de pagamentos 1:N atingido
+                  value:
+                    error:
+                      type: bad_request
+                      code: 422
+                      message: multiple payments limit reached
+                      businessCode: multiple_payments_limit_reached
+                      details: []
+      tags:
+      - Sessions
+  /v1/sessions/{id}/cancel:
+    post:
+      summary: Cancelar uma sessão
+      operationId: cancelSession
+      parameters:
+      - name: id
+        required: true
+        description: Identificação da sessão a ser cancelada
+        in: path
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelSession201Response'
+              examples:
+                CancelSession201Response:
+                  $ref: '#/components/examples/CancelSession201Response'
+      tags:
+      - Sessions
+  /v1/sessions/{id}/history:
+    get:
+      summary: Recuperar o histórico da sessão
+      operationId: getSessionHistory
+      description: 'Retorna a trilha de auditoria da sessão em ordem decrescente de criação, com os registros mais recentes primeiro: alterações de campos, tentativas de pagamento, confirmações assíncronas e expirações.
+
+
+        Cada item representa um **registro de histórico** (`id` do evento), não o identificador da sessão. Use `action` (ação principal derivada) e `actions` (lista completa) junto com `diff` para entender o que ocorreu.
+
+
+        O campo `status` em cada item segue a **semântica de produto** na leitura: expirações automáticas por `dueDate` ou limite 1:N podem aparecer como `disabled`, mesmo quando o status persistido no registro era `created`.
+
+
+        Para o estado atual da sessão e de `multiplePayments`, consulte `GET /v1/sessions/{id}`. O histórico não substitui essa consulta.
+
+        '
+      parameters:
+      - name: id
+        required: true
+        description: Identificação da sessão
+        in: path
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionHistoryResponse'
+              examples:
+                SessionHistoryResponse:
+                  $ref: '#/components/examples/SessionHistoryResponse'
+        '400':
+          description: Header `X-Client-Id` ausente ou identificador da sessão ausente no path
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Sessão não encontrada para o par `id` + `X-Client-Id`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno inesperado ao recuperar o histórico da sessão
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Sessions
+  /v1/sessions/{id}/link:
+    get:
+      summary: Recupera sessão com os dados das configurações da empresa
+      operationId: getSessionWithSettings
+      description: 'Retorna a sessão completa junto das configurações da empresa usadas no Link de Pagamento. Também inclui `multiplePayments` para indicar a disponibilidade agregada do link em sessões 1:1 e 1:N.
+
+        '
+      parameters:
+      - name: id
+        required: true
+        description: Identificação da sessão a ser recuperada
+        in: path
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionSettingsResponse'
+      tags:
+      - Sessions
+components:
+  schemas:
+    VendorCharge:
+      type: object
+      description: Parâmetros adicionais para transacionar com `vendors`
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador do vendedor já cadastrado na API de [vendors](/api-reference/vendors/criacao-de-um-novo-vendedor)
+        paymentFacilitatorId:
+          type: string
+          description: Seu código de Subadquirente na respectiva bandeira. [Verifique a lista de provedores suportados](/documentations/vendors/provedores)
+          nullable: true
+      required:
+      - id
+      - paymentFacilitatorId
+    PaymentMethodDripObjectRequest:
+      title: Drip
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - drip
+          description: Método da cobrança via Drip
+        cancelRedirectUrl:
+          type: string
+          description: Link de redirecionamento em caso de cancelamento do pagamento no ambiente de checkout da Drip
+        successRedirectUrl:
+          type: string
+          description: Link de redirecionamento em caso de aprovação do pagamento no ambiente de checkout da Drip
+      required:
+      - paymentType
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    UserSettings:
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador das configurações da empresa
+        logo:
+          type: string
+          format: uri
+          description: URL do logo da empresa
+        mainColor:
+          type: string
+          description: Cor primária
+        secondaryColor:
+          type: string
+          description: Cor secundária
+        attentionColor:
+          type: string
+          description: Cor utilizada para alertas
+        errorColor:
+          type: string
+          description: Cor utilizada para as mensagens de erro
+        successColor:
+          type: string
+          description: Cor utilizada nas mensagens de sucesso
+        backgroundColor:
+          type: string
+          description: Cor de fundo
+        clientId:
+          type: string
+          description: Identificador do cliente na Malga
+        companyUrl:
+          type: string
+          description: 'Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com'
+        mastercardClickToPayDpaid:
+          type: string
+          description: Digital Payment Application ID (dpaId) para habilitar Mastercard Click to Pay no Link de Pagamento. Campo opcional.
+        merchantId:
+          type: string
+          description: Indica se a configuração retornada é específica de um merchant (id do merchant) ou a configuração padrão do cliente (nesse caso sem valor).
+    PaymentMethodNupayObjectRequest:
+      title: NuPay
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - nupay
+          description: Método da cobrança via Nupay
+        orderUrl:
+          type: string
+          description: URL da cobrança
+        delayToAutoCancel:
+          type: integer
+          description: Tempo em minutos para a expiração de uma cobrança criada que não tenha sido paga
+        returnUrl:
+          type: string
+          description: URL para a qual o cliente será redirecionado após finalizar o pagamento
+        cancelUrl:
+          type: string
+          description: URL para onde o cliente será direcionado caso escolha não finalizar o pagamento e cancele o pedido
+        recipients:
+          type: array
+          description: Beneficiários finais da transação NuPay (PLDFT). Campo opcional.
+          items:
+            $ref: '#/components/schemas/NupayRecipient'
+      required:
+      - paymentType
+    PaySessionRequest:
+      description: 'Corpo para pagamento da sessão (`paymentMethod` e `paymentSource`). Se existir split, as regras foram definidas na **criação da sessão** (`splitRules` em POST /v1/sessions) e são aplicadas ao processar esta cobrança; não envie `splitRules` aqui.
+
+        '
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador de comprador para consulta futura
+        paymentMethod:
+          description: Define o método de cobrança
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodCard'
+          - $ref: '#/components/schemas/PaymentMethodPixObjectRequest'
+          - $ref: '#/components/schemas/PaymentMethodBoleto'
+          - $ref: '#/components/schemas/PaySessionPaymentMethodDripObjectRequest'
+          - $ref: '#/components/schemas/PaymentSessionNuPay'
+          - $ref: '#/components/schemas/PaymentMethodClickToPay'
+        paymentSource:
+          oneOf:
+          - $ref: '#/components/schemas/SourceTypeCard'
+          - $ref: '#/components/schemas/SourceTypeCardOneShot'
+          - $ref: '#/components/schemas/SourceTypeToken'
+          - $ref: '#/components/schemas/SourceTypeCustomer'
+          - $ref: '#/components/schemas/SourceTypeCustomerData'
+          - $ref: '#/components/schemas/SourceTypeClickToPay'
+        fraudAnalysis:
+          description: Parâmetros adicionais para análise de fraude. Alguns destes campos podem ser necessários para processar com provedores específicos.
+          allOf:
+          - $ref: '#/components/schemas/FraudAnalysisRequest'
+      required:
+      - paymentMethod
+      - paymentSource
+    SourceTypeCustomerData:
+      title: Pagamentos com dados de Customer
+      type: object
+      description: Dados do customer para cobrança via Cartão, Pix ou Boleto
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `customer` para cobrança via Cartão, Pix ou Boleto
+          enum:
+          - customer
+        customer:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Nome do usuario
+            email:
+              type: string
+              description: Email do usuario
+            phoneNumber:
+              type: string
+              description: Telefone de contato do usuario
+            document:
+              allOf:
+              - $ref: '#/components/schemas/Document'
+            address:
+              allOf:
+              - $ref: '#/components/schemas/Address'
+          required:
+          - email
+          - phoneNumber
+          - document
+      required:
+      - sourceType
+      - customer
+    FraudAnalysisRequest:
+      properties:
+        sla:
+          type: number
+          description: Valor em Minutos de SLA máximo de Análise do Pedido, se houver
+        customer:
+          description: Dados do comprador
+          type: object
+          properties:
+            name:
+              type: string
+              description: Nome do usuario
+            email:
+              type: string
+              description: Email do usuario
+            phone:
+              type: string
+              description: Telefone de contato do usuario
+            identityType:
+              type: string
+              description: Tipo de documento, consultar tabela de tipos suportados
+            identity:
+              type: string
+              description: Número do documento formato conforme tipo selecionado
+            maritalStatus:
+              type: string
+              description: Estado civil do usuario
+            education:
+              type: string
+              description: Nível de escolaridade do usuario
+            registrationDate:
+              type: string
+              description: Data de registro do cliente
+            deliveryAddress:
+              description: Endereço de entrega
+              allOf:
+              - $ref: '#/components/schemas/FraudAnalysisAddress'
+            billingAddress:
+              description: Endereço de cobrança
+              allOf:
+              - $ref: '#/components/schemas/FraudAnalysisAddress'
+            browser:
+              description: Informações sobre o navegador do usuário
+              allOf:
+              - $ref: '#/components/schemas/FraudAnalysisCustomerBrowser'
+        mfa:
+          description: Dados de Multi factor authentication
+          type: object
+          properties:
+            smsOtpUsed:
+              type: boolean
+              description: Usuario utilizou OTP via SMS
+            emailOtpUsed:
+              type: boolean
+              description: Usuario utilizou OTP via email
+        cart:
+          description: Detalhe do carrinho de produtos
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Nome do item/evento
+                  quantity:
+                    type: integer
+                    description: Quantidade de itens do pedido
+                  sku:
+                    type: string
+                    description: Identificador único do item na loja
+                  unitPrice:
+                    type: integer
+                    description: Valor unitário do item/evento em centavos
+                  risk:
+                    type: string
+                    description: Definição do indice de risco do item
+                    enum:
+                    - High
+                    - Low
+                  description:
+                    type: string
+                    description: Descrição do item/evento
+                  categoryId:
+                    type: string
+                    description: Categoria a qual o item/evento pertence
+                  locality:
+                    type: string
+                    description: Definição de local, em caso de evento
+                  date:
+                    type: string
+                    description: Definição de data, em caso de evento
+                  type:
+                    type: number
+                    description: Definição de tipo, em caso de evento
+                  genre:
+                    type: string
+                    description: Definição de gênero, em caso de evento
+                  tickets:
+                    type: object
+                    description: Informações relacionadas aos ingressos, em caso de evento
+                    properties:
+                      quantityTicketSale:
+                        type: number
+                        description: Quantidade total de ingressos à venda
+                      quantityEventHouse:
+                        type: number
+                        description: Quantidade de vezes que o evento será realizado na casa
+                      convenienceFeeValue:
+                        type: number
+                        description: Taxa de Conveniência
+                      quantityFull:
+                        type: number
+                        description: Quantidade de ingressos com valor integral
+                      quantityHalf:
+                        type: number
+                        description: Quantidade de ingresso com desconto (meia entrada)
+                      batch:
+                        type: number
+                        description: Lote do Ingresso
+                  location:
+                    description: Definição de endereço, em caso de evento
+                    allOf:
+                    - $ref: '#/components/schemas/FraudAnalysisAddress'
+        device:
+          description: Detalhes do aparelho do consumidor
+          type: object
+          properties:
+            id:
+              type: string
+              description: Id do dispositivo
+            sessionId:
+              type: string
+              description: ID da sessão
+            os:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Tipo do sistema operacional
+                version:
+                  type: string
+                  description: Versão do sistema operacional
+            model:
+              type: string
+              description: Modelo do aparelho
+            ramCapacity:
+              type: integer
+              description: Capacidade da memória RAM do aparelho
+            diskCapacity:
+              type: integer
+              description: Capacidade de armazenamento do aparelho
+            freeDiskSpace:
+              type: integer
+              description: Quantidade de memória livre
+            resolution:
+              type: integer
+              description: Resolução do aparelho
+            vendors:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name do atributo do fornecedor
+                  value:
+                    type: string
+                    description: Valor do atributo do fornecedor
+            vendorAttributes:
+              description: Atributos do aparelho fornecidos pelo fornecedor
+              type: object
+              properties:
+                flash:
+                  type: boolean
+                  description: Aparelho possui flash
+                phoneCalls:
+                  type: boolean
+                  description: Aparelho pode realizar chamadas
+                sendSms:
+                  type: boolean
+                  description: Aparelho pode enviar sms
+                videoCamera:
+                  type: boolean
+                  description: Aparelho possui camera de video
+                cpuCount:
+                  type: integer
+                  description: Quantidade de cpus
+                simulator:
+                  type: boolean
+                  description: Aparelho possui simulador
+                language:
+                  type: string
+                  description: Lingua do aparelho
+                idiom:
+                  type: string
+                  description: Idioma do aparelho
+                platform:
+                  type: string
+                  description: Plataforma do sistema
+                name:
+                  type: string
+                  description: Nome do aparelho
+                family:
+                  type: string
+                  description: Família do aparelho
+                retinaDisplay:
+                  type: boolean
+                  description: Aparelho possui display de retina
+                camera:
+                  type: boolean
+                  description: Aparelho possui camera
+                model:
+                  type: string
+                  description: Modelo do aparelho
+                frontCamera:
+                  type: boolean
+                  description: Aparelho possui camera frontal
+        airline:
+          description: Detalhes da reserva de passagem aérea
+          type: object
+          properties:
+            passengers:
+              type: array
+              description: Informações sobre os passageiros
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Nome do passageiro
+                  companyMileCard:
+                    type: string
+                    description: Cartão de Milhas da empresa
+                  mileCard:
+                    type: string
+                    description: Cartão de Milhas
+                  identityType:
+                    type: string
+                    description: Tipo de identidade
+                  identityNumber:
+                    type: string
+                    description: Número de identidade
+                  gender:
+                    type: string
+                    description: Gênero do passageiro
+                    enum:
+                    - male
+                    - female
+                  birthdate:
+                    type: string
+                    description: Data de nascimento do passageiro
+            connections:
+              type: array
+              description: Detalhes das conexões de voo
+              items:
+                type: object
+                properties:
+                  company:
+                    type: string
+                    description: Companhia aérea
+                  identificationNumber:
+                    type: integer
+                    description: Número de identificação do voo
+                  date:
+                    type: string
+                    description: Data do voo
+                  seatClass:
+                    type: string
+                    description: Classe do assento
+                  origin:
+                    type: string
+                    description: Aeroporto de origem
+                  destination:
+                    type: string
+                    description: Aeroporto de destino
+                  boarding:
+                    type: string
+                    description: Data de embarque
+                  arriving:
+                    type: string
+                    description: Data de chegada
+                  fareClass:
+                    type: string
+                    description: Classe tarifária
+            reservation:
+              type: string
+              description: Data da reserva de passagem aérea
+        orderOrigin:
+          type: string
+          description: Origem do pedido
+          enum:
+          - app
+          - web
+          - telesales
+          - social_network
+          - other
+        operationalSystem:
+          type: string
+          description: Tipo de sistema operacional do cliente
+        marketplaceType:
+          type: string
+          description: Tipo de mercado
+          enum:
+          - b2b
+          - b2c
+        purchaseInformation:
+          type: object
+          description: Informações sobre o canal de compra
+          properties:
+            lastDateInsertedMail:
+              type: string
+              description: Última data de inserção de e-mail
+            lastDateChangePassword:
+              type: string
+              description: Última data de alteração de senha
+            lastDateChangePhone:
+              type: string
+              description: Última data de alteração de telefone
+            lastDateChangeMobilePhone:
+              type: string
+              description: Última data de alteração de telefone móvel
+            lastDateInsertedAddress:
+              type: string
+              description: Última data de inserção de endereço
+            purchaseLogged:
+              type: boolean
+              description: Indica se a compra foi registrada
+            email:
+              type: string
+              description: Endereço de e-mail do comprador
+            login:
+              type: string
+              description: Nome de usuário do comprador
+        socialNetwork:
+          type: object
+          description: Informações da rede social do comprador
+          properties:
+            optInCompreConfie:
+              type: boolean
+              description: Opt-in para Compre Confie
+            socialNetworkType:
+              type: string
+              description: Tipo de rede social
+              enum:
+              - facebook
+              - twitter
+              - linkedin
+              - google
+              - other
+            authenticationToken:
+              type: string
+              description: Token de autenticação
+        giftList:
+          type: object
+          description: Lista de presentes
+          properties:
+            type:
+              type: string
+              description: Tipo de lista
+              enum:
+              - wishlist
+              - wedding_list
+              - birthday_list
+              - other
+            id:
+              type: string
+              description: Identificador da lista de presentes
+        hotels:
+          type: array
+          description: Informações sobre reservas de hotéis
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Nome do hotel
+              city:
+                type: string
+                description: Cidade do hotel
+              state:
+                type: string
+                description: Estado do hotel
+              country:
+                type: string
+                description: País do hotel
+              reservationDate:
+                type: string
+                description: Data da reserva
+              reserveExpirationDate:
+                type: string
+                description: Data de expiração da reserva
+              checkInDate:
+                type: string
+                description: Data de check-in
+              checkOutDate:
+                type: string
+                description: Data de check-out
+    FraudAnalysisCustomerBrowser:
+      type: object
+      properties:
+        browserFingerprint:
+          type: string
+          description: Fingerprint gerado do navegador
+        cookiesAccepted:
+          type: boolean
+          description: Indica se os cookies foram aceitados
+        email:
+          type: string
+          description: E-mail logado no navegador
+        hostName:
+          type: string
+          description: Nome do host do usuário
+        ipAddress:
+          type: string
+          description: Endereço de ip do usuário
+        type:
+          type: string
+          description: User-agent do browser
+    TransactionRequest:
+      properties:
+        id:
+          type: string
+          description: Identificador único do request feito ao provedor
+        providerId:
+          type: string
+          format: uuid
+          description: Identificador do provider que processou a requisiçao, consulte a lista de providers configurados na sua conta
+        providerType:
+          type: string
+          description: Código que identifica o provedor, consultar tabela de provedores suportados pela Malga
+        idempotencyKey:
+          type: string
+          description: Chave única de referência gerada pela Malga para cada requisição, utilizada para garantir idempotência e evitar duplicidade no provedor, pode ser também consultada na API ou dashboard do provedor como orderId ou referenceKey no provedor.
+        authorizationNsu:
+          type: string
+          description: Identificador único da transação retornado pelo provider
+        transactionId:
+          type: string
+          description: Identificador único da transação retornado pelo provider, txId, pode ser usado para recuperar a transação nas APIs ou dashboard do provedor
+        requestStatus:
+          type: string
+          enum:
+          - running
+          - failed
+          - success
+          - timeout
+          - internal_error
+          - processing
+          description: Status do processamento da requisição no provider
+        requestType:
+          type: string
+          enum:
+          - pending
+          - authorization
+          - pre_authorization
+          - void
+          - capture
+          - probe
+          - charge_back
+          - zero_dollar
+          - anti_fraud
+          - dispute
+          description: Identifica o tipo da requisição feita para o provider
+        tokenizedPayment:
+          type: boolean
+          description: Identifica se a transação foi processada usando um token externo
+        amount:
+          type: number
+          description: Valor da transação enviada para processamento do provider, em casos de estorno ou captura parcial o valor pode ser diferente do amount original da transação
+        responseTs:
+          type: string
+          description: Tempo de duração do processamento da requisição no provider
+        providerError:
+          type: object
+          description: Detalhes do erro em caso de falha no processamento da transação
+          properties:
+            message:
+              type: string
+              description: Mensagem de erro mapeado pela Malga que descreve o motivo de rejeição retornad
+            declinedCode:
+              type: string
+              description: Codigo de erro mapeado pela Malga com base no tipo de erro apresentado pelo provedor
+            retryable:
+              type: boolean
+              description: Identifica se o tipo de erro permite ou não retentativa
+            networkDeniedReason:
+              type: string
+              description: Código retornado pelo provider que identitifica o motivo da rejeição, consultar o provedor
+            networkDeniedMessage:
+              type: string
+              description: Mensagem de erro retornado pelo provider, consultar o provedor
+        providerAuthorization:
+          type: object
+          description: Dados adicionais do retorno da autorização do provider no processamento da transação
+          properties:
+            networkAuthorizationCode:
+              type: string
+              description: Código de autorização da transação conforme retornado pelo provider
+            networkResponseCode:
+              type: string
+              description: Código de resposta da requisição conforme retornado pelo provider
+        createdAt:
+          type: string
+          description: Data de criação do request feito ao provedor
+        updatedAt:
+          type: string
+          description: Data de atualização do request feito ao provedor
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          description: Nome da rua/avenida/travessa
+        streetNumber:
+          type: string
+          description: Número onde se localiza o endereço
+        complement:
+          type: string
+          description: Complemento onde se localiza o endereço, caso exista
+        zipCode:
+          type: string
+          description: Codigo postal CEP
+        country:
+          type: string
+          description: Pais onde se localiza o endereço - Padrão ISO 3166-1 alpha-2
+          default: BR
+          enum:
+          - AL
+          - AD
+          - AR
+          - AT
+          - AU
+          - BA
+          - BZ
+          - BE
+          - BG
+          - BR
+          - BY
+          - CA
+          - CU
+          - CY
+          - CZ
+          - CH
+          - CL
+          - CN
+          - CO
+          - CR
+          - DE
+          - DK
+          - DO
+          - EC
+          - EE
+          - SV
+          - GT
+          - FI
+          - FR
+          - GB
+          - GR
+          - HR
+          - HK
+          - HU
+          - IS
+          - ID
+          - IE
+          - IN
+          - IL
+          - IT
+          - LI
+          - LT
+          - LU
+          - LV
+          - MK
+          - MC
+          - MD
+          - MT
+          - MU
+          - JP
+          - KR
+          - MX
+          - ME
+          - MY
+          - NL
+          - NZ
+          - 'NO'
+          - PY
+          - PE
+          - PK
+          - PL
+          - PT
+          - RU
+          - RO
+          - SM
+          - RS
+          - SE
+          - SG
+          - TH
+          - TW
+          - TR
+          - SI
+          - SK
+          - ES
+          - UY
+          - UA
+          - US
+          - VE
+          - VN
+          - ZA
+        state:
+          type: string
+          description: Estado onde se localiza o endereço
+        city:
+          type: string
+          description: Cidade onde se localiza o endereço
+        district:
+          type: string
+          description: Bairro onde se localiza o endereço
+      required:
+      - street
+      - streetNumber
+      - zipCode
+      - country
+      - state
+      - city
+      - district
+    SourceTypeCardObject:
+      title: Cartão de crédito
+      type: object
+      description: Dados para cobrança por cartão de crédito salve
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança
+          enum:
+          - card
+        cardId:
+          type: string
+          format: uuid
+          description: Identificador do cartão quando source tipo card
+      required:
+      - sourceType
+      - cardId
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    DripBrowser:
+      properties:
+        ipAddress:
+          type: string
+          description: IP do usuário
+        browserFingerprint:
+          type: string
+          description: Fingerprint do navegador utilizado pelo usuário
+    SessionHistoryResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/SessionHistoryItem'
+    SourceTypeToken:
+      title: Token
+      type: object
+      description: Dados para cobrança única de token de cartão
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `token` para cobrança no token gerado
+          enum:
+          - token
+        tokenId:
+          type: string
+          format: uuid
+          description: Identificador do token quando source tipo token (opcional)
+      required:
+      - sourceType
+      - tokenId
+    PaymentMethodClickToPay:
+      title: Click to Pay
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - click_to_pay
+          description: Método da cobrança via Click to Pay
+        installments:
+          type: number
+          description: Quantidade de parcelas para cobrança do tipo Click to Pay
+      required:
+      - paymentType
+    SessionResponse:
+      properties:
+        id:
+          type: string
+          description: Identificação da sessão
+        name:
+          type: string
+          description: Nome que identifica a sessão
+        status:
+          type: string
+          enum:
+          - created
+          - paid
+          - canceled
+          - voided
+          description: Status da sessão
+        isActive:
+          type: boolean
+          description: Determina se a sessão está ativa
+        clientId:
+          type: string
+          description: Identificador do cliente na Malga
+        orderId:
+          type: string
+          description: Identificador único da cobrança do lado do cliente para conciliação futura
+        amount:
+          type: number
+          description: Valor da transação em centavos, exemplo 100 para cobrar R$ 1,00
+        currency:
+          type: string
+          description: Identificador da moeda para processamento da cobrança, formato ISO 4217.
+        capture:
+          type: boolean
+          description: Determina se a transação deve ser capturada automaticamente
+        merchantId:
+          type: string
+          description: Identificação do merchant id a ser utilizado
+        dueDate:
+          type: string
+          nullable: true
+          description: 'Data limite da sessão, em ISO 8601. Pode estar ausente (`omitempty`) quando a sessão foi criada sem data de vencimento.
+
+            '
+        description:
+          type: string
+          description: Descrição da sessão
+        statementDescriptor:
+          type: string
+          description: Descrição a ser exibida fatura do comprador
+        captchaEnabled:
+          type: boolean
+          description: Indica se a sessão usa verificação por CAPTCHA no Link de Pagamento.
+        items:
+          type: array
+          description: Itens do pedido
+          items:
+            $ref: '#/components/schemas/SessionItemObject'
+        paymentLink:
+          type: string
+          description: Link para acessar o Link de Pagamento desta sessão
+        vendor:
+          allOf:
+          - $ref: '#/components/schemas/VendorCharge'
+        paymentMethods:
+          type: array
+          description: Métodos de pagamento disponíveis na sessão
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/PaymentMethodCardObject'
+            - $ref: '#/components/schemas/PaymentMethodPixObject'
+            - $ref: '#/components/schemas/PaymentMethodBoletoObject'
+            - $ref: '#/components/schemas/PaymentMethodDripObjectRequest'
+            - $ref: '#/components/schemas/PaymentMethodNupayObjectRequest'
+        createdAt:
+          type: string
+          description: Data de criação da sessão
+        updatedAt:
+          type: string
+          description: Data da atualização da sessão
+        publicKey:
+          type: string
+          description: Chave de acesso com escopo restrito, usada para pagar a sessão
+        providerReferenceKey:
+          type: string
+          description: Chave de referência da sessão no provedor
+        splitRules:
+          type: array
+          description: Regras de split persistidas nesta sessão (definidas na criação quando informadas).
+          items:
+            $ref: '#/components/schemas/SplitRule'
+        multiplePayments:
+          allOf:
+          - $ref: '#/components/schemas/MultiplePayments'
+          description: 'Estado conceitual de **disponibilidade do link** para receber uma próxima cobrança.
+
+            Retornado em respostas completas de sessão. Em respostas parciais de atualização ou pagamento, consulte `GET /v1/sessions/{id}` para obter o estado agregado atualizado.
+
+            '
+      example:
+        id: c1db83fa-723c-4e1f-9722-bc19d1be6791
+        name: Pedido 1
+        status: created
+        isActive: true
+        captchaEnabled: false
+        clientId: 39d2d314-5412-431a-b34b-74f9f0fbe7e1
+        orderId: b84b7694-d22f-4083-bee7-c1274b16eb4a
+        amount: 100
+        currency: BRL
+        capture: true
+        merchantId: 9930c8d9-a7a8-4039-9faf-3715ad87baf8
+        dueDate: '2022-10-26T19:32:08.000Z'
+        description: Pedido Black Friday
+        statementDescriptor: LOJA JOAO
+        items:
+        - id: 5f9c9d1e-1c17-4c65-9e0e-1a4a1a2b3c4d
+          name: Item 1
+          description: Item do carrinho
+          unitPrice: 1000
+          quantity: 1
+          tangible: false
+        paymentLink: https://link.malga.io/7648b72d-a79f-43e1-843d-eb0133bd2438
+        paymentMethods:
+        - paymentType: pix
+          expiresIn: 30
+        createdAt: '2022-10-25T22:49:06.588Z'
+        updatedAt: '2022-10-25T22:49:06.588Z'
+        publicKey: 8be71cdf-01dc-4b1a-823a-4c58be6e4cf1
+        multiplePayments:
+          allow: false
+          maxPayments: null
+          paymentCount: 0
+          pendingCount: 0
+          status: active
+    SourceTypeTokenObject:
+      title: Cartão tokenizado
+      type: object
+      description: Dados para cobrança única de token de cartão
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `token` para cobrança no token gerado
+          enum:
+          - token
+        tokenId:
+          type: string
+          format: uuid
+          description: Identificador do token quando source tipo token (opcional)
+      required:
+      - sourceType
+      - tokenId
+    SessionItemObject:
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+          description: 'Identificador estável do item, gerado pela Malga na criação da sessão. Retornado em respostas de sessão (`GET /v1/sessions/{id}`, criação e Link de Pagamento). Ignorado em requests — não é necessário enviar em `POST /v1/sessions`.
+
+            '
+        name:
+          type: string
+          description: Nome do item da sessão
+        description:
+          type: string
+          description: Descrição do item da sessão
+        unitPrice:
+          type: integer
+          minimum: 0
+          description: Preço unitário em centavos do item, exemplo 100 para cobrar R$ 1,00
+        quantity:
+          type: integer
+          minimum: 1
+          description: Define a quantidade de itens
+        tangible:
+          type: boolean
+          description: Determina se o item é tangível
+        categoryId:
+          type: string
+          description: Identificador da categoria do item
+      required:
+      - name
+      - unitPrice
+      - quantity
+    Document:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Tipo de documento, consultar tabela de tipos suportados
+        number:
+          type: string
+          description: Número do documento formato conforme tipo selecionado
+        country:
+          type: string
+          description: Pais de emissão do documento, Padrão ISO 3166-1 alpha-2, consultar tabela de tipos suportados
+          default: BR
+          enum:
+          - AL
+          - AD
+          - AR
+          - AT
+          - AU
+          - BA
+          - BZ
+          - BE
+          - BG
+          - BR
+          - BY
+          - CA
+          - CU
+          - CY
+          - CZ
+          - CH
+          - CL
+          - CN
+          - CO
+          - CR
+          - DE
+          - DK
+          - DO
+          - EC
+          - EE
+          - SV
+          - GT
+          - FI
+          - FR
+          - GB
+          - GR
+          - HR
+          - HK
+          - HU
+          - IS
+          - ID
+          - IE
+          - IN
+          - IL
+          - IT
+          - LI
+          - LT
+          - LU
+          - LV
+          - MK
+          - MC
+          - MD
+          - MT
+          - MU
+          - JP
+          - KR
+          - MX
+          - ME
+          - MY
+          - NL
+          - NZ
+          - 'NO'
+          - PY
+          - PE
+          - PK
+          - PL
+          - PT
+          - RU
+          - RO
+          - SM
+          - RS
+          - SE
+          - SG
+          - TH
+          - TW
+          - TR
+          - SI
+          - SK
+          - ES
+          - UY
+          - UA
+          - US
+          - VE
+          - VN
+          - ZA
+      required:
+      - type
+      - number
+    PaymentMethodCardObject:
+      title: Cartão de crédito
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - credit
+          - debit
+          description: Método da cobrança via Cartão Crédito/Débito
+        installments:
+          type: number
+          description: Quantidade de parcelas para cobrança do tipo credito
+        recurrence:
+          type: string
+          enum:
+          - initial
+          - subsequent
+          - unscheduled
+          description: Indica se a transação é recorrente. Pode assumir o valor `initial` (primeira transação recorrente), `subsequent` (transação recorrente que não é a primeira) ou `unscheduled` (cobrança avulsa dentro de contexto de assinatura recorrente para ajustar débitos).
+        threeDS:
+          type: object
+          description: Informações sobre o 3DS2
+          properties:
+            enabled:
+              type: boolean
+              description: Indica se o 3DS2 deve ser utilizado
+            liabilityShiftRequired:
+              type: boolean
+              default: true
+              description: Se verdadeiro, só continuará a cobrança caso haja transferência de responsabilidade pro banco emissor
+      required:
+      - paymentType
+    PlatformFeeAppliedOutput:
+      type: object
+      description: Snapshot da platform fee aplicada em uma cobrança (retorno transacional).
+      required:
+      - ruleId
+      - paymentMethod
+      - amount
+      - appliedAt
+      properties:
+        ruleId:
+          type: string
+          format: uuid
+          description: Identificador da regra de platform fee aplicada
+        percentage:
+          type: number
+          format: float
+          nullable: true
+          description: Percentual da regra no momento da aplicação (quando houver)
+        fixedAmount:
+          type: integer
+          nullable: true
+          description: Valor fixo da regra em centavos no momento da aplicação (quando houver)
+        paymentMethod:
+          type: string
+          description: Método de pagamento associado à regra aplicada (`credit`, `pix`, `boleto`, `default`, etc.)
+        installment:
+          type: integer
+          minimum: 1
+          maximum: 24
+          nullable: true
+          description: Parcelas informadas na regra aplicável; geralmente preenchido apenas para `credit`
+        amount:
+          type: integer
+          description: Valor calculado da platform fee para a transação, em centavos
+          example: 500
+        appliedAt:
+          type: string
+          format: date-time
+          description: Momento ISO 8601 em que a taxa foi aplicada no transacional
+    PaymentMethodBoletoObjectRequest:
+      title: Boleto
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - boleto
+          description: Método da cobrança via Boleto, o source deve ser um customer válido
+        expiresDate:
+          type: string
+          description: Data de vencimento do boleto em ISO-Date, ex 2017-01-31
+          default: 7 dias contados da data atual
+        instructions:
+          type: string
+          nullable: true
+          maxLength: 255
+          description: 'Campo instruções do boleto. Opcional. Quando informado, deve ter entre 1 e 255 caracteres (string vazia não é aceita). Utilize `\\n` para quebra de linha. Valores em branco ou acima do limite retornam `400 Bad Request`.
+
+            '
+        interest:
+          type: object
+          description: Informações opcionais da condição de juros para pagamento em atraso
+          properties:
+            days:
+              type: integer
+              description: Dias após a expiração do boleto quando o juros deve ser cobrado.
+            amount:
+              type: integer
+              description: Valor em centavos da taxa de juros que será cobrado ao dia.
+            percentage:
+              type: number
+              description: Valor em porcentagem da taxa de juros que será cobrado ao mês.
+        fine:
+          type: object
+          description: Informações opcionais da condição de multa para pagamento em atraso
+          properties:
+            days:
+              type: integer
+              description: Dias após a expiração do boleto quando a multa deve ser cobrada.
+            amount:
+              type: integer
+              description: Valor em centavos da multa.
+            percentage:
+              type: number
+              description: Valor em porcentagem da multa.
+      required:
+      - paymentType
+      - expiresDate
+    PaymentMethodBoletoObject:
+      title: Boleto
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - boleto
+          description: Método da cobrança via Boleto, o source deve ser um customer válido
+        expiresDate:
+          type: string
+          description: Data de vencimento do boleto em ISO-Date, ex 2017-01-31
+          default: 7 dias contados da data atual
+        instructions:
+          type: string
+          nullable: true
+          maxLength: 255
+          description: Campo instruções do boleto. Máximo de 255 caracteres. Obs. Utilizar \\n para quebra de linha
+        barcodeData:
+          type: string
+          description: Código copia e cola do boleto registrado gerado, pronto para pagamento;
+        barcodeImageUrl:
+          type: string
+          description: Link para download do do boleto registrado gerado, pronto para pagamento;
+      required:
+      - paymentType
+      - expiresDate
+      - barcodeData
+      - barcodeImageUrl
+    PaymentMethodClickToPayObjectRequest:
+      title: Click to Pay
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - click_to_pay
+          description: Método da cobrança via Click to Pay
+        installments:
+          type: integer
+          minimum: 1
+          description: Quantidade de parcelas para cobrança do tipo Click to Pay
+      required:
+      - paymentType
+      - installments
+    PaymentMethodBoleto:
+      title: Boleto
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - boleto
+          description: Método da cobrança via Boleto, o source deve ser um customer válido
+        expiresDate:
+          type: string
+          description: Data de vencimento do boleto em ISO-Date, ex 2017-01-31
+          default: 7 dias contados da data atual
+        instructions:
+          type: string
+          nullable: true
+          maxLength: 255
+          description: 'Campo instruções do boleto. Opcional. Quando informado, deve ter entre 1 e 255 caracteres (não é permitida string vazia). Utilize `\n` para quebra de linha. Valores em branco ou acima do limite retornam `400 Bad Request`.
+
+            '
+        interest:
+          type: object
+          description: Informações opcionais da condição de juros para pagamento em atraso
+          properties:
+            days:
+              type: integer
+              description: Dias após a expiração do boleto quando o juros deve ser cobrado.
+            amount:
+              type: integer
+              description: Valor em centavos da taxa de juros que será cobrado ao dia.
+            percentage:
+              type: number
+              description: Valor em porcentagem da taxa de juros que será cobrado ao mês.
+        fine:
+          type: object
+          description: Informações opcionais da condição de multa para pagamento em atraso
+          properties:
+            days:
+              type: integer
+              description: Dias após a expiração do boleto quando a multa deve ser cobrada.
+            amount:
+              type: integer
+              description: Valor em centavos da multa.
+            percentage:
+              type: number
+              description: Valor em porcentagem da multa.
+        items:
+          type: object
+          description: Informações dos itens de pedido
+          properties:
+            id:
+              type: string
+              description: Identificador do item
+            title:
+              type: string
+              description: Descrição do item
+            unitPrice:
+              type: integer
+              description: Valor unitário do item.
+            quantity:
+              type: integer
+              description: Quantidade do item
+      required:
+      - paymentType
+    SourceTypeCustomer:
+      title: Cartão com Customer salvo
+      type: object
+      description: Identificador do comprador para cobrança
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `customer` para cobrança no cartão default do comprador
+          enum:
+          - customer
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador do cliente quando source tipo customer, debitando o cartão default do comprador
+        cardCvv:
+          type: string
+          description: Código de verificação cobrança sem tokenização, deve ser enviado sempre que o comprador estiver presente no momento da compra (opcional)
+      required:
+      - sourceType
+      - customerId
+    PatchSessionRequest:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+          description: Ativa ou desativa o link de pagamento da sessão. Sessões já pagas, canceladas ou expiradas não podem ser reativadas.
+        dueDate:
+          type: string
+          nullable: true
+          description: 'Atualiza a data limite da sessão, em ISO 8601 (com horário, ex.: `2026-01-17T20:00:00Z`, ou apenas data, ex.: `2026-02-20`).
+
+            Quando informado, o dia calendário em **America/Sao_Paulo** deve ser **hoje ou no futuro**.
+
+            Enviar `null` remove a `dueDate`: a sessão deixa de expirar por vencimento.
+
+            '
+        maxPayments:
+          oneOf:
+          - type: integer
+            enum:
+            - -1
+            description: Link 1:N ilimitado.
+          - type: integer
+            minimum: 1
+            maximum: 99999
+            description: Link 1:N com limite finito de pagamentos.
+          description: 'Atualiza a capacidade de pagamentos em sessões 1:N.
+
+            Aceita `-1` (ilimitado) ou um valor inteiro entre `1` e `99999`.
+
+            `0`, valores menores que `-1` e valores acima de `99999` são inválidos.
+
+            '
+      required:
+      - isActive
+    FraudAnalysisAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          description: Padrão ISO 3166-1 alpha-2
+        state:
+          type: string
+          description: Estado
+        city:
+          type: string
+          description: Cidade
+        district:
+          type: string
+          description: Bairro
+        zipCode:
+          type: string
+          description: Codigo postal CEP
+        street:
+          type: string
+          description: Nome da rua/avenida/travessa
+        number:
+          type: string
+          description: Número da rua
+        complement:
+          type: string
+          description: Complemento caso exista
+    PaymentMethodCardObjectRequest:
+      title: Cartão de crédito
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - credit
+          description: Método da cobrança via cartão de crédito.
+        installments:
+          type: integer
+          minimum: 1
+          description: Quantidade de parcelas da cobrança.
+        recurrence:
+          type: string
+          enum:
+          - initial
+          - subsequent
+          - unscheduled
+          description: Indica se a transação é recorrente. Pode assumir o valor `initial` (primeira transação recorrente), `subsequent` (transação recorrente que não é a primeira) ou `unscheduled` (cobrança avulsa em contexto de assinatura recorrente).
+        threeDS:
+          type: object
+          description: Configurações de autenticação 3DS2.
+          properties:
+            enabled:
+              type: boolean
+              description: Indica se o 3DS2 deve ser utilizado.
+            liabilityShiftRequired:
+              type: boolean
+              default: true
+              description: Indica se a autenticação deve exigir transferência de responsabilidade.
+      required:
+      - paymentType
+      - installments
+    SourceTypeClickToPay:
+      title: Click to Pay
+      type: object
+      description: Dados do Click to Pay
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `click_to_pay` para cobrança via Click to Pay
+          enum:
+          - wallet
+        walletPayment:
+          type: string
+          description: Tipo de pagamento, usar `credit` para cobrança por cartão de crédito
+          enum:
+          - credit
+        walletClickToPay:
+          type: object
+          description: Informações sobre o Click to Pay obtidas pelo SDK da Mastercard
+          properties:
+            dpaId:
+              type: string
+              description: Identificador do Click to Pay
+            correlationId:
+              type: string
+              description: Identificador da correlação do Click to Pay
+            flowId:
+              type: string
+              description: Identificador do fluxo do Click to Pay
+            merchantTransactionId:
+              type: string
+              description: Identificador da transação do Click to Pay
+      required:
+      - sourceType
+      - walletPayment
+      - walletClickToPay
+    MetaPagination:
+      properties:
+        itemCount:
+          type: integer
+          description: Quantidade de itens na página
+        totalItems:
+          type: integer
+          description: Quantidade total de itens na consulta (esse valor é mantido em cache por 5 minutos para melhorar a performance da API)
+        itemsPerPage:
+          type: integer
+          description: Quantidade de itens por página
+        totalPages:
+          type: integer
+          description: Quantidade total de páginas
+        currentPage:
+          type: integer
+          description: Página atual
+    CancelSession201Response:
+      properties:
+        id:
+          type: string
+          description: Identificação da sessão
+        status:
+          type: string
+          enum:
+          - created
+          - paid
+          - canceled
+          - voided
+          description: Status da sessão
+    PaymentSessionNuPay:
+      title: NuPay
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - nupay
+          description: Método da cobrança via NuPay
+      required:
+      - paymentType
+    PaySessionPaymentMethodDripObjectResponse:
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - drip
+          description: Método da cobrança via Drip
+        browser:
+          description: Informações sobre o navegador do usuário
+          allOf:
+          - $ref: '#/components/schemas/DripBrowser'
+        paymentUrl:
+          type: string
+          description: URL para pagamento da cobrança Drip
+        cancelRedirectUrl:
+          type: string
+          description: Link de redirecionamento em caso de cancelamento do pagamento no ambiente de checkout da Drip
+        successRedirectUrl:
+          type: string
+          description: Link de redirecionamento em caso de aprovação do pagamento no ambiente de checkout da Drip
+        checkoutId:
+          type: string
+          description: Id do checkout gerado na drip
+        paymentQrCode:
+          type: string
+          description: Link do qrcode para pagamento
+        paymentQrCodeText:
+          type: string
+          description: Texto do qrcode para pagamento
+        upfrontPaymentAmount:
+          type: number
+          description: Valor para pagamento do qrcode gerado
+      required:
+      - paymentType
+    CreateSession:
+      properties:
+        orderId:
+          type: string
+          description: Identificador único da cobrança do lado do cliente para conciliação futura
+        amount:
+          type: integer
+          minimum: 0
+          description: Valor da transação em centavos, exemplo 100 para cobrar R$ 1,00
+        currency:
+          type: string
+          default: BRL
+          description: Identificador da moeda para processamento da cobrança, formato ISO 4217.
+        isActive:
+          type: boolean
+          description: Determina se a sessão está ativa
+        capture:
+          type: boolean
+          description: Determina se a transação deve ser capturada automaticamente
+        merchantId:
+          type: string
+          format: uuid
+          description: Identificação do merchant id a ser utilizado
+        dueDate:
+          type: string
+          description: 'Data limite da sessão, em ISO 8601 (com horário, ex.: `2026-01-17T20:00:00Z`, ou apenas data, ex.: `2026-02-20`).
+
+            **Opcional**: quando omitido, a sessão não possui data de vencimento e não entra no job de expiração por `dueDate`.
+
+            Quando informado, o dia calendário em **America/Sao_Paulo** deve ser **no mínimo amanhã** (a data de hoje e datas passadas são rejeitadas).
+
+            '
+        name:
+          type: string
+          description: Nome que identifica a sessão
+        description:
+          type: string
+          description: Descrição da sessão
+        statementDescriptor:
+          type: string
+          minLength: 3
+          description: Descrição a ser exibida fatura do comprador
+        createLink:
+          type: boolean
+          description: Determina se a sessão terá um Link de Pagamento
+        captchaEnabled:
+          type: boolean
+          description: Habilita verificação por CAPTCHA no Link de Pagamento da sessão.
+        maxPayments:
+          oneOf:
+          - type: integer
+            enum:
+            - -1
+            description: Link 1:N ilimitado.
+          - type: integer
+            minimum: 1
+            maximum: 99999
+            description: Link 1:N com limite finito de pagamentos.
+          description: 'Configura a sessão como link de **múltiplos pagamentos** (1:N).
+
+            Aceita `-1` (ilimitado) ou um valor inteiro entre `1` e `99999`.
+
+            `0`, valores menores que `-1` e valores acima de `99999` são inválidos.
+
+            Quando omitido, a sessão é tratada como 1:1 (legado).
+
+
+            **Restrição pix/boleto:** quando `paymentMethods` contém `pix` e/ou `boleto`, `maxPayments` só é aceito como omitido, `null`, `1` ou `-1` (ilimitado). Valores finitos maiores que `1` retornam `422` com `businessCode: "pix_boleto_multiple_payments_not_allowed"`. Cartão de crédito continua aceito em qualquer valor de `maxPayments` suportado.
+
+            '
+        providerReferenceKey:
+          type: string
+          description: Chave de referência da sessão no provedor
+        paymentMethods:
+          type: array
+          minItems: 1
+          description: Métodos de pagamento disponíveis na sessão
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/PaymentMethodCardObjectRequest'
+            - $ref: '#/components/schemas/PaymentMethodPixObjectRequest'
+            - $ref: '#/components/schemas/PaymentMethodBoletoObjectRequest'
+            - $ref: '#/components/schemas/PaymentMethodDripObjectRequest'
+            - $ref: '#/components/schemas/PaymentMethodNupayObjectRequest'
+            - $ref: '#/components/schemas/PaymentMethodClickToPayObjectRequest'
+        items:
+          type: array
+          minItems: 1
+          description: Itens do pedido
+          items:
+            $ref: '#/components/schemas/SessionItemObject'
+        splitRules:
+          type: array
+          description: Regras de split da sessão, persistidas para o pagamento. Não reenviar em POST /v1/sessions/{id}/charge.
+          items:
+            $ref: '#/components/schemas/SplitRule'
+        vendor:
+          allOf:
+          - $ref: '#/components/schemas/VendorCharge'
+      required:
+      - merchantId
+      - paymentMethods
+      - items
+    SessionSettingsResponse:
+      properties:
+        id:
+          type: string
+          description: Identificação da sessão a ser utilizada
+        name:
+          type: string
+          description: Nome que identifica a sessão
+        status:
+          type: string
+          enum:
+          - created
+          - paid
+          - canceled
+          - voided
+          description: Status da sessão
+        isActive:
+          type: boolean
+          description: Determina se a sessão está ativa
+        clientId:
+          type: string
+          description: Identificador do cliente na Malga
+        orderId:
+          type: string
+          description: Identificador único da cobrança do lado do cliente para conciliação futura
+        amount:
+          type: number
+          description: Valor da transação em centavos, exemplo 100 para cobrar R$ 1,00
+        currency:
+          type: string
+          description: Identificador da moeda para processamento da cobrança, formato ISO 4217.
+        capture:
+          type: boolean
+          description: Determina se a transação deve ser capturada automaticamente
+        merchantId:
+          type: string
+          description: Identificação do merchant id a ser utilizado
+        dueDate:
+          type: string
+          nullable: true
+          description: 'Data limite da sessão, em ISO 8601. Pode estar ausente quando a sessão foi criada sem data de vencimento.
+
+            '
+        description:
+          type: string
+          description: Descrição da sessão
+        statementDescriptor:
+          type: string
+          description: Descrição a ser exibida fatura do comprador
+        items:
+          type: array
+          description: Itens do pedido
+          items:
+            $ref: '#/components/schemas/SessionItemObject'
+        paymentLink:
+          type: string
+          description: Link para acessar o Link de Pagamento desta sessão
+        paymentMethods:
+          type: array
+          description: Métodos de pagamento disponíveis na sessão
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/PaymentMethodCardObject'
+            - $ref: '#/components/schemas/PaymentMethodPixObject'
+            - $ref: '#/components/schemas/PaymentMethodBoletoObjectRequest'
+            - $ref: '#/components/schemas/PaymentMethodDripObjectRequest'
+            - $ref: '#/components/schemas/PaymentMethodNupayObjectRequest'
+        createdAt:
+          type: string
+          description: Data de criação da sessão
+        updatedAt:
+          type: string
+          description: Data da atualização da sessão
+        publicKey:
+          type: string
+          description: Chave de acesso com escopo restrito, usada para pagar a sessão
+        multiplePayments:
+          allOf:
+          - $ref: '#/components/schemas/MultiplePayments'
+          description: 'Estado conceitual de **disponibilidade do link** para receber uma próxima cobrança.
+
+            Retornado em respostas completas de sessão. Em respostas parciais de atualização ou pagamento, consulte `GET /v1/sessions/{id}` para obter o estado agregado atualizado.
+
+            '
+        settings:
+          allOf:
+          - type: object
+          - description: Configurações da empresa
+          - $ref: '#/components/schemas/UserSettings'
+      example:
+        id: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        name: Nome da sessão
+        status: created
+        isActive: true
+        clientId: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        orderId: null
+        amount: 100
+        currency: BRL
+        capture: true
+        merchantId: 69aea152-ba70-49a3-a31c-044ac1651146
+        dueDate: '2022-10-25T09:28:45.000Z'
+        description: Promoção Black Friday
+        statementDescriptor: LOJA JOAO
+        paymentMethods:
+        - paymentType: credit
+          installments: 1
+        items:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          name: Item 1
+          description: Descrição do item
+          unitPrice: 10000
+          quantity: 1
+          tangible: false
+        createdAt: '2022-10-25T09:28:45.000Z'
+        updatedAt: '2022-10-25T09:28:45.000Z'
+        publicKey: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        multiplePayments:
+          allow: true
+          maxPayments: 5
+          paymentCount: 1
+          pendingCount: 0
+          status: active
+        settings:
+          id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          email: company@email.com
+          phone: '5551996225566'
+          statementDescription: LOJA JOAO
+          logo: https://logo.com/images/logo.png
+          mainColor: '#fff000'
+          secondaryColor: '#fff000'
+          attentionColor: '#333333'
+          errorColor: '#ff0000'
+          successColor: '#00FF00'
+          backgroundColor: '#fff000'
+          companyName: Company Name
+          clientId: 1b0c6960-702a-4074-95c2-eed2790c16a1
+          documentNumber: '011001001001000010'
+          language: pt_BR
+    PaymentMethodPixObject:
+      title: Pix
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - pix
+          description: Método da cobrança via PIX, o source deve ser um customer válido.
+        expiresIn:
+          type: number
+          description: Tempo em segundos que define a validade da cobrança.
+        qrCodeData:
+          type: string
+          description: Código copia e cola para o QR code dinâmico gerado, pronto para ser pago.
+        qrCodeImageUrl:
+          type: string
+          description: Link para download da imagem do QR code dinâmico gerado, pronto para ser scaneado e pago.
+      required:
+      - paymentType
+      - expiresIn
+      - qrCodeData
+      - qrCodeImageUrl
+    PatchSession200Response:
+      properties:
+        id:
+          type: string
+          description: Identificação da sessão
+        isActive:
+          type: boolean
+          description: Estado de ativação da sessão após a atualização
+    SessionHistoryItem:
+      type: object
+      description: 'Registro de auditoria de um evento na sessão. O item não retorna campos de nível raiz como `chargeId` nem metadados de sistema.
+
+        '
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador do registro de histórico (não confundir com o `id` da sessão no path).
+        status:
+          type: string
+          enum:
+          - created
+          - paid
+          - canceled
+          - voided
+          - disabled
+          description: 'Status da sessão na leitura do produto no momento do evento. O valor `disabled` indica desativação automática por `dueDate` ou limite de pagamentos 1:N; cancelamento manual permanece `canceled`.
+
+            '
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação do registro (RFC 3339, com precisão de milissegundos).
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data da última atualização do registro.
+        clientId:
+          type: string
+          format: uuid
+          description: Identificador do cliente Malga associado ao registro, quando preenchido.
+        merchantId:
+          type: string
+          format: uuid
+          description: Identificador do merchant associado ao registro, quando preenchido.
+        action:
+          type: string
+          nullable: true
+          description: 'Ação principal derivada de `actions`, com prioridade documentada (ex.: `statusChanged`, `sessionExpiredByDueDate`, `paymentSucceeded`). Pode ser omitida (`null`) quando o `diff` indica expiração por `dueDate` mas `actions` não lista `sessionExpiredByDueDate`.
+
+            '
+        actions:
+          type: array
+          items:
+            type: string
+          description: 'Lista completa de ações semânticas do evento. Valores possíveis incluem `statusChanged`, `amountChanged`, `isActiveChanged`, `paymentSucceeded`, `paymentPending`, `paymentExpired`, `sessionExpiredByDueDate`, `sessionExpiredByMaxPayments`, `splitRulesChanged`, entre outros.
+
+            '
+        diff:
+          type: object
+          additionalProperties: true
+          description: 'Objeto JSON com mudanças (`changes.*`), razões estáveis (`reason`, `changes.isActive.reason`) e contexto (ex.: `maxPaymentsContext`, resposta da tentativa de cobrança em `changes.response`). A estrutura varia conforme o fluxo.
+
+            '
+      required:
+      - id
+      - status
+      - createdAt
+      - updatedAt
+    MultiplePayments:
+      type: object
+      description: 'Estado do link de pagamento para receber uma próxima cobrança.
+
+
+        - **Sessões 1:1** retornam `allow=false`, `maxPayments=null` e `status` derivado da disponibilidade do link.
+
+        - **Sessões 1:N** (criadas com `maxPayments`) retornam `allow=true` e `status` reflete capacidade restante e estado da sessão.
+
+        '
+      properties:
+        allow:
+          type: boolean
+          description: '`true` em sessões 1:N (com `maxPayments` configurado); `false` em sessões 1:1.
+
+            '
+        maxPayments:
+          type: integer
+          nullable: true
+          description: 'Limite configurado para a sessão.
+
+            `-1` indica ilimitado, valores entre `1` e `99999` indicam limite finito; `null` em sessões 1:1.
+
+            '
+        paymentCount:
+          type: integer
+          description: Quantidade de pagamentos já autorizados neste link.
+        pendingCount:
+          type: integer
+          description: 'Quantidade de reservas pendentes de confirmação assíncrona neste link (ex.: Pix em aberto).
+
+            '
+        status:
+          type: string
+          enum:
+          - active
+          - disabled
+          - canceled
+          description: 'Disponibilidade conceitual do link para próxima cobrança:
+
+
+            - `active`: link disponível.
+
+            - `disabled`: link temporariamente indisponível (ex.: `isActive=false`, expiração por `dueDate`, ou limite atingido em 1:N). Estado reversível.
+
+            - `canceled`: link cancelado ou anulado, estado terminal.
+
+
+            O campo raiz `status` da sessão segue mantendo apenas `created`, `paid`, `canceled` ou `voided`.
+
+            '
+    SourceTypeCustomerObject:
+      title: Customer
+      type: object
+      description: Identificador do comprador para cobrança
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `customer` para cobrança no cartão default do comprador
+          enum:
+          - customer
+        customerId:
+          type: string
+          format: uuid
+          description: Identificador do cliente quando source tipo customer, debitando o cartão default do comprador
+      required:
+      - sourceType
+      - customerId
+    PaySessionPaymentMethodDripObjectRequest:
+      title: Drip
+      type: object
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - drip
+          description: Método da cobrança via Drip
+        browser:
+          description: Informações sobre o navegador do usuário
+          allOf:
+          - $ref: '#/components/schemas/DripBrowser'
+      required:
+      - paymentType
+    PaySession201Response:
+      properties:
+        id:
+          type: string
+          description: Identificador da transação
+        clientId:
+          type: string
+          format: uuid
+          description: Identificador do cliente na Malga
+        merchantId:
+          type: string
+          format: uuid
+          description: Identificador do merchant id utilizado na transação
+        description:
+          type: string
+          description: Descrição da cobrança para consulta futura
+        orderId:
+          type: string
+          description: Identificador único da cobrança do lado do cliente para conciliação futura
+        createdAt:
+          type: string
+          description: Data de criação do cartão
+        amount:
+          type: number
+          description: Valor da transação em centavos, exemplo 100 para cobrar R$ 1,00
+        originalAmount:
+          type: number
+          description: Valor original da transação em centavos, exemplo 100 para cobrar R$ 1,00
+        currency:
+          type: string
+          description: Identificador da moeda para processamento da cobrança, formato ISO 4217.
+          default: BRL
+        statementDescriptor:
+          type: string
+          description: Descrição a ser exibida na fatura do comprador
+        status:
+          type: string
+          enum:
+          - created
+          - paid
+          - canceled
+          - voided
+          description: Status da sessão
+        paymentMethod:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodCardObject'
+          - $ref: '#/components/schemas/PaymentMethodPixObject'
+          - $ref: '#/components/schemas/PaymentMethodBoletoObject'
+          - $ref: '#/components/schemas/PaySessionPaymentMethodDripObjectResponse'
+          - $ref: '#/components/schemas/PaymentMethodNupayObjectRequest'
+        paymentSource:
+          oneOf:
+          - $ref: '#/components/schemas/SourceTypeCardObject'
+          - $ref: '#/components/schemas/SourceTypeTokenObject'
+          - $ref: '#/components/schemas/SourceTypeCustomerObject'
+        transactionRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionRequest'
+        platformFee:
+          allOf:
+          - $ref: '#/components/schemas/PlatformFeeAppliedOutput'
+          description: 'Detalhes da taxa de plataforma aplicada na cobrança quando há `splitRules` e o merchant tem platform fee habilitado. Ausente quando não há aplicação de platform fee.
+
+            '
+    NupayRecipient:
+      title: Beneficiário final NuPay
+      type: object
+      properties:
+        referenceId:
+          type: string
+          description: Identificador único do beneficiário final
+        name:
+          type: string
+          description: Nome ou razão social do beneficiário final
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+        amount:
+          type: integer
+          description: Valor atribuído ao beneficiário final, em centavos
+      required:
+      - referenceId
+      - name
+      - document
+      - amount
+    SessionList:
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SessionResponse'
+        meta:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/MetaPagination'
+    PaymentMethodCard:
+      type: object
+      title: Cartão
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - credit
+          - voucher
+          description: Método da cobrança via Cartão Crédito/Débito/Voucher
+        installments:
+          type: number
+          description: Quantidade de parcelas para cobrança do tipo credito
+        recurrence:
+          type: string
+          enum:
+          - initial
+          - subsequent
+          - unscheduled
+          description: Indica se a transação é recorrente. Pode assumir o valor `initial` (primeira transação recorrente), `subsequent` (transação recorrente que não é a primeira) ou `unscheduled` (cobrança avulsa dentro de contexto de assinatura recorrente para ajustar débitos).
+      required:
+      - paymentType
+    SourceTypeCard:
+      title: Cartão tokenizado
+      type: object
+      description: Dados para cobrança por cartão de crédito salve
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `card` para cobrança em cartão tokenizado
+          enum:
+          - card
+        cardId:
+          type: string
+          format: uuid
+          description: Identificador do cartão quando source tipo card
+        cardCvv:
+          type: string
+          description: Código de verificação cobrança sem tokenização, deve ser enviado sempre que o comprador estiver presente no momento da compra (opcional)
+      required:
+      - sourceType
+      - cardId
+    SplitRule:
+      type: object
+      properties:
+        sellerId:
+          type: string
+          format: uuid
+          description: Identificador do recebedor já cadastrado na API de [sellers](/api-reference/sellers/criacao-de-um-novo-recebedor).
+          example: 5323ece6-816d-11ed-a1eb-0242ac120002
+        percentage:
+          type: integer
+          minimum: 1
+          maximum: 100
+          description: Campo condicional. Percentual do valor da transação que será enviado ao recebedor. Envie exatamente um dos campos, `percentage` ou `amount`, nunca ambos.
+          example: 70
+        amount:
+          type: integer
+          minimum: 1
+          description: Campo condicional. Valor em centavos que será enviado ao recebedor. Envie exatamente um dos campos, `amount` ou `percentage`, nunca ambos.
+          example: 5000
+        processingFee:
+          type: boolean
+          description: Indica se o recebedor vinculado à regra será cobrado pelas taxas da transação.
+          example: false
+        chargeEntireFee:
+          type: boolean
+          description: Indica se o recebedor será cobrado pela taxa inteira da transação. Não pode ser verdadeiro junto com `chargeRemainderFee`.
+          example: false
+        chargeRemainderFee:
+          type: boolean
+          description: Indica se o recebedor será cobrado pela taxa restante da transação.
+          example: false
+        liable:
+          type: boolean
+          description: Indica se o recebedor atrelado assumirá os riscos de chargeback da transação.
+          example: true
+        transactionOwner:
+          type: boolean
+          description: Indica se o recebedor é o responsável pela transação.
+          example: true
+        fares:
+          type: object
+          description: Informações sobre as taxas que serão cobradas do recebedor.
+          properties:
+            mdr:
+              type: number
+              minimum: 0
+              description: Percentual de MDR que será aplicado ao recebedor.
+              example: 2.5
+            fee:
+              type: number
+              minimum: 0
+              description: Taxa fixa que será aplicada ao recebedor.
+              example: 0.3
+      required:
+      - sellerId
+    SourceTypeCardOneShot:
+      title: Cartão one shot
+      type: object
+      description: Dados do cartão para cobrança direta
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `card` para cobrança direta no cartão
+          enum:
+          - card
+        card:
+          type: object
+          properties:
+            cardHolderName:
+              type: string
+              description: Nome do portador do cartão quando cobrança sem tokenização
+            cardNumber:
+              type: string
+              description: Número do cartão quando cobrança sem tokenização
+            cardCvv:
+              type: string
+              description: Código de verificação cobrança sem tokenização
+            cardExpirationDate:
+              type: string
+              description: Mês e ano de validade no formato MM/YYYY quando cobrança sem tokenização
+      required:
+      - sourceType
+      - cardHolderName
+      - cardNumber
+      - cardCvv
+      - cardExpirationDate
+    PaymentMethodPixObjectRequest:
+      title: Pix
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - pix
+          description: Método da cobrança via PIX, o source deve ser um customer válido.
+        expiresIn:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+          description: Tempo em segundos que define a validade da cobrança.
+      required:
+      - paymentType
+      - expiresIn
+  examples:
+    PaySessionNupayRequest:
+      summary: Exemplo cobrança Nupay
+      value:
+        paymentMethod:
+          paymentType: nupay
+        paymentSource:
+          sourceType: customer
+          customer":
+            name: Customer Name
+            email: customer@email.com
+            phoneNumber": '2191330299'
+            document:
+              type: cpf
+              number: '31807868095'
+              country: BR
+            address:
+              country: BR
+              state: RJ
+              city: Rio de Janeiro
+              district: Leblon
+              zipCode: '20011020'
+              street: Rua do Carmo
+              streetNumber: '71'
+              complement: complement
+        fraudAnalysis:
+          customer":
+            name: Customer Name
+            identity: '31807868095'
+            identityType: CPF
+            email: user@email.com
+            phone: '2191330299'
+            billingAddress:
+              street: Rua do Carmo
+              zipCode: '20011020'
+              number: '71'
+              country: BR
+              state: RJ
+              district: Leblon
+              city: Rio de Janeiro
+          cart:
+            items:
+              sku: '123'
+              name: desc
+              quantity: 10
+              unitPrice: 10
+              risk: Low
+    CreateSessionRequest1NFixed:
+      summary: Sessão 1:N com limite finito
+      value:
+        amount: 100
+        name: Loja 1
+        merchantId: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        dueDate: '2026-02-20T23:59:59.000Z'
+        createLink: true
+        maxPayments: 5
+        paymentMethods:
+        - paymentType: pix
+          expiresIn: 30
+        items:
+        - name: Item 1
+          description: Item do carrinho
+          unitPrice: 1000
+          quantity: 1
+          tangible: false
+    PatchSessionRequest:
+      value:
+        isActive: true
+        dueDate: '2026-12-31T23:59:59Z'
+        maxPayments: 10
+    SessionList:
+      value:
+        items:
+        - id: 1b0c6960-702a-4074-95c2-eed2790c16a1
+          name: Nome da sessão
+          status: created
+          isActive: true
+          captchaEnabled: false
+          clientId: 1b0c6960-702a-4074-95c2-eed2790c16a1
+          orderId: null
+          amount: 100
+          currency: BRL
+          capture: true
+          merchantId: 69aea152-ba70-49a3-a31c-044ac1651146
+          dueDate: '2022-10-25T09:28:45.000Z'
+          description: Promoção Black Friday
+          statementDescriptor: LOJA JOAO
+          paymentMethods:
+          - paymentType: credit
+            installments: 1
+          items:
+          - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+            name: Item 1
+            description: Descrição do item
+            unitPrice: 10000
+            quantity: 1
+            tangible: false
+          createdAt: '2022-10-25T09:28:45.000Z'
+          updatedAt: '2022-10-25T09:28:45.000Z'
+          publicKey: 1b0c6960-702a-4074-95c2-eed2790c16a1
+          paymentLink: https://checkout.malga.io/1b0c6960-702a-4074-95c2-eed2790c16a1
+          multiplePayments:
+            allow: false
+            maxPayments: null
+            paymentCount: 0
+            pendingCount: 0
+            status: active
+        meta:
+          totalItems: 1
+          itemCount: 1
+          itemsPerPage: 10
+          totalPages: 1
+          currentPage: 1
+    PaySession201NupayResponse:
+      summary: Exemplo resposta cobrança Nupay
+      value:
+        id: 6d2ff1d1-def7-4cd6-86a2-11b9289c8263
+        clientId: <CLIENT_ID>
+        merchantId: <MERCHANT_ID>
+        description": Pagamento de sessão
+        orderId: 86150b4c-617e-461f-b5a2-895b065ca4b6
+        createdAt: '2023-11-20T18:19:07.388Z'
+        amount: 100
+        originalAmount: 100
+        currency: BRL
+        statementDescriptor: null
+        isDispute: false
+        status: pending
+        paymentMethod:
+          paymentType: nupay
+        paymentSource":
+          sourceType: customer
+          customerId": <CUSTOMER_ID>
+        fraudAnalysisMetadata:
+          sla: null,
+          customer:
+            name: Customer Name
+            email: user@email.com
+            identity: '96596877027'
+            identityType: CPF
+            birthdate: null
+            phone: '2191330299'
+            billingAddress:
+              country: BR
+              street: Rua do Carmo
+              number: '71'
+              complement: null
+              zipCode: '20011020'
+              city: Rio de Janeiro
+              state: RJ
+              district: Leblon
+            deliveryAddress": null
+          cart:
+            items:
+              name: desc
+              quantity: 1
+              sku: '123'
+              unitPrice: 1
+              risk: Low
+              locality": null,
+              date": null,
+              type": null,
+              genre": null,
+              tickets": null,
+              location": null
+        transactionRequests:
+          id: a10e3dbf-edc9-4984-8982-2f5579ae0c26
+          createdAt: '2023-09-12T18:19:07.563Z'
+          updatedAt: '2023-09-12T18:19:08.079Z'
+          idempotencyKey": 3a950c0f-6582-4aaa-92c7-4d642166d2bf
+          providerId": 242e3e9d-5e49-4ef0-97cc-85f7562cc965
+          providerType": NUPAY
+          transactionId": 2dd95fe6-550e-4192-b8d5-e5fe529cd285
+          amount": 100
+          authorizationCode": null
+          authorizationNsu": null
+          requestStatus": success
+          requestType": pending
+          responseTs": 437ms
+          nupay:
+            expiresIn: 250000
+            paymentUrl: https://staging-nuapp.nubank.com.br/bdc/omniknight/expr/payment-intents.home-screen?payment-intent-id=76ac98f6-38e4-4b9e-a530-16761fa030e6&amount=100&storeName=Plug%20Pagamentos&version=announcement&token=SQ5xJKHG%2FCMs7ztjkwusP7QHsHdwRWs3aEc%2FHu4%2F9efdq%2FlBq6fXbOsockCbnJmv8l%2F6OyBCe3qka%2BZ8dt6mCw%3D%3D&poId=2dd95fe6-550e-4192-b8d5-e5fe529cd285
+    CancelSession201Response:
+      value:
+        id: c1db83fa-723c-4e1f-9722-bc19d1be6791
+        status: canceled
+    PaySession201PixResponse:
+      summary: Exemplo resposta cobrança PIX
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        merchantId: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        description: Descrição longa da cobrança
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        createdAt: 2012-06-30 23:59:59 +0000
+        amount: 150
+        originalAmount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        status: pending
+        paymentMethod:
+          paymentType: pix
+          expiresIn: 3600
+          qrCodeData: 00020101021126510014BR.GOV.BCB.PIX0129K89VdiUgWN1B3p0IHrgHkNHg9tX5F52040000530398654040.155802BR5913Customer test600062070503***630431C0
+          qrCodeImageUrl: https://....
+        paymentSource:
+          sourceType: customer
+          customerId: 1cdcf0c9-eb04-4e43-b9b2-b7a4acdead1f
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+          providerType: STRIPE
+          transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+          amount: 1500
+          authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+          providerAuthorization:
+            networkAuthorizationCode: '00'
+            networkResponseCode: ''
+    Session1N:
+      summary: Sessão 1:N com disponibilidade agregada
+      value:
+        id: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        name: Nome da sessão
+        status: created
+        isActive: true
+        captchaEnabled: false
+        clientId: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        orderId: null
+        amount: 100
+        currency: BRL
+        capture: true
+        merchantId: 69aea152-ba70-49a3-a31c-044ac1651146
+        dueDate: '2026-02-20T23:59:59.000Z'
+        description: Promoção Black Friday
+        statementDescriptor: LOJA JOAO
+        paymentMethods:
+        - paymentType: pix
+          expiresIn: 30
+        items:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          name: Item 1
+          description: Descrição do item
+          unitPrice: 10000
+          quantity: 1
+          tangible: false
+        createdAt: '2026-02-20T09:28:45.000Z'
+        updatedAt: '2026-02-20T09:28:45.000Z'
+        publicKey: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        multiplePayments:
+          allow: true
+          maxPayments: 5
+          paymentCount: 1
+          pendingCount: 0
+          status: active
+    PaySession201CardResponse:
+      summary: Exemplo resposta cobrança por cartão
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        merchantId: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        description: Descrição longa da cobrança
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        createdAt: 2012-06-30 23:59:59 +0000
+        amount: 150
+        originalAmount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        status: pending
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+        paymentSource:
+          sourceType: card
+          cardId: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+          providerType: STRIPE
+          transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+          amount: 1500
+          authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+          providerAuthorization:
+            networkAuthorizationCode: '00'
+            networkResponseCode: ''
+    PatchSession200Response:
+      value:
+        id: c1db83fa-723c-4e1f-9722-bc19d1be6791
+        isActive: true
+    PaySessionCardRequest:
+      summary: Exemplo cobrança Cartão
+      value:
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+        paymentSource:
+          sourceType: card
+          card:
+            cardNumber: '5261424250184574'
+            cardCvv: '321'
+            cardExpirationDate: 06/2028
+            cardHolderName: JOAO DA SILVA
+    PaySessionDripRequest:
+      summary: Exemplo cobrança Drip
+      value:
+        customerId: 69777a21-15b8-43a8-8fb5-08a459129d3b
+        paymentMethod:
+          paymentType: drip
+          browser:
+            ipAddress: 127.0.0.1
+            browserFingerprint: '1231232131232133'
+        paymentSource:
+          sourceType": customer
+          customer":
+            name: Customer Name
+            email: customer@email.com
+            phoneNumber": '+341913302999'
+            document:
+              type: cpf
+              number: '31807868095'
+              country: BR
+            address:
+              country: BR
+              state: RJ
+              city: Rio de Janeiro
+              district: Leblon
+              zipCode: '20011020'
+              street: rua do carmo
+              streetNumber: '71'
+              complement: teste
+    PaySessionPixRequest:
+      summary: Exemplo cobrança Pix
+      value:
+        paymentMethod:
+          paymentType: pix
+          expiresIn: 3600
+        paymentSource:
+          sourceType: customer
+          customer:
+            name: Customer test
+            email: jose2@gmail.com
+            document:
+              number: '97055503019'
+              type: cpf
+            phoneNumber: 21 98889999099
+    SessionHistoryResponse:
+      value:
+      - id: 550e8400-e29b-41d4-a716-446655440003
+        status: disabled
+        createdAt: '2026-05-20T00:00:01.000Z'
+        updatedAt: '2026-05-20T00:00:01.000Z'
+        clientId: 39d2d314-5412-431a-b34b-74f9f0fbe7e1
+        merchantId: 660e8400-e29b-41d4-a716-446655440002
+        action: sessionExpiredByDueDate
+        actions:
+        - sessionExpiredByDueDate
+        diff:
+          reason: expired by due date
+          expiredAt: '2026-05-19T23:59:59.000Z'
+          changes:
+            isActive:
+              from: true
+              to: false
+              reason: sessionExpiredByDueDate
+      - id: 550e8400-e29b-41d4-a716-446655440002
+        status: created
+        createdAt: '2026-05-19T14:30:00.000Z'
+        updatedAt: '2026-05-19T14:30:00.000Z'
+        clientId: 39d2d314-5412-431a-b34b-74f9f0fbe7e1
+        merchantId: 660e8400-e29b-41d4-a716-446655440002
+        action: paymentSucceeded
+        actions:
+        - paymentSucceeded
+        diff:
+          changes:
+            response:
+              from: null
+              to:
+                chargeId: 880e8400-e29b-41d4-a716-446655440099
+                status: pending
+                amount: 5000
+          updatedAt: '2026-05-19T14:30:00.000Z'
+      - id: 550e8400-e29b-41d4-a716-446655440001
+        status: created
+        createdAt: '2026-05-19T12:00:00.000Z'
+        updatedAt: '2026-05-19T12:00:00.000Z'
+        clientId: 39d2d314-5412-431a-b34b-74f9f0fbe7e1
+        merchantId: 660e8400-e29b-41d4-a716-446655440002
+        action: statusChanged
+        actions:
+        - statusChanged
+        diff:
+          changes:
+            status:
+              from: null
+              to: created
+          createdAt: '2026-05-19T12:00:00.000Z'
+    PaySessionBoletoRequest:
+      summary: Exemplo cobrança Boleto
+      value:
+        paymentMethod:
+          paymentType: boleto
+          expiresDate: '2022-12-31'
+          instructions: Instruções para pagamento do boleto
+          interest:
+            days: 1
+            amount: 100
+            percentage: 0.2
+          fine:
+            days: 2
+            amount: 200
+            percentage: 0
+        paymentSource:
+          sourceType: customer
+          customer:
+            name: Customer test
+            email: jose2@gmail.com
+            document:
+              number: '97055503019'
+              type: cpf
+            phoneNumber: 21 98889999099
+    CreateSessionRequest1NUnlimited:
+      summary: Sessão 1:N ilimitada
+      value:
+        amount: 100
+        name: Loja 1
+        merchantId: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        dueDate: '2026-02-20T23:59:59.000Z'
+        createLink: true
+        maxPayments: -1
+        paymentMethods:
+        - paymentType: pix
+          expiresIn: 30
+        items:
+        - name: Item 1
+          description: Item do carrinho
+          unitPrice: 1000
+          quantity: 1
+          tangible: false
+    PaySessionCardRequestWithRecurrence:
+      summary: Exemplo cobrança Cartão com recorrência
+      value:
+        paymentMethod:
+          paymentType: credit
+          installments: 1
+          recurrence: initial
+        paymentSource:
+          sourceType: card
+          card:
+            cardNumber: '5261424250184574'
+            cardCvv: '321'
+            cardExpirationDate: 06/2028
+            cardHolderName: JOAO DA SILVA
+    CreateSessionRequest:
+      value:
+        amount: 100
+        name: Loja 1
+        merchantId: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        dueDate: '2022-10-25T09:28:45.000Z'
+        createLink: true
+        paymentMethods:
+        - paymentType: pix
+          expiresIn: 30
+        items:
+        - name: Item 1
+          description: Item do carrinho
+          unitPrice: 1000
+          quantity: 1
+          tangible: false
+        splitRules:
+        - sellerId: 5323ece6-816d-11ed-a1eb-0242ac120002
+          percentage: 100
+          processingFee: false
+          chargeEntireFee: false
+          chargeRemainderFee: false
+          liable: true
+          transactionOwner: true
+          fares:
+            mdr: 2.5
+            fee: 30
+    PaySession201DripResponse:
+      summary: Exemplo resposta cobrança Drip
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: 290f9fcc-2d89-11ee-be56-0242ac120002
+        merchantId: ba3f0dba-905d-4705-9e61-a75d6a6eca5d
+        description: Descrição longa da cobrança
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        createdAt: 2012-06-30 23:59:59 +0000
+        amount: 150
+        originalAmount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        capture: true
+        isDispute: false
+        status: pending
+        paymentMethod:
+          paymentType: drip
+          maxInstallments: 4
+          paymentUrl: https://sandbox-portal.dripapp.com.br/checkouts/a1fa9d15-e3e5-46a7-a507-613a73b35315
+          items:
+          - id": '12345'
+            quantity": 1
+            title": title item
+            unitPrice": 150
+          browser:
+            ipAddress: 127.0.0.1
+            browserFingerprint: cbd4a441-c63c-4dee-ac6b-bfa7fa1df818
+          cancelRedirectUrl: https://service-example.com/cancel
+          successRedirectUrl: https://service-example.com/success
+        paymentSource:
+          sourceType: customer
+          customerId: 1cdcf0c9-eb04-4e43-b9b2-b7a4acdead1f
+        transactionRequests:
+        - id: b0ba6be9-1d18-49e0-87a5-4936fe76c65a
+          createdAt: '2023-07-18T00:00:04.169Z'
+          updatedAt: '2023-07-18T00:00:04.713Z'
+          idempotencyKey: 036b42b2-16f2-498d-9e5a-42fb8b690e11
+          providerId: 769bce00-678e-4d64-9617-9ce82f4dfcbf
+          providerType: DRIP
+          transactionId: 036b42b2-16f2-498d-9e5a-42fb8b690e11
+          amount: 150
+          authorizationCode: 735e6b88-8878-4c3e-9047-d93d0ee1542d
+          authorizationNsu: null
+          requestStatus: success
+          requestType: pending
+          responseTs: 475ms
+          drip:
+            paymentUrl: https://sandbox-portal.dripapp.com.br/checkouts/a1fa9d15-e3e5-46a7-a507-613a73b35315
+            items:
+            - id": '12345'
+              quantity": 1
+              title": title item
+              unitPrice": 150
+            browser:
+              ipAddress: 127.0.0.1
+              browserFingerprint: cbd4a441-c63c-4dee-ac6b-bfa7fa1df818
+            cancelRedirectUrl: https://service-example.com/cancel
+            successRedirectUrl: https://service-example.com/success
+    PaySession201BoletoResponse:
+      summary: Exemplo resposta cobrança Boleto
+      value:
+        id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        merchantId: 148d5db0-f1c3-439f-902d-f1f268086e1d
+        description: Descrição longa da cobrança
+        orderId: 32c68ff7-902c-408b-b464-cf487c7cda97
+        createdAt: 2012-06-30 23:59:59 +0000
+        amount: 150
+        originalAmount: 150
+        currency: BRL
+        statementDescriptor: LOJA JOAO
+        status: pending
+        paymentMethod:
+          paymentType: boleto
+          expiresDate: '2021-12-31'
+          barcodeData: '412343241324321431241341'
+          barcodeImageUrl: https://....
+        paymentSource:
+          sourceType: customer
+          customerId: 1cdcf0c9-eb04-4e43-b9b2-b7a4acdead1f
+        transactionRequests:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          idempotencyKey: fafe857b176e45d6b12e32fcaf228996
+          providerId: 2c3b57d8-ee43-4b19-bc8a-949a88c51df1
+          providerType: STRIPE
+          transactionId: ch_3JYE7MHjGFBGEeiP0lfTD3Ob
+          amount: 1500
+          authorizationNsu: 1cc8391c-f0d5-4b7a-9fcf-653cea26be13
+          requestStatus: success
+          requestType: authorization
+          responseTs: 2633ms
+          createdAt: '2021-08-12T16:08:39.536Z'
+          updatedAt: '2021-08-12T16:08:42.212Z'
+          providerAuthorization:
+            networkAuthorizationCode: '00'
+            networkResponseCode: ''
+    Session:
+      value:
+        id: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        name: Nome da sessão
+        status: created
+        isActive: true
+        captchaEnabled: false
+        clientId: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        orderId: null
+        amount: 100
+        currency: BRL
+        capture: true
+        merchantId: 69aea152-ba70-49a3-a31c-044ac1651146
+        dueDate: '2022-10-25T09:28:45.000Z'
+        description: Promoção Black Friday
+        statementDescriptor: LOJA JOAO
+        paymentMethods:
+        - paymentType: credit
+          installments: 1
+        items:
+        - id: 78601913-a176-4d71-b7e8-abb6fc49a340
+          name: Item 1
+          description: Descrição do item
+          unitPrice: 10000
+          quantity: 1
+          tangible: false
+        createdAt: '2022-10-25T09:28:45.000Z'
+        updatedAt: '2022-10-25T09:28:45.000Z'
+        publicKey: 1b0c6960-702a-4074-95c2-eed2790c16a1
+        multiplePayments:
+          allow: false
+          maxPayments: null
+          paymentCount: 0
+          pendingCount: 0
+          status: active
+        splitRules:
+        - sellerId: 5323ece6-816d-11ed-a1eb-0242ac120002
+          percentage: 100
+          processingFee: false
+          chargeEntireFee: false
+          chargeRemainderFee: false
+          liable: true
+          transactionOwner: true
+          fares:
+            mdr: 2.5
+            fee: 30
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos

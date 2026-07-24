@@ -1,0 +1,1490 @@
+openapi: 3.1.0
+info:
+  version: '0.5'
+  title: Documentação Malga 3DS2 Malga Merchants API
+  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+servers:
+- url: https://api.malga.io
+  description: Production
+security:
+- X-Client-ID: []
+  X-Api-Key: []
+tags:
+- name: Merchants
+  description: '
+
+    Através das APIs de `merchants` é possível realizar a criação e configuração de sub contas na Malga. Uma sub conta, ou um `merchant`, é um cadastro de estabelecimento comercial que você tenha junto há um dos provedores de pagamentos integrados pela Malga. Uma vez que você tenha uma conta criada em um dos provedores aceitos, basta você solicitar suas credenciais de acesso ao parceiro e configurar seu cadastro na Malga.
+
+
+    No cadastro de `merchant` é necessário informar o código da categoria `mcc` do seu cadastro junto ao provedor, escolher um dos tipos de provedores suportados pela Malga, e definir a prioridade do provedor com suas credenciais de acesso à API do provedor.
+
+
+    O sistema de roteamento inteligente de transações da Malga foi desenvolvido de maneira a suportar o uso de múltiplos provedores por cadastro de estabelecimento. Usamos a prioridade definida no cadastro dos provedores para priorizar um determinado provedor em relação à outro, dessa forma você consegue gerenciar a ordem de provedores que será utilizado para fazer as retentativas.
+
+
+    ### Consulte a [tabela de provedores aceitos](#section/Provedores-e-meios-de-pagamentos-suportados) para cadastro de credenciais
+
+
+    ### Consulte a [tabela de código MCC](api-reference/type-tables/mcc-code.mdx) para cadastro de Merchants
+
+
+    **Dados básicos do objeto do tipo merchant**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Merchant" exampleRef="#/components/examples/Merchant" />
+
+    '
+paths:
+  /v1/merchants:
+    post:
+      summary: Criação de novo merchant para cobrança
+      operationId: createMerchant
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMerchantDto'
+            examples:
+              MerchantRequest:
+                $ref: '#/components/examples/MerchantRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchant'
+              examples:
+                Merchant:
+                  $ref: '#/components/examples/Merchant'
+      tags:
+      - Merchants
+    get:
+      summary: Listagem de merchants cadastrados
+      operationId: listMerchants
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: number
+        required: false
+        description: Número da página
+      - in: query
+        name: limit
+        schema:
+          type: number
+        required: false
+        description: Quantidade de itens por página
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantList'
+              examples:
+                MerchantList:
+                  $ref: '#/components/examples/MerchantList'
+      tags:
+      - Merchants
+  /v1/merchants/{id}:
+    get:
+      operationId: getMerchantById
+      summary: Recuperar detalhes de merchant pelo id
+      parameters:
+      - name: id
+        required: true
+        description: Id do merchant
+        in: path
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchant'
+              examples:
+                Merchant:
+                  $ref: '#/components/examples/Merchant'
+      tags:
+      - Merchants
+    patch:
+      operationId: updateMerchant
+      summary: Atualizar configurações de merchant
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id do merchant
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMerchantDto'
+      responses:
+        '200':
+          description: ''
+      tags:
+      - Merchants
+    delete:
+      summary: Deletar merchant pelo id
+      operationId: deleteMerchant
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Id do merchant
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: ''
+      tags:
+      - Merchants
+  /v1/merchants/{merchantId}/platform-fee/enabled:
+    patch:
+      operationId: togglePlatformFeeEnabled
+      summary: Ativar ou desativar platform fee do merchant
+      parameters:
+      - name: merchantId
+        required: true
+        in: path
+        description: Identificador do merchant
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TogglePlatformFeeDto'
+            examples:
+              TogglePlatformFeeRequest:
+                $ref: '#/components/examples/TogglePlatformFeeRequest'
+      responses:
+        '200':
+          description: Platform fee atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TogglePlatformFeeResponse'
+              examples:
+                TogglePlatformFeeResponse:
+                  $ref: '#/components/examples/TogglePlatformFeeResponse'
+        '404':
+          description: Merchant não encontrado
+      tags:
+      - Merchants
+  /v1/merchants/{merchantId}/platform-fee:
+    post:
+      operationId: createPlatformFeeRules
+      summary: Criar regras de platform fee
+      parameters:
+      - name: merchantId
+        required: true
+        in: path
+        description: Identificador do merchant
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreatePlatformFeeDto'
+            examples:
+              PlatformFeeRequest:
+                $ref: '#/components/examples/PlatformFeeRequest'
+      responses:
+        '201':
+          description: Regras criadas com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlatformFeeOutput'
+              examples:
+                PlatformFeeRulesArrayResponse:
+                  $ref: '#/components/examples/PlatformFeeRulesArrayResponse'
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Merchant não encontrado
+        '409':
+          description: Regra já existente para o método de pagamento informado
+      tags:
+      - Merchants
+    get:
+      operationId: listPlatformFeeRules
+      summary: Listar regras de platform fee
+      parameters:
+      - name: merchantId
+        required: true
+        in: path
+        description: Identificador do merchant
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Lista de regras de platform fee e flag de ativação do merchant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformFeeListOutput'
+              examples:
+                PlatformFeeListResponse:
+                  $ref: '#/components/examples/PlatformFeeListResponse'
+        '404':
+          description: Merchant não encontrado
+      tags:
+      - Merchants
+    put:
+      operationId: updatePlatformFeeRules
+      summary: Atualizar regras de platform fee
+      parameters:
+      - name: merchantId
+        required: true
+        in: path
+        description: Identificador do merchant
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreatePlatformFeeDto'
+            examples:
+              PlatformFeeRequest:
+                $ref: '#/components/examples/PlatformFeeRequest'
+      responses:
+        '200':
+          description: Regras atualizadas com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlatformFeeOutput'
+              examples:
+                PlatformFeeRulesArrayResponse:
+                  $ref: '#/components/examples/PlatformFeeRulesArrayResponse'
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Merchant ou regra não encontrada
+        '409':
+          description: Regra já existente para o método de pagamento informado
+      tags:
+      - Merchants
+  /v1/merchants/{merchantId}/platform-fee/{platformFeeId}:
+    delete:
+      operationId: deletePlatformFeeRule
+      summary: Deletar uma regra de platform fee pelo ID
+      parameters:
+      - name: merchantId
+        required: true
+        in: path
+        description: Identificador do merchant
+        schema:
+          type: string
+          format: uuid
+      - name: platformFeeId
+        required: true
+        in: path
+        description: Identificador da regra de platform fee
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Regra deletada com sucesso
+        '404':
+          description: Merchant ou regra não encontrada
+      tags:
+      - Merchants
+components:
+  schemas:
+    ProviderDto:
+      properties:
+        name:
+          type: string
+          description: Nome opcional de identificação do provedor
+        priority:
+          type: number
+          description: Define a prioridade do provedor no roteamento da transação (usar 1 para o prioritário)
+        credentials:
+          oneOf:
+          - $ref: '#/components/schemas/PagSeguro'
+          - $ref: '#/components/schemas/PayPal'
+          - $ref: '#/components/schemas/Pagarme_v5'
+          - $ref: '#/components/schemas/Cielo'
+          - $ref: '#/components/schemas/Braspag'
+          - $ref: '#/components/schemas/BS2'
+          - $ref: '#/components/schemas/BS2_BOLETO'
+          - $ref: '#/components/schemas/BB'
+          - $ref: '#/components/schemas/Braintree'
+          - $ref: '#/components/schemas/Klap'
+          - $ref: '#/components/schemas/Zoop'
+          - $ref: '#/components/schemas/Stripe'
+          - $ref: '#/components/schemas/MercadoPago'
+          - $ref: '#/components/schemas/Clearsale'
+          - $ref: '#/components/schemas/NuPay'
+          - $ref: '#/components/schemas/Adyen'
+          - $ref: '#/components/schemas/GetnetSep'
+          - $ref: '#/components/schemas/Vr'
+          - $ref: '#/components/schemas/Drip'
+          - $ref: '#/components/schemas/Worldpay'
+          - $ref: '#/components/schemas/Safrapay'
+          - $ref: '#/components/schemas/Mapinvest'
+          - $ref: '#/components/schemas/Bolt'
+          - $ref: '#/components/schemas/Barte'
+          - $ref: '#/components/schemas/Picpay'
+          - $ref: '#/components/schemas/Rede'
+          - $ref: '#/components/schemas/Itau'
+          - $ref: '#/components/schemas/B2E'
+          - $ref: '#/components/schemas/Konduto'
+        options:
+          oneOf:
+          - $ref: '#/components/schemas/ClearsaleOptions'
+          - $ref: '#/components/schemas/NuPayOptions'
+          - $ref: '#/components/schemas/BarteOptions'
+          - $ref: '#/components/schemas/B2EOptions'
+        acquirer:
+          oneOf:
+          - $ref: '#/components/schemas/MerchantAcquirerSingleMid'
+          - $ref: '#/components/schemas/MerchantAcquirerMultipleMid'
+      required:
+      - name
+      - priority
+      - credentials
+    NuPayOptions:
+      title: NuPayOptions
+      properties:
+        type:
+          type: string
+          enum:
+          - NUPAY
+        merchantName:
+          type: string
+          description: Nome do merchant a ser utilizado nas transações NuPay
+        storeName:
+          type: string
+          description: Nome da loja a ser utilizada nas transações NuPay
+      required:
+      - type
+    Adyen:
+      title: Adyen
+      properties:
+        type:
+          type: string
+          enum:
+          - ADYEN
+        apiKey:
+          type: string
+          description: Chave de API da Adyen
+        liveUrlPrefix:
+          type: string
+          description: Prefixo de URL de produção da Adyen, não inserir o http:// ou https://
+        webhookHmacKey:
+          type: string
+          description: Chave HMAC para validação de webhook
+        merchantAccount:
+          type: string
+          description: Conta do Merchant da Adyen
+        version:
+          type: string
+          description: Versão da API da Adyen
+      required:
+      - type
+      - apiKey
+      - liveUrlPrefix
+      - merchantAccount
+    BB:
+      title: BB
+      properties:
+        type:
+          type: string
+          enum:
+          - BB
+        authBasic:
+          type: string
+          description: Credencial de uso da sua conta no Banco do Brasil
+        devAppKey:
+          type: string
+          description: Credencial de uso da sua conta no Banco do Brasil
+        pixKey:
+          type: string
+          description: Chave Pix da da sua conta no Banco do Brasil
+        version:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          description: Versão da API PIX a ser integrada
+        mtlsPemBase64:
+          type: string
+          description: (PIX V2) O conteúdo do seu certificado x509 em formato `.pem`, convertido para Base64
+        mtlsPassPhrase:
+          type: string
+          description: (PIX V2) PassPhrase associada ao seu certificado
+      required:
+      - type
+      - authBasic
+      - devAppKey
+      - pixKey
+    BS2_BOLETO:
+      title: BS2_BOLETO
+      properties:
+        type:
+          type: string
+          enum:
+          - BS2_BOLETO
+        clientKey:
+          type: string
+          description: Credencial de uso da sua conta no BS2
+        clientSecret:
+          type: string
+          description: Credencial de uso da sua conta no BS2
+        refreshToken:
+          type: string
+          description: Credencial de uso da sua conta no BS2
+      required:
+      - type
+      - clientKey
+      - clientSecret
+      - refreshToken
+    Drip:
+      title: Drip
+      properties:
+        type:
+          type: string
+          enum:
+          - DRIP
+        secretKey:
+          type: string
+          description: Secret key da sua conta Drip
+      required:
+      - type
+      - secretKey
+    BarteOptions:
+      title: BarteOptions
+      properties:
+        type:
+          type: string
+          enum:
+          - BARTE
+        paymentMethod:
+          type: string
+          enum:
+          - CREDIT_CARD_EARLY_SELLER
+          - CREDIT_CARD_EARLY_BUYER
+          description: Método de pagamento da Barte.
+      required:
+      - type
+      - paymentMethod
+    Bolt:
+      title: Bolt
+      properties:
+        type:
+          type: string
+          enum:
+          - BOLT
+        gatewayId:
+          type: string
+          description: GatewayId da Bolt (infra da DXC)
+        gatewayKey:
+          type: string
+          description: GatewayKey da Bolt (infra da DXC)
+        merchantId:
+          type: string
+          description: MerchantId da Bolt (infra da DXC)
+        merchantKey:
+          type: string
+          description: MerchantKey da Bolt (infra da DXC)
+        merchantTerminal:
+          type: string
+          description: MerchantTerminal da Bolt (infra da DXC)
+      required:
+      - token
+    Braintree:
+      title: Braintree
+      properties:
+        type:
+          type: string
+          enum:
+          - BRAINTREE
+        merchantId:
+          type: string
+          description: Id do merchant da sua conta na Braintree
+        publicKey:
+          type: string
+          description: Chave pública da sua conta na Braintree
+        privateKey:
+          type: string
+          description: Chave privada da sua conta na Braintree
+      required:
+      - type
+      - merchantId
+      - publicKey
+      - privateKey
+    PlatformFeeOutput:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador único da regra de platform fee
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        percentage:
+          type: number
+          format: float
+          description: Percentual da taxa aplicado
+          example: 2.5
+          nullable: true
+        fixedAmount:
+          type: integer
+          description: Valor fixo da taxa em centavos
+          example: 50
+          nullable: true
+        paymentMethod:
+          type: string
+          enum:
+          - credit
+          - pix
+          - boleto
+          - default
+          description: 'Método de pagamento ao qual a regra se aplica (`default` indica regra de fallback).
+
+            '
+          example: credit
+        installment:
+          type: integer
+          description: 'Número de parcelas informado na criação da regra. Presente apenas para `credit`; null para `pix`, `boleto` e `default`. A unicidade é validada por faixa: à vista (1), 2x a 6x (2-6), 7x a 12x (7-12), 13x a 24x (13-24).
+
+            '
+          example: 5
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação da regra
+          example: '2024-01-15T10:30:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data da última atualização da regra
+          example: '2024-01-15T10:30:00.000Z'
+    BS2:
+      title: BS2
+      properties:
+        type:
+          type: string
+          enum:
+          - BS2
+        clientKey:
+          type: string
+          description: Credencial de uso da sua conta no BS2
+        clientSecret:
+          type: string
+          description: Credencial de uso da sua conta no BS2
+        pixKey:
+          type: string
+          description: Chave pix da sua conta no BS2
+      required:
+      - type
+      - clientKey
+      - clientSecret
+      - pixKey
+    TogglePlatformFeeDto:
+      type: object
+      required:
+      - enabled
+      properties:
+        enabled:
+          type: boolean
+          description: Define se o platform fee está ativo (`true`) ou inativo (`false`) para o merchant
+          example: true
+    UpdateMerchantDto:
+      type: object
+      properties:
+        mcc:
+          type: string
+          description: Código de segmento do lojista no adquirente formado por quatro números, solicite ao seu provedor caso não saiba qual o seu Merchant Category Code.
+        name:
+          type: string
+          description: Nome do merchant que será exibido na Dashboard (Subcontas, Fluxos Inteligentes, etc.)
+        merchantName:
+          type: string
+          description: Nome do merchant que será exibido em caso de desafio no 3DS. Caso esse merchant não use 3DS, esse campo é opcional.
+        merchantUrl:
+          type: string
+          description: URL do merchant que serve como informativo durante a autenticação 3DS. Caso o merchant não use 3DS, esse campo é opcional.
+    PagSeguro:
+      title: PagSeguro
+      properties:
+        type:
+          type: string
+          enum:
+          - PAGSEGURO
+        token:
+          type: string
+          description: Token de uso na API V4 da pagseguro
+        email:
+          type: string
+          description: Email do usuário da conta principal da paseguro
+      required:
+      - type
+      - token
+      - email
+    Worldpay:
+      title: Worldpay
+      properties:
+        type:
+          type: string
+          enum:
+          - WORLDPAY
+        merchantCode:
+          type: string
+          description: Código do seu merchant Worldpay
+        userAPI:
+          type: string
+          description: Usuário Worldpay
+        senha:
+          type: string
+          description: Senha Worldpay
+      required:
+      - type
+      - merchantCode
+      - userAPI
+      - senha
+    Rede:
+      title: Rede
+      properties:
+        type:
+          type: string
+          enum:
+          - REDE
+        merchantId:
+          type: string
+          description: Identificador do estabelecimento na rede
+        apiKey:
+          type: string
+          description: Chave secreta de acesso a api da rede
+      required:
+      - type
+      - merchantId
+      - apiKey
+    Vr:
+      title: Vr
+      properties:
+        affiliationId:
+          type: string
+          description: Identificação de afiliação do vr
+      required:
+      - affiliationId
+    Braspag:
+      title: Braspag
+      properties:
+        type:
+          type: string
+          enum:
+          - BRASPAG
+        clientSecret:
+          type: string
+          description: Credencial para uso da sua conta na Braspag
+        merchantId:
+          type: string
+          description: Identificador da loja na Braspag
+        merchantKey:
+          type: string
+          description: Chave pública para autenticação dupla na Braspag
+      required:
+      - type
+      - clientSecret
+      - merchantId
+      - merchantKey
+    B2EOptions:
+      title: B2EOptions
+      properties:
+        type:
+          type: string
+          enum:
+          - ANTIFRAUD
+        productType:
+          type: string
+          enum:
+          - ASYNC
+          description: Representa o tipo de produto de antifraude
+      required:
+      - type
+    Barte:
+      title: Barte
+      properties:
+        type:
+          type: string
+          enum:
+          - BARTE
+        tokenApi:
+          type: string
+          description: Token de API da Barte
+      required:
+      - type
+      - tokenApi
+    Cielo:
+      title: Cielo
+      properties:
+        type:
+          type: string
+          enum:
+          - CIELO
+        merchantKey:
+          type: string
+          description: Credencial de uso da sua conta na Cielo
+        merchantId:
+          type: string
+          description: Credencial de uso da sua conta na Cielo
+      required:
+      - type
+      - merchantKey
+      - merchantId
+    MerchantAcquirerSingleMid:
+      type: object
+      description: Informações do adquirente
+      title: MID único
+      required:
+      - merchantId
+      properties:
+        merchantId:
+          type: string
+          description: ID do merchant. Obrigatório se não estiver em cada BIN. Caso esteja aqui no nível superior ele irá usar esse merchantId para todas as bandeiras.
+          example: '1234567890'
+        bin:
+          type: array
+          description: BINs do adquirente
+          items:
+            type: object
+            required:
+            - merchantId
+            properties:
+              brand:
+                type: string
+                description: Bandeira do BIN
+                example: Mastercard
+              value:
+                type: string
+                description: Valor do BIN
+                example: '550259'
+    Itau:
+      title: Itaú
+      properties:
+        type:
+          type: string
+          enum:
+          - ITAU
+        pixSecretKey:
+          type: string
+          description: Chave secreta da API de PIX da sua conta Itaú
+        pixClientId:
+          type: string
+          description: Client ID da API de PIX
+        pixMtlsCert:
+          type: string
+          description: Certificado CSR em Base64
+        pixMtlsCertKey:
+          type: string
+          description: Chave do Certificado CSR em Base64
+        pixKey:
+          type: string
+          description: Chave PIX da conta
+        boletoSecretKey:
+          type: string
+          description: Chave secreta da API de Boleto da sua conta Itaú
+        boletoClientId:
+          type: string
+          description: Client ID da API de Boleto
+        boletoMtlsCert:
+          type: string
+          description: Certificado CSR do Boleto em Base64
+        boletoMtlsCertKey:
+          type: string
+          description: Chave do Certificado CSR do Boleto em Base64
+        boletoBeneficiaryKey:
+          type: string
+          description: ID do Beneficiário que é a concatenação da Agência + Conta + DAC
+    MetaPagination:
+      properties:
+        itemCount:
+          type: integer
+          description: Quantidade de itens na página
+        totalItems:
+          type: integer
+          description: Quantidade total de itens na consulta (esse valor é mantido em cache por 5 minutos para melhorar a performance da API)
+        itemsPerPage:
+          type: integer
+          description: Quantidade de itens por página
+        totalPages:
+          type: integer
+          description: Quantidade total de páginas
+        currentPage:
+          type: integer
+          description: Página atual
+    Konduto:
+      title: Konduto
+      properties:
+        type:
+          type: string
+          enum:
+          - KONDUTO
+        secretKey:
+          type: string
+          description: Chave secreta para integração da Konduto
+        publicKey:
+          type: string
+          description: A chave pública identifica a sua loja na Konduto
+      required:
+      - type
+      - secretKey
+    PlatformFeeListOutput:
+      type: object
+      required:
+      - platformFeeEnabled
+      - rules
+      properties:
+        platformFeeEnabled:
+          type: boolean
+          description: Indica se o platform fee está ativo para o merchant
+          example: true
+        rules:
+          type: array
+          description: Regras de platform fee ativas cadastradas para o merchant
+          items:
+            $ref: '#/components/schemas/PlatformFeeOutput'
+    Pagarme_v5:
+      title: Pagarme_v5
+      properties:
+        type:
+          type: string
+          enum:
+          - PAGARME_V5
+        secretKey:
+          type: string
+          description: Credencial de uso da sua conta na Pagarme
+      required:
+      - type
+      - secretKey
+    MerchantAcquirerMultipleMid:
+      type: object
+      description: Informações do adquirente
+      title: Múltiplos MID's
+      properties:
+        bin:
+          type: array
+          description: BINs do adquirente
+          items:
+            type: object
+            required:
+            - merchantId
+            properties:
+              merchantId:
+                type: string
+                description: ID do merchant. Obrigatório se não estiver cadastrado no nível superior. Caso esteja nesse nível ele irá usar o merchantId para cada respectivo BIN.
+                example: '1234567890'
+              brand:
+                type: string
+                description: Bandeira do BIN
+                example: Mastercard
+              value:
+                type: string
+                description: Valor do BIN
+                example: '550259'
+    Stripe:
+      title: Stripe
+      properties:
+        type:
+          type: string
+          enum:
+          - STRIPE
+        secretKey:
+          type: string
+          description: Chave secreta de acesso a api da stripe
+      required:
+      - type
+      - secretKey
+    Picpay:
+      title: Picpay
+      properties:
+        type:
+          type: string
+          enum:
+          - PICPAY
+        clientId:
+          type: string
+          description: Client_id da Picpay
+        clientSecret:
+          type: string
+          description: Client_secret da Picpay
+      required:
+      - type
+      - clientId
+      - clientSecret
+    CreatePlatformFeeDto:
+      type: object
+      required:
+      - paymentMethod
+      properties:
+        percentage:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+          description: Percentual da taxa (0-100) com até 2 casas decimais. Ao menos um entre `percentage` e `fixedAmount` deve ser informado.
+          example: 2.5
+        fixedAmount:
+          type: integer
+          minimum: 0
+          description: Valor fixo da taxa em centavos (>= 0). Ao menos um entre `percentage` e `fixedAmount` deve ser informado.
+          example: 50
+        paymentMethod:
+          type: string
+          enum:
+          - credit
+          - pix
+          - boleto
+          - default
+          description: 'Método de pagamento ao qual a regra se aplica. Use `default` para regras de fallback quando não houver regra específica para o método da transação. Nota: `default` não aceita `installment`.
+
+            '
+          example: credit
+        installment:
+          type: integer
+          minimum: 1
+          maximum: 24
+          description: 'Número de parcelas. **Obrigatório** quando `paymentMethod` for `credit`; **proibido** nos demais. O valor informado (1-24) é agrupado em faixas de parcelamento. Apenas uma regra por faixa é permitida por merchant. Faixas: à vista (1), 2x a 6x (2-6), 7x a 12x (7-12), 13x a 24x (13-24). O valor original é armazenado e retornado; a unicidade é validada por faixa.
+
+            '
+          example: 5
+    Klap:
+      title: Klap
+      properties:
+        type:
+          type: string
+          enum:
+          - KLAP
+        apiKey:
+          type: string
+          description: Chave de API da sua conta na Klap
+        commerceId:
+          type: string
+          description: ID do comércio da sua conta na Klap
+        keyComponent1:
+          type: string
+          description: Componente 1 da sua chave na Klap
+        keyComponent2:
+          type: string
+          description: Componente 2 da sua chave na Klap
+      required:
+      - type
+      - apiKey
+      - CommerceId
+      - keyComponent1
+      - keyComponent2
+    MercadoPago:
+      title: MercadoPago
+      properties:
+        type:
+          type: string
+          enum:
+          - MERCADO_PAGO
+        accessToken:
+          type: string
+          description: Chave de acesso a API
+      required:
+      - type
+      - accessToken
+    TogglePlatformFeeResponse:
+      type: object
+      properties:
+        platformFeeEnabled:
+          type: boolean
+          description: Estado atual do platform fee para o merchant
+          example: true
+    MerchantList:
+      properties:
+        meta:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/MetaPagination'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Merchant'
+    Mapinvest:
+      title: Mapinvest
+      properties:
+        type:
+          type: string
+          enum:
+          - MAPINVEST
+        clientId:
+          type: string
+          description: ClientId do seu merchant Mapinvest
+        clientSecret:
+          type: string
+          description: ClientSecret do seu merchant Mapinvest
+        pixKey:
+          type: string
+          description: A chave pix do seu merchant Mapinvest
+        publicKey:
+          type: string
+          description: PublicKey do seu merchant Mapinvest (mtls)
+        privateKey:
+          type: string
+          description: PrivateKey do seu merchant Mapinvest (mtls)
+      required:
+      - token
+    Merchant:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador do merchant
+        createdAt:
+          type: string
+          description: Data de criação
+        clientId:
+          type: string
+          format: uuid
+          description: Identificador do client
+        mcc:
+          type: string
+          description: Código mcc do cadatro do lojista no adquirente
+        status:
+          type: string
+          enum:
+          - active
+          - deleted
+          - pending
+          description: Status do merchant
+        providers:
+          $ref: '#/components/schemas/ProviderDto'
+        platformFeeEnabled:
+          type: boolean
+          description: Indica se o platform fee está ativo para o merchant
+          example: false
+        platformFees:
+          type: array
+          description: Regras de platform fee cadastradas para o merchant
+          items:
+            $ref: '#/components/schemas/PlatformFeeOutput'
+    Safrapay:
+      title: Safrapay
+      properties:
+        type:
+          type: string
+          enum:
+          - SAFRAPAY
+        token:
+          type: string
+          description: Token do seu merchant Safrapay
+      required:
+      - token
+    Zoop:
+      title: Zoop
+      properties:
+        type:
+          type: string
+          enum:
+          - ZOOP
+        marketplaceId:
+          type: string
+          description: Identificador do marketplace id na zoop
+        sellerId:
+          type: string
+          description: Identificador do seller id na zoop
+        apiKey:
+          type: string
+          description: Chave zpk de acesso a api da zoop
+        xApiKeyToken:
+          type: string
+          description: Chave pra gerir throttle a api da zoop
+        privateKey:
+          type: string
+          description: Chave privada de acesso a api da zoop - conteúdo do .key em base64
+        publicKey:
+          type: string
+          description: Chave pública de acesso a api da zoop - conteúdo da .pem em base64
+      required:
+      - type
+      - marketplaceId
+      - sellerId
+      - apiKey
+      - xApiKeyToken
+      - privateKey
+      - publicKey
+    ClearsaleOptions:
+      title: ClearsaleOptions
+      properties:
+        type:
+          type: string
+          enum:
+          - ANTIFRAUD
+        captureOnError:
+          type: boolean
+          description: Captura a transação em caso de erro no provedor antifraude
+        captureOnApproved:
+          type: boolean
+          description: Captura a transação automaticamente caso o provedor antifraude aprove a transação
+        refundOnError:
+          type: boolean
+          description: Estorna a transação em caso de erro no provedor antifraude
+        refundOnReproved:
+          type: boolean
+          description: Estorna ou cancela a transação automaticamente caso o provedor antifraude reprove a transação
+        runBeforeCharge:
+          type: boolean
+          description: Determina se o provedor antifraude é executado antes do provedor de cobrança
+        productType:
+          type: string
+          enum:
+          - SYNC
+          - ASYNC
+          description: Representa o tipo de produto de antifraude (síncrono ou assíncrono)
+      required:
+      - type
+    PayPal:
+      title: PayPal
+      properties:
+        type:
+          type: string
+          enum:
+          - PAYPAL
+        clientId:
+          type: string
+          description: Credencial de uso da sua conta no Paypal
+        clientSecret:
+          type: string
+          description: Credencial de uso da sua conta no Paypal
+      required:
+      - type
+      - clientId
+      - clientSecret
+    CreateMerchantDto:
+      properties:
+        mcc:
+          type: string
+          description: Código de segmento do lojista no adquirente, solicite ao seu provedor caso não saiba qual o seu Merchant Category Code.
+        name:
+          type: string
+          description: Nome do merchant que será exibido na Dashboard (Subcontas, Fluxos Inteligentes, etc.)
+        merchantName:
+          type: string
+          description: Nome do merchant que será exibido em caso de desafio no 3DS. Caso esse merchant não use 3DS, esse campo é opcional.
+        merchantUrl:
+          type: string
+          description: URL do merchant que serve como informativo durante a autenticação 3DS. Caso o merchant não use 3DS, esse campo é opcional.
+        providers:
+          $ref: '#/components/schemas/ProviderDto'
+      required:
+      - clientId
+      - mcc
+      - status
+    GetnetSep:
+      title: GetnetSep
+      properties:
+        type:
+          type: string
+          enum:
+          - GETNET_SEP
+        clientApiKey:
+          type: string
+          description: ClientApiKey da GetnetSep
+        clientSecret:
+          type: string
+          description: Client secret da GetnetSep
+        sellerId:
+          type: string
+          description: Seller ID da GetnetSep
+      required:
+      - clientApiKey
+      - clientSecret
+      - sellerId
+    B2E:
+      title: B2E
+      properties:
+        type:
+          type: string
+          enum:
+          - B2E
+        user:
+          type: string
+          description: User para a API da b2e
+        password:
+          type: string
+          description: Senha secreta de acesso a API da b2e
+        merchantId:
+          type: string
+          description: Identificador do merchant na b2e
+      required:
+      - type
+      - user
+      - password
+      - merchantId
+    Clearsale:
+      title: Clearsale
+      properties:
+        type:
+          type: string
+          enum:
+          - CLEARSALE
+        name:
+          type: string
+          description: Nome para a api da clearsale
+        password:
+          type: string
+          description: Senha secreta de acesso a api da clearsale
+        app:
+          type: string
+          description: Identificador do APP na ClearSale
+      required:
+      - type
+      - name
+      - password
+    NuPay:
+      title: NuPay
+      properties:
+        type:
+          type: string
+          enum:
+          - NUPAY
+        merchantApiToken:
+          type: string
+          description: Token de API da NuPay
+        merchantApiKey:
+          type: string
+          description: Chave de API da NuPay
+      required:
+      - type
+      - merchantApiToken
+      - merchantApiKey
+  examples:
+    TogglePlatformFeeRequest:
+      summary: Ativar platform fee para o merchant
+      value:
+        enabled: true
+    PlatformFeeRulesArrayResponse:
+      summary: Resposta em array ao criar ou atualizar regras de platform fee
+      value:
+      - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        paymentMethod: credit
+        percentage: 3.5
+        fixedAmount: 50
+        installment: 3
+        createdAt: '2024-01-15T10:30:00.000Z'
+        updatedAt: '2024-01-15T10:30:00.000Z'
+      - id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+        paymentMethod: pix
+        percentage: null
+        fixedAmount: 50
+        installment: null
+        createdAt: '2024-01-15T10:30:00.000Z'
+        updatedAt: '2024-01-15T10:30:00.000Z'
+      - id: c3d4e5f6-a7b8-9012-cdef-123456789012
+        paymentMethod: boleto
+        percentage: 1
+        fixedAmount: 100
+        installment: null
+        createdAt: '2024-01-15T10:30:00.000Z'
+        updatedAt: '2024-01-15T10:30:00.000Z'
+    PlatformFeeRequest:
+      summary: Criar ou atualizar regras de platform fee
+      value:
+      - paymentMethod: credit
+        percentage: 3.5
+        fixedAmount: 50
+        installment: 3
+      - paymentMethod: pix
+        fixedAmount: 50
+      - paymentMethod: boleto
+        percentage: 1
+        fixedAmount: 100
+    MerchantRequest:
+      value:
+        mcc: '4040'
+        status: true
+        providers:
+        - name: PagSeguro
+          priority: 1
+          credentials:
+            type: PAGSEGURO
+            token: 1B2B32530CA24641324AB63843240F5633
+            email: email@gmail.com
+          acquirer:
+            merchantId: '1111111111'
+            bin:
+            - brand: Mastercard
+              value: '550259'
+              merchantId: '2222222222'
+            - brand: Visa
+              value: '448768'
+              merchantId: '3333333333'
+    TogglePlatformFeeResponse:
+      summary: Resposta após ativar ou desativar platform fee
+      value:
+        platformFeeEnabled: true
+    MerchantList:
+      value:
+        meta:
+          itemCount: 10
+          totalItems: 20
+          itemsPerPage: 10
+          totalPages: 5
+          currentPage: 2
+        items:
+        - id: 69aea152-ba70-49a3-a31c-044ac1651146
+          updatedAt: '2021-03-12T15:57:20.239Z'
+          createdAt: '2021-03-12T15:57:20.239Z'
+          clientId: 523afbe7-36dc-4654-9dba-e7167d0e5e2d
+          mcc: '4040'
+          status: true
+          providers:
+          - id: 72cc1ff1-5f6e-4eb2-9cc5-6a3a85525e4b
+            updatedAt: '2021-03-12T15:57:20.239Z'
+            createdAt: '2021-03-12T15:57:20.239Z'
+            name: PagSeguro
+            priority: 1
+            credentials:
+              type: PAGSEGURO
+              token: 1B2B32530CA2464F8AB63843240F5633
+              email: email@gmail.com
+    PlatformFeeListResponse:
+      summary: Listagem de regras com flag de ativação (GET /platform-fee)
+      value:
+        platformFeeEnabled: true
+        rules:
+        - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+          paymentMethod: credit
+          percentage: 3.5
+          fixedAmount: 50
+          installment: 3
+          createdAt: '2024-01-15T10:30:00.000Z'
+          updatedAt: '2024-01-15T10:30:00.000Z'
+        - id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+          paymentMethod: pix
+          percentage: null
+          fixedAmount: 50
+          installment: null
+          createdAt: '2024-01-15T10:30:00.000Z'
+          updatedAt: '2024-01-15T10:30:00.000Z'
+        - id: c3d4e5f6-a7b8-9012-cdef-123456789012
+          paymentMethod: boleto
+          percentage: 1
+          fixedAmount: 100
+          installment: null
+          createdAt: '2024-01-15T10:30:00.000Z'
+          updatedAt: '2024-01-15T10:30:00.000Z'
+    Merchant:
+      value:
+        id: 69aea152-ba70-49a3-a31c-044ac1651146
+        updatedAt: '2021-03-12T15:57:20.239Z'
+        createdAt: '2021-03-12T15:57:20.239Z'
+        clientId: 523afbe7-36dc-4654-9dba-e7167d0e5e2d
+        mcc: '4040'
+        status: true
+        platformFeeEnabled: true
+        platformFees:
+        - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+          paymentMethod: credit
+          percentage: 2.5
+          fixedAmount: null
+          installment: null
+          createdAt: '2021-03-12T15:57:20.239Z'
+          updatedAt: '2021-03-12T15:57:20.239Z'
+        - id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+          paymentMethod: pix
+          percentage: null
+          fixedAmount: 50
+          installment: null
+          createdAt: '2021-03-12T15:57:20.239Z'
+          updatedAt: '2021-03-12T15:57:20.239Z'
+        providers:
+        - id: 72cc1ff1-5f6e-4eb2-9cc5-6a3a85525e4b
+          updatedAt: '2021-03-12T15:57:20.239Z'
+          createdAt: '2021-03-12T15:57:20.239Z'
+          name: PagSeguro
+          priority: 1
+          credentials:
+            type: PAGSEGURO
+            token: 1B2B32530CA23412AB63843240F5633
+            email: email@gmail.com
+          acquirer:
+            merchantId: '1111111111'
+            bin:
+            - brand: Mastercard
+              value: '550259'
+              merchantId: '2222222222'
+            - brand: Visa
+              value: '448768'
+              merchantId: '3333333333'
+  securitySchemes:
+    X-Client-ID:
+      type: apiKey
+      in: header
+      name: X-Client-Id
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-tagGroups:
+- name: API Key
+  tags:
+  - Client-token
+- name: Cartões
+  tags:
+  - Tokens
+  - Cards
+- name: Pagamentos
+  tags:
+  - Customers
+  - Charges
+  - Sessions
+  - Sellers
+  - Vendors
+  - Split
+  - 3DSecure2
+  - Settings
+- name: Notificação e eventos
+  tags:
+  - Webhooks
+- name: Provedores
+  tags:
+  - Merchants
+  - Providers
+- name: Gestão de pagamentos
+  tags:
+  - Flows
+- name: Exportar Dados
+  tags:
+  - Reports
+- name: Apêndice
+  tags:
+  - Tabelas de tipos
