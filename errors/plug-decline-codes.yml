@@ -1,0 +1,50 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.malga.io/documentations/type-tables/declined-code
+envelope_field: declinedCode
+note: >
+  Card charges that are declined carry a declinedCode on the charge response.
+  Messages and ABECS orientation are published by Malga. Complements (does not
+  replace) errors/plug-problem-types.yml, which covers API-level HTTP errors.
+decline_codes:
+  - {code: authentication_attempts_unavailable_by_issuer, message: "Authentication attempts unavailable by issuer", retryable: false}
+  - {code: authentication_error, message: "Authentication Error", retryable: false}
+  - {code: authentication_error_without_challenge, message: "Authentication error without challenge", retryable: false}
+  - {code: authentication_unavailable, message: "Authentication Unavailable", retryable: false}
+  - {code: bad_request, message: "Request failed with status code 400", retryable: true, abecs: "VERIFIQUE OS DADOS"}
+  - {code: blocked_card, message: "Blocked Card", retryable: true, abecs: "TRANSACAO NAO PERMITIDA PARA O CARTAO - NAO TENTE NOVAMENTE"}
+  - {code: canceled_card, message: "Canceled Card", retryable: true, abecs: "TRANSACAO NAO PERMITIDA PARA O CARTAO - NAO TENTE NOVAMENTE"}
+  - {code: card_not_supported, message: "The card does not support this type of purchase", retryable: false, abecs: "UTILIZE FUNCAO DEBITO"}
+  - {code: cardholder_not_complete_authentication, message: "Cardholder did not complete authentication", retryable: false}
+  - {code: denied_reason_not_available, message: "The charge has been declined because the provider behaved unexpectedly", retryable: true, abecs: "REFAZER A TRANSACAO"}
+  - {code: expired_card, message: "The card expiration date is invalid", retryable: true, abecs: "VERIFIQUE OS DADOS DO CARTAO"}
+  - {code: failed_authentication, message: "Failed authentication eciRaw 07/00", retryable: false}
+  - {code: fraud_confirmed, message: "The charge has been declined for confirmed fraud", retryable: false, abecs: "TRANSACAO NAO PERMITIDA PARA O CARTAO - NAO TENTE NOVAMENTE"}
+  - {code: fraud_suspect, message: "The charge has been declined for suspect it is fraudulent", retryable: true, abecs: "CONTATE A CENTRAL DO SEU CARTAO"}
+  - {code: generic, message: "The card has been declined for a unknown reason", retryable: true, abecs: "CONTATE A CENTRAL DO SEU CARTAO"}
+  - {code: insufficient_funds, message: "The card has insufficient funds", retryable: true, abecs: "NAO AUTORIZADA"}
+  - {code: internal_error, message: "The charge has been declined for a unknown reason", retryable: true, abecs: "REFAZER A TRANSACAO"}
+  - {code: invalid_amount, message: "The charge amount is not valid or exceeded maximum allowed", retryable: provider-dependent, abecs: "VALOR DA TRANSACAO NAO PERMITIDO"}
+  - {code: invalid_credentials, message: "Invalid credentials", retryable: true, abecs: "REFAZER A TRANSACAO"}
+  - {code: invalid_cvv, message: "The security code is invalid", retryable: true, abecs: "SENHA INVALIDA"}
+  - {code: invalid_data, message: "The card has been declined for invalid data", retryable: false, abecs: "VERIFIQUE OS DADOS DO CARTAO"}
+  - {code: invalid_installment, message: "The charge has been declined because invalid number of installments", retryable: true, abecs: "PARCELAMENTO INVALIDO"}
+  - {code: invalid_merchant, message: "The charge has been declined because merchant is not valid", retryable: provider-dependent, abecs: "CONTA ORIGEM INVALIDA"}
+  - {code: invalid_number, message: "The card number is invalid", retryable: false, abecs: "VERIFIQUE OS DADOS DO CARTAO"}
+  - {code: invalid_pares, message: "Invalid PARes", retryable: false}
+  - {code: invalid_pin, message: "The card has been declined because pin is invalid", retryable: false, abecs: "SENHA INVALIDA"}
+  - {code: issuer_not_available, message: "The card issuer could not be reached, charge not authorized", retryable: true, abecs: "DADOS DO CARTAO INVALIDO"}
+  - {code: lost_card, message: "The card has been declined because the card is reported lost", retryable: false, abecs: "TRANSACAO NAO PERMITIDA - NAO TENTE NOVAMENTE"}
+  - {code: maximum_pin_tries, message: "The card has been declined because pin validation has been exceeded", retryable: provider-dependent, abecs: "ERRO NO CARTAO"}
+  - {code: not_permitted, message: "The charge is not permitted to the card", retryable: true, abecs: "TRANSACAO NAO PERMITIDA PARA O CARTAO"}
+  - {code: pickup_card, message: "The card cannot be used to make this charges", retryable: true, abecs: "CONTATE A CENTRAL DO SEU CARTAO"}
+  - {code: pin_try_exceeded, message: "The card has been declined because exceeded maximum pin tries", retryable: false, abecs: "EXCEDIDAS TENTATIVAS DE SENHA. CONTATE A CENTRAL DO SEU CARTAO"}
+  - {code: processing_error, message: "The charge has been declined for a unknown reason", retryable: true, abecs: "REFAZER A TRANSACAO"}
+  - {code: request_not_sent, message: "The charge has been declined for a unknown reason", retryable: true, abecs: "REFAZER A TRANSACAO"}
+  - {code: restricted_card, message: "The card cannot be used to make this charge", retryable: true, abecs: "DESBLOQUEIE O CARTAO"}
+  - {code: security_violation, message: "The card has been declined for a unknown reason", retryable: true, abecs: "VERIFIQUE OS DADOS DO CARTAO"}
+  - {code: service_not_allowed, message: "The card has been declined because do not support international charge", retryable: false, abecs: "CARTAO NAO PERMITE TRANSACAO INTERNACIONAL"}
+  - {code: stolen_card, message: "The card has been declined because the card is reported stolen", retryable: false, abecs: "TRANSACAO NAO PERMITIDA - NAO TENTE NOVAMENTE"}
+  - {code: transaction_not_allowed, message: "The card has been declined for a unknown reason", retryable: false, abecs: "ERRO NO CARTAO"}
+  - {code: try_again, message: "The card has been declined for a unknown reason", retryable: true, abecs: "REFAZER A TRANSACAO"}
+  - {code: unable_to_perform_authentication, message: "Issuer unable to perform authentication", retryable: false}

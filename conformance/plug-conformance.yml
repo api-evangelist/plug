@@ -1,0 +1,14 @@
+generated: '2026-07-20'
+method: searched
+source: https://malga.io + https://docs.malga.io
+standards:
+  - {id: pci-dss, conforms: true, level: "Level 1", evidence: "Malga states PCI DSS Level 1 compliance on malga.io; tokenization SDK reduces merchant PCI scope."}
+  - {id: 3ds2, conforms: true, evidence: "Provider-agnostic 3D Secure 2 (EMV 3DS) authentication, incl. DataOnly mode."}
+  - {id: oauth2, conforms: false, evidence: "API uses X-Client-Id + X-Api-Key key auth, not OAuth2."}
+  - {id: rfc9457-problem-details, conforms: false, evidence: "Errors are JSON with HTTP status codes; not application/problem+json."}
+  - {id: openapi-3.1, conforms: true, evidence: "Publishes an OpenAPI 3.1.0 description at docs.malga.io/api-reference/api-spec.yaml."}
+  - {id: graphql, conforms: true, evidence: "Analytics API is GraphQL (Relay connections)."}
+compliance_program:
+  pci_dss: Level 1
+  region: Brazil
+  note: Pix, boleto, card and wallet methods for the Brazilian market.

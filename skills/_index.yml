@@ -1,0 +1,12 @@
+generated: '2026-07-20'
+method: generated
+source: openapi/plug-openapi-original.yml
+skills:
+  - file: plug-create-and-charge.md
+    name: Create a customer and charge a card with Malga
+    api: openapi/plug-openapi-original.yml
+    operations: [create_token, createCustomer, saveCard, charge, captureCharge, refundCharge, getChargesByid]
+  - file: plug-subscription-billing.md
+    name: Set up recurring billing with Malga subscriptions
+    api: openapi/plug-openapi-original.yml
+    operations: [createSubscription, getSubscription, updateSubscription, cancelSubscription, pauseSubscription, resumeSubscription, listSubscriptionCycles, createWebhook]

@@ -1,0 +1,65 @@
+generated: '2026-07-20'
+method: searched
+source: https://www.npmjs.com/org/malga + https://docs.malga.io/sdks
+note: >
+  Malga (formerly Plug) publishes its client libraries under the npm @malga /
+  @malga-checkout scopes; source repos live in the GitHub org github.com/plughacker.
+packages:
+  - language: javascript
+    registry: npm
+    name: malga
+    url: https://www.npmjs.com/package/malga
+    install: npm install malga
+    repository: https://github.com/plughacker/malga-node
+    official: true
+    description: Node.js server-side library for the Malga API.
+  - language: javascript
+    registry: npm
+    name: "@malga/tokenization"
+    url: https://www.npmjs.com/package/@malga/tokenization
+    install: npm install @malga/tokenization
+    repository: https://github.com/plughacker/malga-tokenization
+    official: true
+    description: Client-side card tokenization SDK (keeps PAN off your servers).
+  - language: javascript
+    registry: npm
+    name: "@malga-checkout/core"
+    url: https://www.npmjs.com/package/@malga-checkout/core
+    install: npm install @malga-checkout/core
+    official: true
+    description: Core web components for Malga Checkout.
+  - language: javascript
+    registry: npm
+    name: "@malga-checkout/react"
+    url: https://www.npmjs.com/package/@malga-checkout/react
+    install: npm install @malga-checkout/react
+    official: true
+    description: React wrapper for Malga Checkout.
+  - language: javascript
+    registry: npm
+    name: "@malga-checkout/vue"
+    url: https://www.npmjs.com/package/@malga-checkout/vue
+    install: npm install @malga-checkout/vue
+    official: true
+    description: Vue wrapper for Malga Checkout.
+  - language: javascript
+    registry: npm
+    name: "@malga-checkout/angular"
+    url: https://www.npmjs.com/package/@malga-checkout/angular
+    install: npm install @malga-checkout/angular
+    official: true
+    description: Angular wrapper for Malga Checkout.
+  - language: javascript
+    registry: npm
+    name: "@malga-checkout-full/core"
+    url: https://www.npmjs.com/package/@malga-checkout-full/core
+    install: npm install @malga-checkout-full/core
+    official: true
+    description: Core web components for Malga Checkout Full (hosted full checkout).
+  - language: javascript
+    registry: npm
+    name: gerar-cartao-malga
+    url: https://www.npmjs.com/package/gerar-cartao-malga
+    install: npm install -g gerar-cartao-malga
+    official: true
+    description: CLI that generates sandbox test cards for Malga.

@@ -1,0 +1,26 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.malga.io/documentations/webhooks/webhook1-1
+spec_type: Webhooks
+note: >
+  Malga documents a webhook surface (no published AsyncAPI document). Webhooks are
+  managed via the REST API and deliver real-time notifications. Event names below
+  are the documented categories; the live docs are the source of truth.
+delivery:
+  current_version: v1.1
+  deprecated_versions: [v1.0]
+  signature: HMAC signature on each event; verify with the SDK helper (verify-event).
+  signature_docs: https://docs.malga.io/sdks/api-sdks/docs/webhooks/verify-event
+  resilience_guide: https://docs.malga.io/documentations/webhooks/webhook-receiver-aws-sqs
+management_operations:
+  - {operationId: createWebhook, method: POST, path: "/v1/webhooks"}
+  - {operationId: ListWebhooks, method: GET, path: "/v1/webhooks"}
+  - {operationId: getWebhook, method: GET, path: "/v1/webhooks/{id}"}
+  - {operationId: updateWebhook, method: PATCH, path: "/v1/webhooks/{id}"}
+  - {operationId: deleteWebhook, method: DELETE, path: "/v1/webhooks/{id}"}
+event_categories:
+  - charge status changes (authorization, capture, void/refund, decline)
+  - subscription / recurrence engine events (status changes, new charges)
+docs:
+  webhooks: https://docs.malga.io/documentations/webhooks/webhook1-1
+  recurrence_webhooks: https://docs.malga.io/documentations/more/recurrence/engine/webhooks

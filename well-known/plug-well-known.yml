@@ -1,0 +1,20 @@
+generated: '2026-07-20'
+method: searched
+source: live probes of /.well-known/ on Malga hosts
+note: >
+  No real /.well-known/ discovery documents are served. malga.io and
+  dashboard.malga.io return HTTP 200 for arbitrary /.well-known/ paths but the
+  body is the SPA HTML shell (text/html), not a valid discovery document.
+  api.malga.io and docs.malga.io return 404. Recorded as absent.
+hosts:
+  - host: https://api.malga.io
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+  - host: https://malga.io
+    documents:
+      - {path: /.well-known/security.txt, status: 200, valid: false, reason: SPA HTML fallback (text/html)}
+      - {path: /.well-known/openid-configuration, status: 200, valid: false, reason: SPA HTML fallback}

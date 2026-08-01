@@ -1,0 +1,29 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.malga.io/sdks/intro-sdk
+note: Client-side / embeddable UI components, distinct from the server-side SDK in packages/.
+families:
+  - family: Malga Checkout
+    description: Embeddable card/checkout web components with framework wrappers.
+    loaders:
+      - "@malga-checkout/core"
+      - "@malga-checkout/react"
+      - "@malga-checkout/vue"
+      - "@malga-checkout/angular"
+    docs: https://docs.malga.io/sdks/malga-checkout/js
+  - family: Malga Checkout Full
+    description: Hosted full-checkout surface (order, items and payment methods).
+    loaders:
+      - "@malga-checkout-full/core"
+      - "@malga-checkout-full/react"
+      - "@malga-checkout-full/vue"
+      - "@malga-checkout-full/angular"
+    docs: https://docs.malga.io/sdks/malga-checkout-full/js
+  - family: Tokenization SDK
+    description: Client-side card tokenization fields (v1 and v2) that style and capture card data (PCI scope reduction).
+    loaders:
+      - "@malga/tokenization"
+    docs: https://docs.malga.io/sdks/tokenization/v2/intro
+  - family: VTEX Connector
+    description: Prebuilt connector plugin for the VTEX commerce platform.
+    docs: https://docs.malga.io/sdks/plugins/vtex-connector

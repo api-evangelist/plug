@@ -1,0 +1,16 @@
+generated: '2026-07-20'
+method: searched
+source: https://www.npmjs.com/package/gerar-cartao-malga
+cli:
+  name: gerar-cartao-malga
+  vendor: Malga (Plug)
+  official: true
+  purpose: Generate test cards for the Malga sandbox environment.
+  install:
+    - method: npm
+      command: npm install -g gerar-cartao-malga
+  binary_catalogued_in: packages/plug-packages.yml
+  scope: >
+    Developer utility only — produces sandbox test card numbers that follow
+    Malga's final-digit behavior rules (see sandbox/plug-sandbox.yml). Not a
+    full API management CLI.

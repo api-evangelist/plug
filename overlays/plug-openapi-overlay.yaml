@@ -1,0 +1,22 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Malga (Plug)
+  version: 1.0.0
+extends: openapi/plug-openapi-original.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: plug
+      x-apievangelist-brand: Malga (formerly Plug / plugpagamentos.com)
+      x-apievangelist-category: payment-orchestration
+      x-apievangelist-region: Brazil
+      x-idempotency-header: X-Idempotency-Key
+      x-auth-headers: [X-Client-Id, X-Api-Key]
+      x-compliance: [PCI DSS Level 1]
+  - target: $.info
+    update:
+      x-apievangelist-artifacts:
+        conventions: conventions/plug-conventions.yml
+        decline_codes: errors/plug-decline-codes.yml
+        sandbox: sandbox/plug-sandbox.yml
+        webhooks: asyncapi/plug-webhooks.yml

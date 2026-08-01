@@ -1,0 +1,35 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.malga.io/documentations/welcome/testing
+note: >
+  Malga's sandbox drives outcomes off the FINAL DIGIT of the test card number and
+  the document number. Values below are published verbatim by Malga; never invent
+  additional test values.
+test_vs_live:
+  separation: Separate sandbox and production API keys generated in the dashboard.
+  sandbox_status_endpoint: POST /v1/charges/{id} (changeStatusTransaction) forces a charge status in sandbox.
+  sandbox_antifraud_endpoint: PATCH /v1/charges/{id}/antifraud (changeAntifraudStatusTransaction).
+card_final_digit_rules:
+  "0": Approved
+  "1": Approved
+  "4": Approved
+  "2": Declined (unauthorized)
+  "3": Declined (expired card)
+  "5": Declined (blocked card)
+  "6": Declined (timeout)
+  "7": Declined (canceled card)
+  "8": Random approval or timeout
+cvv_rule: CVV ending in 0 validates successfully; any other value returns not-validated.
+capture_reversal_simulation:
+  amount: 991
+  effect: Simulates a failure in capture or reversal transactions.
+antifraud_document_final_digit_rules:
+  "0": Pending (not authorized)
+  "1": Approved
+  "2": Failed (random timeout or processing error)
+  other: Declined
+tooling:
+  cli: gerar-cartao-malga (npm) — generates sandbox test cards. See cli/plug-cli.yml.
+docs:
+  testing_guide: https://docs.malga.io/documentations/welcome/testing
+  antifraud_testing: https://docs.malga.io/documentations/anti-fraud/testing

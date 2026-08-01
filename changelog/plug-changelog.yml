@@ -1,0 +1,16 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.malga.io/release-notes
+scheme: dated-release-notes
+current_version: v1
+note: Recent window from Malga's dated release notes; the live page is the source of truth.
+entries:
+  - {date: '2025-09-08', title: 'MapInvest', type: addition, highlight: New payment provider added (MapInvest).}
+  - {date: '2025-07-29', title: 'GETNET SEP', type: addition, highlight: GETNET SEP support.}
+  - {date: '2025-05-16', title: 'Split Pagarme', type: addition, highlight: Payment split via Pagar.me.}
+  - {date: '2025-03-25', title: 'Tokenization V2', type: addition, highlight: Tokenization SDK v2 released.}
+  - {date: '2025-01-30', title: '3DS DataOnly', type: addition, highlight: New 3DS DataOnly authentication mode.}
+  - {date: '2025-01-02', title: 'Apple Pay', type: addition, highlight: Apple Pay support.}
+  - {date: '2024-12-13', title: '3DSecure2 Agnostico', type: addition, highlight: Provider-agnostic 3DS2.}
+  - {date: '2024-08-19', title: 'Picpay', type: addition, highlight: New PicPay payment method.}
+  - {date: '2024-05-28', title: 'Barte', type: addition, highlight: Barte added as a credit provider.}

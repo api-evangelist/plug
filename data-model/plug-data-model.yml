@@ -1,0 +1,56 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/plug-openapi-original.yml
+note: Entity-relationship graph derived from Malga OpenAPI tags, paths and id-reference
+  fields.
+entities:
+- Charge
+- Customer
+- Card
+- Session
+- Subscription
+- Webhook
+- Merchant
+- Seller
+- Vendor
+- Token
+- Payout
+- Flow
+- Settings
+relationships:
+- from: Charge
+  to: Customer
+  type: belongs_to
+  via: customer
+- from: Charge
+  to: Card
+  type: has_one
+  via: paymentSource
+- from: Customer
+  to: Card
+  type: has_many
+  via: cards
+- from: Session
+  to: Charge
+  type: has_many
+  via: charge
+- from: Subscription
+  to: Customer
+  type: belongs_to
+  via: customer
+- from: Subscription
+  to: Charge
+  type: has_many
+  via: cycles
+- from: Merchant
+  to: Seller
+  type: has_many
+  via: sellers
+- from: Webhook
+  to: Charge
+  type: observes
+  via: events
+- from: Payout
+  to: Seller
+  type: belongs_to
+  via: seller

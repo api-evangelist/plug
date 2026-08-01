@@ -1,0 +1,21 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/plug-openapi-original.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: X-Client-ID
+  type: apiKey
+  in: header
+  parameter: X-Client-Id
+  sources:
+  - openapi/plug-openapi-original.yml
+- name: X-Api-Key
+  type: apiKey
+  in: header
+  parameter: X-Api-Key
+  sources:
+  - openapi/plug-openapi-original.yml

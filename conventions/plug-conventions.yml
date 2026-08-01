@@ -1,0 +1,47 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.malga.io/documentations/more/idempotency
+authentication:
+  style: api-key
+  headers: [X-Client-Id, X-Api-Key]
+  docs: https://docs.malga.io/api-reference/authentication
+  detail: >
+    Every API call is authenticated with two HTTP headers — X-Client-Id (client
+    identifier) and X-Api-Key (secret access key) — generated per account in the
+    Malga dashboard. See authentication/plug-authentication.yml.
+idempotency:
+  supported: true
+  header: X-Idempotency-Key
+  scope: All POST operations accept an idempotency key.
+  key_generation: client-side; must be unique per request.
+  retry_behavior: >
+    A repeated request carrying the same X-Idempotency-Key returns the original
+    response body. Concurrent duplicates may return HTTP 409 (Transaction is
+    processing) or HTTP 400.
+  recommended_retry: 3-5 attempts, minimum 10s apart.
+  docs: https://docs.malga.io/documentations/more/idempotency
+pagination:
+  style: page-limit
+  note: >
+    List endpoints (charges, customers, sessions, webhooks, sellers, etc.) return
+    paginated collections; the GraphQL Analytics API uses Relay-style cursor
+    connections (edges/pageInfo).
+  analytics_docs: https://docs.malga.io/analytics/objects/page-info
+request_tracing:
+  note: Charges expose provider NSU / authorization identifiers for reconciliation.
+versioning:
+  scheme: uri-path
+  current: v1
+  detail: REST API is under /v1; OpenAPI info.version is 0.5. Webhooks are versioned (v1.0 deprecated, v1.1 current).
+error_envelope:
+  format: json
+  detail: >
+    API errors return standard HTTP status codes (400/403/404/409/413/422/424/500)
+    with a JSON body. Declined card charges carry a declinedCode field — see
+    errors/plug-decline-codes.yml. See errors/plug-problem-types.yml.
+cross_links:
+  errors: errors/plug-problem-types.yml
+  decline_codes: errors/plug-decline-codes.yml
+  authentication: authentication/plug-authentication.yml
+  lifecycle: lifecycle/plug-lifecycle.yml
+  sandbox: sandbox/plug-sandbox.yml

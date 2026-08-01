@@ -1,0 +1,18 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/plug-openapi-original.yml
+format: http-status
+note: >
+  Derived from HTTP 4xx/5xx responses declared across the Malga OpenAPI. Responses
+  are JSON (not application/problem+json). Card-decline detail is carried
+  separately as declinedCode — see errors/plug-decline-codes.yml.
+problems:
+  - {status: 400, title: Bad Request, meaning: Malformed request or invalid parameters.}
+  - {status: 403, title: Forbidden, meaning: "Account not enabled for the requested capability (e.g. prepayment/anticipation)."}
+  - {status: 404, title: Not Found, meaning: Resource (session/charge/customer) not found or not owned by the client.}
+  - {status: 409, title: Conflict, meaning: "Duplicate/existing rule, or a transaction already processing (idempotency race)."}
+  - {status: 413, title: Payload Too Large, meaning: Uploaded file exceeds the 3MB maximum (seller documents).}
+  - {status: 422, title: Unprocessable Entity, meaning: Business rules blocked creation of the resource.}
+  - {status: 424, title: Failed Dependency, meaning: An upstream payment provider dependency failed.}
+  - {status: 500, title: Internal Server Error, meaning: Unexpected server-side error.}
+docs: https://docs.malga.io/documentations/welcome/errors

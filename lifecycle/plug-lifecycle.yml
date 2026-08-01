@@ -1,0 +1,17 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.malga.io/release-notes
+versioning:
+  scheme: uri-path
+  current: v1
+  openapi_info_version: '0.5'
+  detail: REST endpoints under /v1. Webhooks carry their own version (v1.0 deprecated, v1.1 current).
+deprecation:
+  policy_url: https://docs.malga.io/documentations/webhooks/webhook1-0
+  detail: >
+    Webhooks v1.0 is explicitly marked obsolete ("obsoleto") in the docs, with
+    v1.1 as the current webhook contract — an active deprecation of a versioned
+    surface. Tokenization v1 is superseded by v2.
+status_page: https://status.malga.io
+release_notes: https://docs.malga.io/release-notes
+deprecated_operations: []

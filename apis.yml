@@ -1,8 +1,13 @@
 aid: plug
-name: Plug
-description: Plug is a company surfaced as a portfolio company of lightspeed-venture-partners, qed-investors
-  and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the
-  enrichment pipeline.
+name: Malga
+description: >-
+  Malga (formerly Plug / plugpagamentos.com) is a Brazilian intelligent payment
+  infrastructure and orchestration platform. It lets companies route transactions
+  across multiple acquirers, payment providers, methods (card, Pix, boleto, wallets
+  such as PicPay and Apple Pay) and anti-fraud engines from a single API, with smart
+  routing/retry flows, tokenization, 3D Secure 2, subscriptions/recurrence, split
+  payments, sellers/payouts and a GraphQL analytics API. Malga is PCI DSS Level 1
+  compliant and backed by Lightspeed Venture Partners and QED Investors.
 url: https://raw.githubusercontent.com/api-evangelist/plug/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,17 +16,621 @@ x-backed-by:
 - qed-investors
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 20
+  pass: local-v1
+image: https://malga.io/images/malga-announcement.webp
 tags:
 - Company
-apis: []
+- Payments
+- Payment Orchestration
+- Payment Gateway
+- Fintech
+- Pix
+- Tokenization
+- Subscriptions
+- Brazil
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- name: Malga Analytics API
+  description: GraphQL API for querying processed payment data (charges, cards, authorization rates).
+  humanURL: https://docs.malga.io/analytics/intro
+  baseURL: https://api.malga.io
+  properties:
+  - type: GraphQL
+    url: https://docs.malga.io/analytics/playground
+- aid: plug:plug-3ds2-malga-api
+  name: Malga 3DS2 Malga API
+  description: The 3DS2 Malga API from Malga — 1 operation(s) for 3ds2 malga.
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - 3DS2 Malga
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-3ds2-malga-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-cards-api
+  name: Malga Cards API
+  description: >-
+    **Dados básicos de um objeto cartão**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Card"  />
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Cards
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-cards-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-charges-api
+  name: Malga Charges API
+  description: >-
+    Para realizar uma cobrança deve criar um objeto `charge`. É possível recuperar detalhes de transações
+    individuais ou listar todas as cobranças realizadas em um determinado `merchant`. Os `charges` são
+    identificados a partir de um id 'único'.
+
+
+    **Dados básicos de um objeto do tipo charge**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Charge" exampleRef="#/components/examples/ChargeCard"
+    />
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Charges
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-charges-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-client-token-api
+  name: Malga Client-token API
+  description: >-
+    É possível criar chaves públicas de acesso temporária a API com escopo e tempo de expiração limitados.
+
+
+    Recomendamos o uso deste tipo de chave quando você tiver que expor a chave em uma aplicação client
+    side.
+
+
+    **Detalhe dos parâmetros da chamada de criação da chave pública:**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/AuthRequest" />
+
+
+    **Retorno da chamada de criação da chave pública:**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/AuthResponse" />
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Client-token
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-client-token-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-customers-api
+  name: Malga Customers API
+  description: >-
+    Através da API de `customers` é possível realizar a criação, edição, listagem e exclusão de dados
+    de compradores para uso nos serviços de tokenização de cartões, cobrança por PIX, Boleto, uso em análise
+    de motores de antifraude e recorrência.
+
+
+    *A fim de manter maior integridade dos dados, as informações de email e documento (CPF/CNJP) são únicos
+    para customers na sua conta Malga, não podendo existir dois compradores iguais.*
+
+
+    ### Consulte a [tabela de tipos de paises e documentos suportados](#section/Tabela-tipos-de-paises-e-documentos-cadastro-de-Customer)
+    para criação de customer
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Customers
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-customers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-flows-api
+  name: Malga Flows API
+  description: >-
+    Através da API de `flows` é possível recuperar detalhes de um Fluxo ou listar todas os Fluxos cadastrados
+    em determinado `clientId`.
+
+
+    Os fluxos inteligentes são um recurso disponibilizado pela Malga para gestão dos pagamentos, possibilitando
+    a configuração e a inserção de regras e condicionais personalizados para processamento das cobranças.
+    Para mais informações, consulte a documentação [link](https://docs.malga.io/documentations/flow-guide/introduction).
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Flows
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-flows-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-merchants-api
+  name: Malga Merchants API
+  description: >-
+    Através das APIs de `merchants` é possível realizar a criação e configuração de sub contas na Malga.
+    Uma sub conta, ou um `merchant`, é um cadastro de estabelecimento comercial que você tenha junto há
+    um dos provedores de pagamentos integrados pela Malga. Uma vez que você tenha uma conta criada em
+    um dos provedores aceitos, basta você solicitar suas credenciais de acesso ao parceiro e configurar
+    seu cadastro na Malga.
+
+
+    No cadastro de `merchant` é necessário informar o código da categoria `mcc` do seu cadastro junto
+    ao provedor, escolher um dos tipos de provedores suportados pela Malga, e definir a prioridade do
+    provedor com suas credenciais de acesso à API do provedor.
+
+
+    O sistema de roteamento inteligente de transações da Malga foi desenvolvido de maneira a suportar
+    o uso de múltiplos provedores por cadastro de estabelecimento. Usamos a prioridade definida no cadastro
+    dos provedores para priorizar um determinado provedor em relação à outro, dessa forma você consegue
+    gerenciar a ordem de provedores que será utilizado para fazer as retentativas.
+
+
+    ### Consulte a [tabela de provedores aceitos](#section/Provedores-e-meios-de-pagamentos-suportados)
+    para cadastro de credenciais
+
+
+    ### Consulte a [tabela de código MCC](api-reference/type-tables/mcc-code.mdx) para cadastro de Merchants
+
+
+    **Dados básicos do objeto do tipo merchant**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Merchant" exampleRef="#/components/examples/Merchant"
+    />
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Merchants
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-merchants-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-payouts-api
+  name: Malga Payouts API
+  description: >-
+    Através das APIs de `payouts` é possível consultar o saldo disponível, listar repasses e visualizar
+    as ordens de pagamento liquidadas para um cliente.
+
+
+    Esses endpoints são read-only e atendem a fluxos de conciliação financeira de Split de pagamentos.
+    As consultas são restritas ao `X-Client-Id` autenticado e podem ser filtradas por `sellerId` quando
+    aplicável.
+
+
+    **Status possíveis de repasse:** `pending`, `paid`, `failed`, `offset`.
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Payouts
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-payouts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-prepayment-api
+  name: Malga Prepayment API
+  description: >-
+    > **🚧 Beta** — esta API está em fase Beta. Já está disponível para clientes habilitados, mas detalhes
+    do contrato e do fluxo podem evoluir nas próximas versões.
+
+
+    **Antecipação avulsa de recebíveis.** Permite que clientes habilitados recebam antes da data prevista
+    os recebíveis das suas vendas, mediante desconto proporcional ao tempo antecipado.
+
+
+    ### Pré-requisitos
+
+
+    - Transacionar pelo **provedor de pagamento Malga** (a antecipação não está disponível para transações
+    feitas por outros provedores conectados à plataforma).
+
+    - Sua conta precisa estar **habilitada** para antecipar recebíveis. Para solicitar a habilitação,
+    entre em contato com o suporte. A solicitação passa por uma análise antes de ser aprovada.
+
+
+    ### Fluxo
+
+
+    1. Consulte os recebíveis disponíveis para antecipação.
+
+    2. Simule a antecipação informando uma ou mais datas de recebimento — a Malga agrupa todos os recebíveis
+    previstos para cada data informada.
+
+    3. Confirme a simulação para efetivar a antecipação. Para receber em D+1, o aceite precisa acontecer
+    **até as 15h (horário de Brasília)** do dia da simulação.
+
+
+    Detalhes do guia conceitual em [Antecipação avulsa](/documentations/more/prepayment).
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Prepayment
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-prepayment-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-providers-api
+  name: Malga Providers API
+  description: >-
+    Através das APIs de Providers você pode realizar a edição e atualização dos provedores vinculados
+    a um merchant já cadastrado na Malga.
+
+
+    Essas operações permitem que você mantenha seus dados sempre atualizados, garantindo a continuidade
+    e a segurança das integrações com os provedores de pagamento.
+
+
+    **Atenção:**
+
+    Alterações nas credenciais ou configurações do provedor podem impactar o processamento das transações.
+    Sempre revise e valide as informações antes de salvar.
+
+
+    ### Consulte a [tabela de provedores aceitos](#section/Provedores-e-meios-de-pagamentos-suportados)
+    para cadastro de credenciais
+
+
+    ### Consulte a [tabela de código MCC](api-reference/type-tables/mcc-code.mdx) para cadastro de Merchants
+
+
+    **Dados básicos do objeto do tipo providers**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/UpdateMerchantProviderDto" exampleRef="#/components/examples/UpdateMerchantProviderDto"
+    />
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Providers
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-providers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-seller-documents-api
+  name: Malga Seller Documents API
+  description: The Seller Documents API from Malga — 2 operation(s) for seller documents.
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Seller Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-seller-documents-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-sellers-api
+  name: Malga Sellers API
+  description: >-
+    Para realizar uma cobrança com Split, antes é necessário criar um `seller`. Os `sellers` são identificados
+    a partir de um id único.
+
+
+    Através das APIs de `sellers` é possível realizar a criação e configuração de recebedores que serão
+    beneficiados em um Split. Um recebedor, ou `seller`, é um cadastro de pessoa física ou jurídica para
+    quem você deseja repassar automaticamente valores de uma cobrança.
+
+
+    É obrigatório informar o campo `owner` para recebedores do tipo pessoa física. Para pessoa jurídica,
+    informe `owner` e `business`.
+
+
+    Status possíveis: `pending`, `active`, `partial`, `inactive` e `blocked`.
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Seller" exampleRef="#/components/examples/SellerRequestBusiness"
+    />
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Sellers
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-sellers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-sessions-api
+  name: Malga Sessions API
+  description: >-
+    Através da API de sessões é possível criar um pedido, composto por itens, métodos de pagamento e outros
+    atributos, que pode ser pago através de um endpoint ou integrado ao MalgaCheckout.
+
+
+    # Fluxo de criação e de pagamento de uma sessão
+
+    - Crie uma `sessão` informando os dados básicos necessários
+
+    - Utilize a `publicKey` retornada na criação ou recuperada na rota de detalhes no `X-Api-Key` para
+    autenticar o pagamento
+
+
+    **Dados básicos de um objeto do tipo session**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Session" exampleRef="#/components/examples/Session"
+    />
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Sessions
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-sessions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-settings-api
+  name: Malga Settings API
+  description: >-
+    Através da API de `settings` é possível recuperar, criar e atualizar configurações de personalização
+    de link de pagamento de um determinado `clientId`. É possível também configurar branding específico
+    por merchant, enviando o header opcional `X-Merchant-Id`. Quando o header é enviado no **GET**, o
+    sistema busca primeiro a configuração do merchant; se não existir, retorna a configuração padrão do
+    cliente (fallback automático). Em **POST/PATCH**, o escopo é exato (sem fallback).
+
+
+    **PATCH:** aceita `multipart/form-data` (inclui upload de logo) ou `application/json` (somente campos
+    textuais). Campos vazios são ignorados no update. Se nenhum campo efetivo for enviado, a API retorna
+    `422`.
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-settings-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-subscriptions-api
+  name: Malga Subscriptions API
+  description: >-
+    Através da API de `subscriptions` é possível realizar a criação, edição, listagem e exclusão de assinaturas.
+
+
+    **Dados básicos de um objeto do tipo subscription**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Subscription" exampleRef="#/components/examples/Subscription"
+    />
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-subscriptions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-tokens-api
+  name: Malga Tokens API
+  description: >-
+    **Dados básicos de uma requisição de criação de card token**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/TokenRequest"   />
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-tokens-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-vendors-api
+  name: Malga Vendors API
+  description: The Vendors API from Malga — 2 operation(s) for vendors.
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Vendors
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-vendors-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
+- aid: plug:plug-webhooks-api
+  name: Malga Webhooks API
+  description: >-
+    A Malga utiliza o serviço de webhooks para notificar o seu sistema sobre os eventos ocorridos na nossa
+    plataforma. Através de webhooks você consegue atualizar seu sistema sempre que um evento importante
+    acontece, como a atualização de status de uma cobrança para confirmar ou cancelar um determinado pagamento.
+
+
+    **Dados básicos de um objeto do tipo event:**
+
+
+    <SchemaDefinition schemaRef="#/components/schemas/Event" exampleRef="#/components/examples/Event"
+    />
+  humanURL: https://docs.malga.io/api-reference/about-apis
+  baseURL: https://api.malga.io
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/plug-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.malga.io/documentations/welcome/introduction
+  - type: APIReference
+    url: https://docs.malga.io/api-reference/about-apis
+  - type: Authentication
+    url: authentication/plug-authentication.yml
 common:
 - type: Website
-  url: https://www.plugpagamentos.com/?lang=en
+  url: https://malga.io/
+- type: DeveloperPortal
+  url: https://docs.malga.io/documentations/welcome/introduction
+- type: Documentation
+  url: https://docs.malga.io/documentations/welcome/introduction
+- type: APIReference
+  url: https://docs.malga.io/api-reference/about-apis
+- type: GettingStarted
+  url: https://docs.malga.io/documentations/welcome/introduction
+- type: Blog
+  url: https://malga.io/blog/
+- type: SignUp
+  url: https://dashboard.malga.io/
+- type: Login
+  url: https://dashboard.malga.io/
+- type: StatusPage
+  url: https://status.malga.io/
+- type: ChangeLog
+  url: https://docs.malga.io/release-notes
+- type: GitHubOrganization
+  url: https://github.com/plughacker
+- type: OpenAPI
+  url: openapi/plug-openapi-original.yml
+- type: Authentication
+  url: authentication/plug-authentication.yml
+- type: AgenticAccess
+  url: agentic-access/plug-agentic-access.yml
+- type: DomainSecurity
+  url: security/plug-domain-security.yml
+- type: Packages
+  url: packages/plug-packages.yml
+- type: SDKs
+  url: packages/plug-packages.yml
+- type: CLI
+  url: cli/plug-cli.yml
+- type: Components
+  url: components/plug-components.yml
+- type: Sandbox
+  url: sandbox/plug-sandbox.yml
+- type: Conventions
+  url: conventions/plug-conventions.yml
+- type: Idempotency
+  url: conventions/plug-conventions.yml
+- type: ErrorCatalog
+  url: errors/plug-problem-types.yml
+- type: DeclineCodes
+  url: errors/plug-decline-codes.yml
+- type: Lifecycle
+  url: lifecycle/plug-lifecycle.yml
+- type: Deprecation
+  url: lifecycle/plug-lifecycle.yml
+- type: Conformance
+  url: conformance/plug-conformance.yml
+- type: Compliance
+  url: conformance/plug-conformance.yml
+- type: Webhooks
+  url: asyncapi/plug-webhooks.yml
+- type: WellKnown
+  url: well-known/plug-well-known.yml
+- type: MCPServer
+  url: mcp/plug-mcp.yml
+- type: DataModel
+  url: data-model/plug-data-model.yml
+- type: Overlay
+  url: overlays/plug-openapi-overlay.yaml
+- type: LLMsTxt
+  url: llms/plug-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: ChangeLog
+  url: changelog/plug-changelog.yml

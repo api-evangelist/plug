@@ -1,0 +1,398 @@
+# Malga
+
+## Docs
+
+- [Como acessar a Analytics API Malga](https://docs.malga.io/analytics/authentication/authentication.md): Aprenda como realizar a autenticação na Analytics API da Malga utilizando as credenciais X-Client-ID e X-Api-Key para acesso seguro aos dados.
+- [Tratamento de erros na Analytics API](https://docs.malga.io/analytics/errors/errors.md): Tratamento de erros na Analytics API da Malga: interprete respostas GraphQL e entenda os códigos de status HTTP retornados em cada cenário.
+- [Exemplo](https://docs.malga.io/analytics/graphQl/exemplo.md)
+- [Glossário](https://docs.malga.io/analytics/graphQl/glossario.md)
+- [Overview](https://docs.malga.io/analytics/graphQl/overview.md)
+- [Começando em Analytics API](https://docs.malga.io/analytics/intro.md): Conheça a Analytics API da Malga: acesso detalhado aos dados de pagamentos processados para análises gerenciais e monitoramento de transações.
+- [AuthorizationRate](https://docs.malga.io/analytics/objects/auth-rate.md)
+- [BillingAddress](https://docs.malga.io/analytics/objects/billing-address.md)
+- [Informações Boleto](https://docs.malga.io/analytics/objects/boleto.md): Tabela de campos do objeto Boleto na Analytics API da Malga com os atributos retornados nas consultas de cobranças via boleto bancário.
+- [Card](https://docs.malga.io/analytics/objects/card.md)
+- [CardEdge](https://docs.malga.io/analytics/objects/card-edge.md)
+- [CardsConnection](https://docs.malga.io/analytics/objects/cards-connection.md)
+- [Cart](https://docs.malga.io/analytics/objects/cart.md)
+- [Charge](https://docs.malga.io/analytics/objects/charge.md)
+- [ChargeConnection](https://docs.malga.io/analytics/objects/charge-connection.md)
+- [ChargeCurrencies](https://docs.malga.io/analytics/objects/charge-currencies.md)
+- [ChargeEdge](https://docs.malga.io/analytics/objects/charge-edge.md)
+- [Customer](https://docs.malga.io/analytics/objects/customer.md)
+- [DeclinedCode](https://docs.malga.io/analytics/objects/declined-code.md)
+- [DeliveryAddress](https://docs.malga.io/analytics/objects/delivery-address.md)
+- [FraudAnalysisMetadata](https://docs.malga.io/analytics/objects/fraud-analysis-metadata.md)
+- [Merchants](https://docs.malga.io/analytics/objects/merchants.md)
+- [Informações Nupay](https://docs.malga.io/analytics/objects/nupay.md): Tabela de campos do objeto Nupay na Analytics API da Malga com os atributos retornados nas consultas de cobranças via método Nupay.
+- [PageInfo](https://docs.malga.io/analytics/objects/page-info.md)
+- [PaymentMethod](https://docs.malga.io/analytics/objects/payment-method.md)
+- [PaymentSource](https://docs.malga.io/analytics/objects/payment-source.md)
+- [Informações do Pix](https://docs.malga.io/analytics/objects/pix.md): Tabela de campos do objeto Pix na Analytics API da Malga com os atributos retornados nas consultas de cobranças realizadas via Pix.
+- [ProviderAuthorization](https://docs.malga.io/analytics/objects/provider-auth.md)
+- [ProviderError](https://docs.malga.io/analytics/objects/provider-error.md)
+- [ProvidersResume](https://docs.malga.io/analytics/objects/providers-resume.md)
+- [SubacquirerBalance](https://docs.malga.io/analytics/objects/subacquirer-balance.md)
+- [TotalCharges](https://docs.malga.io/analytics/objects/total-charges.md)
+- [TransactionRequests](https://docs.malga.io/analytics/objects/transaction-request.md)
+- [Playground GraphiQL](https://docs.malga.io/analytics/playground.md)
+- [Authorization Rate](https://docs.malga.io/analytics/queries/authorization-rate.md)
+- [Cards](https://docs.malga.io/analytics/queries/cards.md)
+- [Charges](https://docs.malga.io/analytics/queries/charges.md)
+- [Dashboard](https://docs.malga.io/analytics/queries/dashboard.md)
+- [Subacquirer](https://docs.malga.io/analytics/queries/subacquirer.md)
+- [Criar um novo setup](https://docs.malga.io/api-reference/3ds-malga/criar-um-novo-setup.md): Cria uma sessão de autenticação no 3DS2 Malga.
+- [Sobre as APIs da Malga](https://docs.malga.io/api-reference/about-apis.md): Conheça as APIs da Malga para integração de pagamentos online, com autenticação segura via headers HTTP e acesso a múltiplos provedores de pagamento.
+- [Autenticação](https://docs.malga.io/api-reference/authentication.md): Autenticação na API da Malga: use os headers HTTP X-Client-Id e X-Api-Key com suas chaves de acesso geradas no Dashboard de cada conta.
+- [Criar novo cartão a partir de token](https://docs.malga.io/api-reference/cards/criar-novo-cartao-a-partir-de-token.md)
+- [Listar cartões](https://docs.malga.io/api-reference/cards/listar-cartoes.md)
+- [Recuperar detalhes de cartão](https://docs.malga.io/api-reference/cards/recuperar-detalhes-de-cartao.md)
+- [Alterar o status de uma cobrança no ambiente de sandbox](https://docs.malga.io/api-reference/charges/alterar-o-status-de-uma-cobranca-no-ambiente-de-sandbox.md)
+- [Alterar o status do antifraude no ambiente de sandbox](https://docs.malga.io/api-reference/charges/alterar-o-status-do-antifraude-no-ambiente-de-sandbox.md)
+- [Capturar cobrança pre-autorizada](https://docs.malga.io/api-reference/charges/capturar-cobranca-pre-autorizada.md)
+- [Estornar cobrança aprovada](https://docs.malga.io/api-reference/charges/estornar-cobranca-aprovada.md)
+- [Listar cobranças](https://docs.malga.io/api-reference/charges/listar-cobrancas.md)
+- [Realizar nova cobrança](https://docs.malga.io/api-reference/charges/realizar-nova-cobranca.md)
+- [Recuperar detalhes de cobrança](https://docs.malga.io/api-reference/charges/recuperar-detalhes-de-cobranca.md)
+- [Criar nova chave pública para uso no client-side](https://docs.malga.io/api-reference/client-token/criar-nova-chave-publica-para-uso-no-client-side.md)
+- [Adicionar cartão de crédito ao customer](https://docs.malga.io/api-reference/customers/adicionar-cartao-de-credito-ao-customer.md)
+- [Atualizar customer pelo id](https://docs.malga.io/api-reference/customers/atualizar-customer-pelo-id.md)
+- [Criação de novo customer para cobrança](https://docs.malga.io/api-reference/customers/criacao-de-novo-customer-para-cobranca.md)
+- [Deletar customer pelo id](https://docs.malga.io/api-reference/customers/deletar-customer-pelo-id.md)
+- [Listagem de customers cadastrados](https://docs.malga.io/api-reference/customers/listagem-de-customers-cadastrados.md)
+- [Listagem dos cartões do customer](https://docs.malga.io/api-reference/customers/listagem-dos-cartoes-do-customer.md)
+- [Recuperar detalhes de customer](https://docs.malga.io/api-reference/customers/recuperar-detalhes-de-customer.md)
+- [Consultar um fluxo pelo id](https://docs.malga.io/api-reference/flows/consultar-um-fluxo-pelo-id.md)
+- [Recuperar todos os fluxos paginado](https://docs.malga.io/api-reference/flows/recuperar-todos-os-fluxos-paginado.md)
+- [Ativar ou desativar platform fee do merchant](https://docs.malga.io/api-reference/merchants/ativar-desativar-platform-fee.md)
+- [Atualizar configurações de merchant](https://docs.malga.io/api-reference/merchants/atualizar-configuracoes-de-merchant.md)
+- [Atualizar regras de platform fee](https://docs.malga.io/api-reference/merchants/atualizar-regras-de-platform-fee.md)
+- [Criação de novo merchant para cobrança](https://docs.malga.io/api-reference/merchants/criacao-de-novo-merchant-para-cobranca.md)
+- [Criar regras de platform fee](https://docs.malga.io/api-reference/merchants/criar-regras-de-platform-fee.md)
+- [Deletar merchant pelo id](https://docs.malga.io/api-reference/merchants/deletar-merchant-pelo-id.md)
+- [Deletar uma regra de platform fee pelo ID](https://docs.malga.io/api-reference/merchants/deletar-regras-de-platform-fee.md)
+- [Listagem de merchants cadastrados](https://docs.malga.io/api-reference/merchants/listagem-de-merchants-cadastrados.md)
+- [Listar regras de platform fee](https://docs.malga.io/api-reference/merchants/listar-regras-de-platform-fee.md)
+- [Recuperar detalhes de merchant pelo id](https://docs.malga.io/api-reference/merchants/recuperar-detalhes-de-merchant-pelo-id.md)
+- [Consultar ordem de pagamento pelo ID](https://docs.malga.io/api-reference/payouts/consultar-ordem-pelo-id.md)
+- [Consultar repasse pelo ID](https://docs.malga.io/api-reference/payouts/consultar-payment-batch-pelo-id.md)
+- [Consultar saldo](https://docs.malga.io/api-reference/payouts/consultar-saldo-de-payouts.md): Retorna o saldo disponível e a receber da nossa subadquirente
+- [Listar ordens de pagamento](https://docs.malga.io/api-reference/payouts/listar-ordens.md): Lista paginada das ordens de pagamento da nossa subadquirente.
+- [Listar ordens de pagamento de um repasse](https://docs.malga.io/api-reference/payouts/listar-ordens-de-um-payment-batch.md): Lista paginada das ordens de pagamento que compõem um repasse.
+- [Listar repasses](https://docs.malga.io/api-reference/payouts/listar-payment-batches.md): Listagem paginada dos repasses realizados na subadquirente
+- [Confirmar antecipação (aceite)](https://docs.malga.io/api-reference/prepayment/confirmar-antecipacao.md): > **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.
+- [Recuperar detalhes de uma antecipação](https://docs.malga.io/api-reference/prepayment/consultar-antecipacao.md): > **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.
+- [Consultar recebíveis disponíveis para antecipação](https://docs.malga.io/api-reference/prepayment/consultar-recebiveis-disponiveis-para-antecipacao.md): > **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.
+- [Simular antecipação](https://docs.malga.io/api-reference/prepayment/simular-antecipacao.md): > **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.
+- [Atualizar configurações de provedores do merchant](https://docs.malga.io/api-reference/providers/atualizar-configuracoes-de-provider-de-merchant.md)
+- [Atualização de recebedor pelo ID](https://docs.malga.io/api-reference/sellers/atualizacao-de-recebedor-pelo-id.md): Atualização **parcial** do recebedor. Envie apenas os campos que deseja alterar; campos omitidos permanecem inalterados.
+- [Consultar documento](https://docs.malga.io/api-reference/sellers/consultar-documento.md): Retorna os detalhes de um documento. Documentos expirados retornam 404.
+- [Consultar um recebedor pelo ID](https://docs.malga.io/api-reference/sellers/consultar-um-recebedor-pelo-id.md)
+- [Consultar recebedores por listagem paginada](https://docs.malga.io/api-reference/sellers/consultar-um-recebedor-por-listagem-paginada.md)
+- [Criação de um novo recebedor](https://docs.malga.io/api-reference/sellers/criacao-de-um-novo-recebedor.md)
+- [Deletar documento](https://docs.malga.io/api-reference/sellers/deletar-documento.md): Remove um documento. Apenas documentos com status `uploaded` podem ser deletados. Documentos já associados a um seller (status `attached` ou `sent`) não podem ser removidos.
+- [Deletar recebedor por ID](https://docs.malga.io/api-reference/sellers/deletar-recebedor-por-id.md)
+- [Listar documentos](https://docs.malga.io/api-reference/sellers/listar-documentos.md): Lista os documentos do cliente autenticado. Documentos expirados não são retornados.
+- [Upload de documento](https://docs.malga.io/api-reference/sellers/upload-de-documento.md): Faz upload de um documento (imagem ou PDF) para posterior associação a um seller. O arquivo fica armazenado temporariamente por 7 dias. Após esse prazo, o documento expira e não pode mais ser utilizado.
+- [Atualizar relevância de uma sessão](https://docs.malga.io/api-reference/sessions/atualizar-o-status-de-uma-sessao.md): Atualiza campos de relevância da sessão: `isActive` (obrigatório), `dueDate` e `maxPayments` (sessões 1:N). A resposta é parcial e devolve apenas `id` e `isActive`; após a atualização, consulte `GET /v1/sessions/{id}` para obter o estado completo (`status`, `dueDate`, `maxPayments`, `multiplePayment…
+- [Cancelar uma sessão](https://docs.malga.io/api-reference/sessions/cancelar-uma-sessao.md)
+- [Criar nova sessão](https://docs.malga.io/api-reference/sessions/criar-nova-sessao.md): Cria uma sessão de pagamento. Quando `maxPayments` é omitido, a sessão segue o fluxo 1:1 legado. Quando `maxPayments` é enviado, a sessão opera como link 1:N e a resposta completa retorna `multiplePayments` com a disponibilidade agregada para próximas cobranças.
+- [Listar sessões](https://docs.malga.io/api-reference/sessions/listar-sessoes.md): Lista as sessões do cliente autenticado, com paginação e filtros opcionais.
+- [Pagar uma sessão](https://docs.malga.io/api-reference/sessions/pagar-uma-sessao.md): Inicia uma cobrança para a sessão. Em sessões 1:N, cada chamada aceita representa uma tentativa individual dentro da capacidade configurada em `maxPayments`. A resposta é a cobrança criada e não retorna `multiplePayments`; consulte `GET /v1/sessions/{id}` para acompanhar o estado agregado atualizado…
+- [Recupera sessão com os dados das configurações da empresa](https://docs.malga.io/api-reference/sessions/recupera-sessao-com-os-dados-das-configuracoes-da-empresa.md): Retorna a sessão completa junto das configurações da empresa usadas no Link de Pagamento. Também inclui `multiplePayments` para indicar a disponibilidade agregada do link em sessões 1:1 e 1:N.
+- [Recuperar detalhes de uma sessão](https://docs.malga.io/api-reference/sessions/recuperar-detalhes-de-uma-sessao.md): Retorna a sessão completa. Use este endpoint como fonte do estado agregado de `multiplePayments` após criação, pagamento, atualização, cancelamento ou consulta de histórico.
+- [Recuperar o histórico da sessão](https://docs.malga.io/api-reference/sessions/recuperar-o-historico-da-sessao.md): Consulte a trilha de auditoria de alterações, pagamentos e expirações de uma sessão.
+- [Configurar link de pagamento personalizado](https://docs.malga.io/api-reference/settings/criar-configuracao-de-link-de-pagamento.md)
+- [Editar configuração de link de pagamento](https://docs.malga.io/api-reference/settings/editar-configuracao-de-link-de-pagamento.md): Atualiza a configuração do escopo informado (`X-Client-Id` e, opcionalmente, `X-Merchant-Id`).
+- [Recuperar configuração de link de pagamento personalizado](https://docs.malga.io/api-reference/settings/recuperar-configuracao-de-link-de-pagamento.md)
+- [Atualizar assinatura](https://docs.malga.io/api-reference/subscriptions/atualizar-assinatura.md)
+- [Atualizar configurações do cliente](https://docs.malga.io/api-reference/subscriptions/atualizar-configuracoes-do-cliente.md): Atualiza as configurações do cliente para assinaturas (retry policy, statement descriptor, etc.)
+- [Cancelar assinatura](https://docs.malga.io/api-reference/subscriptions/cancelar-assinatura.md)
+- [Criação de uma nova assinatura](https://docs.malga.io/api-reference/subscriptions/criacao-de-uma-nova-assinatura.md)
+- [Listagem de assinaturas](https://docs.malga.io/api-reference/subscriptions/listagem-de-assinaturas.md)
+- [Listar cycles de uma assinatura](https://docs.malga.io/api-reference/subscriptions/listagem-de-cycles-de-uma-assinatura.md)
+- [Obter configurações do cliente](https://docs.malga.io/api-reference/subscriptions/obter-configuracoes-do-cliente.md): Recupera as configurações atuais do cliente para assinaturas (retry policy, statement descriptor, etc.)
+- [Pausar assinatura](https://docs.malga.io/api-reference/subscriptions/pausar-assinatura.md)
+- [Reativar assinatura](https://docs.malga.io/api-reference/subscriptions/reativar-assinatura.md)
+- [Recuperar detalhes de assinatura](https://docs.malga.io/api-reference/subscriptions/recuperar-detalhes-de-assinatura.md)
+- [Recuperar detalhes de um cycle específico](https://docs.malga.io/api-reference/subscriptions/recuperar-detalhes-de-cycle.md)
+- [Criar um novo token](https://docs.malga.io/api-reference/tokens/criar-um-novo-token.md)
+- [Atualizar um vendedor](https://docs.malga.io/api-reference/vendors/atualizacao-de-vendedor-pelo-id.md)
+- [Recuperar detalhes de um vendedor](https://docs.malga.io/api-reference/vendors/consultar-um-vendedor-pelo-id.md)
+- [Criação de um novo vendedor](https://docs.malga.io/api-reference/vendors/criacao-de-um-novo-vendedor.md)
+- [Deletar vededor pelo id](https://docs.malga.io/api-reference/vendors/deletar-vendedor-por-id.md)
+- [Listagem de vendedores paginada](https://docs.malga.io/api-reference/vendors/listagem-paginada-de-vendedores.md)
+- [Atualizar webhook pelo id](https://docs.malga.io/api-reference/webhooks/atualizar-webhook-pelo-id.md)
+- [Criação de novo webhook para notificação](https://docs.malga.io/api-reference/webhooks/criacao-de-novo-webhook-para-notificacao.md)
+- [Deletar webhook pelo id](https://docs.malga.io/api-reference/webhooks/deletar-webhook-pelo-id.md)
+- [Listagem de webhooks cadastrados](https://docs.malga.io/api-reference/webhooks/listagem-de-webhooks-cadastrados.md)
+- [Recuperar detalhes de webhook](https://docs.malga.io/api-reference/webhooks/recuperar-detalhes-de-webhook.md)
+- [3DS Data Only](https://docs.malga.io/documentations/3ds2-malga/3ds-data-only.md)
+- [Exemplo prático](https://docs.malga.io/documentations/3ds2-malga/3ds-malga/exemplo-pratico.md)
+- [Pré-requisitos e configurações](https://docs.malga.io/documentations/3ds2-malga/3ds-malga/pre-requisitos-configuracao.md)
+- [Principais erros](https://docs.malga.io/documentations/3ds2-malga/3ds-malga/principais-erros.md)
+- [Criando uma transação](https://docs.malga.io/documentations/3ds2-malga/3ds-malga/transacao-3ds2-na-malga.md)
+- [3DS com autenticador externo (MPI)](https://docs.malga.io/documentations/3ds2-malga/3ds-mpi-externo.md)
+- [Glossário 3DS](https://docs.malga.io/documentations/3ds2-malga/glossario-3ds.md)
+- [Começando em 3DS2 Malga](https://docs.malga.io/documentations/3ds2-malga/intro.md)
+- [Fluxo do Antifraude Assíncrono](https://docs.malga.io/documentations/anti-fraud/async-anti-fraud.md)
+- [Fluxo de Feeding](https://docs.malga.io/documentations/anti-fraud/feeding-anti-fraud.md)
+- [Começando em Antifraude](https://docs.malga.io/documentations/anti-fraud/intro.md): Como funciona o Antifraude na Malga: configure provedores para análise de risco em transações de cartão de crédito com mais segurança.
+- [Malga Checkout](https://docs.malga.io/documentations/anti-fraud/malga-checkout.md)
+- [Fluxo do Antifraude Síncrono](https://docs.malga.io/documentations/anti-fraud/sync-anti-fraud.md)
+- [Testando em Sandbox](https://docs.malga.io/documentations/anti-fraud/testing.md)
+- [Gestão de Cobranças](https://docs.malga.io/documentations/dashboard/charge-details.md): Guia de Gestão de Cobranças no Dashboard Malga: monitore transações, faça estornos e capturas e acompanhe o processamento de pagamentos.
+- [Exportando dados através do Dashboard](https://docs.malga.io/documentations/dashboard/export-data.md)
+- [Relatório completo com histórico de operações das cobranças](https://docs.malga.io/documentations/dashboard/full-report.md): Exporte o relatório completo do Dashboard ou API reports com o histórico detalhado de cobranças, requisições, estornos e retornos dos provedores.
+- [Começando em Painel de Dados](https://docs.malga.io/documentations/dashboard/insights/intro.md)
+- [Visão geral](https://docs.malga.io/documentations/dashboard/insights/overview.md)
+- [Performance](https://docs.malga.io/documentations/dashboard/insights/performance.md)
+- [Subcontas](https://docs.malga.io/documentations/dashboard/merchants.md)
+- [Relatório simples (pelo último status da cobrança)](https://docs.malga.io/documentations/dashboard/simple-report.md)
+- [Usuários e Permissões](https://docs.malga.io/documentations/dashboard/users.md)
+- [Utilizando condicionais](https://docs.malga.io/documentations/flow-guide/conditional.md): Saiba como funcionam as regras condicionais do fluxo de pagamentos na Malga e aprenda a configurá-las para otimizar o processamento de suas transações.
+- [Editando Fluxo](https://docs.malga.io/documentations/flow-guide/editing.md): Entenda como editar um Fluxo Inteligente de Pagamento na Malga, ajustando provedores e condicionais para otimizar suas transações financeiras.
+- [Tratamento de erros nos Fluxos inteligentes](https://docs.malga.io/documentations/flow-guide/errors.md): Entenda o tratamento de erros nos Fluxos Inteligentes de Pagamento da Malga e saiba como corrigir configurações para garantir transações bem-sucedidas.
+- [Exemplos de uso](https://docs.malga.io/documentations/flow-guide/examples.md): Exemplos práticos de orquestração de fluxos inteligentes na Malga: ajuste provedores, aplique condicionais e use metadados para otimizar pagamentos.
+- [Fluxos Inteligentes no Dashboard Malga](https://docs.malga.io/documentations/flow-guide/flow-dash.md): Use Fluxos Inteligentes no Dashboard Malga para gerenciar transações, ajustar provedores e regras de orquestração de pagamentos em tempo real.
+- [Histórico de fluxos](https://docs.malga.io/documentations/flow-guide/historic.md): Visualize e restaure versões anteriores dos seus Fluxos Inteligentes de pagamento na Malga com o histórico de fluxos do Dashboard.
+- [Começando em fluxos inteligentes](https://docs.malga.io/documentations/flow-guide/introduction.md): Como funciona a Orquestração de Fluxos Inteligentes na Malga: configure provedores e regras condicionais para otimizar suas transações de pagamento.
+- [Começando um novo fluxo](https://docs.malga.io/documentations/flow-guide/new.md): Saiba como começar um novo Fluxo de Pagamentos na Malga, configurando provedores de cobrança, antifraude e condicionais para otimizar suas transações.
+- [Validação e publicação](https://docs.malga.io/documentations/flow-guide/validation.md): Saiba como publicar um Fluxo de Pagamentos no Dashboard da Malga, validando e ativando suas configurações para otimizar o processamento de transações.
+- [Visualizando o fluxo](https://docs.malga.io/documentations/flow-guide/visualization.md): Visualize o Fluxo Inteligente no Dashboard da Malga: selecione a subconta e o método de pagamento para monitorar e gerenciar suas transações.
+- [Idempotência](https://docs.malga.io/documentations/more/idempotency.md): Entenda como as chaves de idempotência na API da Malga previnem a duplicidade no processamento de requisições, garantindo operações seguras e eficientes.
+- [Antecipação avulsa](https://docs.malga.io/documentations/more/prepayment.md): Antecipe seus recebíveis futuros sob demanda na Malga. Consulte os recebíveis disponíveis, simule o valor que vai receber e confirme a antecipação.
+- [Recorrência do provedor](https://docs.malga.io/documentations/more/recurrence/charges.md): Repasse informações de recorrência ao provedor através do parâmetro recurrence em cobranças de cartão de crédito na API Charges da Malga.
+- [Introdução](https://docs.malga.io/documentations/more/recurrence/engine.md): Conheça o Motor de Assinaturas da Malga, que automatiza cobranças recorrentes com agendamento, retentativas, Dashboard e webhooks.
+- [Configurações](https://docs.malga.io/documentations/more/recurrence/engine/client-settings.md): Personalize o comportamento padrão de assinaturas com o motor da Malga via API de configurações do cliente.
+- [Integração](https://docs.malga.io/documentations/more/recurrence/engine/getting-started.md): Guia passo a passo para integrar o motor de assinaturas da Malga: cadastre customer, salve cartão e crie assinaturas com cobranças automáticas.
+- [Cobrança instantânea](https://docs.malga.io/documentations/more/recurrence/engine/instant-payment.md): Primeira cobrança imediata na criação da assinatura ou ao atualizar startAt antes do primeiro ciclo no motor de assinaturas da Malga.
+- [Gerenciando suas assinaturas](https://docs.malga.io/documentations/more/recurrence/engine/managing.md): Gerencie o ciclo de vida das assinaturas recorrentes na Malga via API: pause, reative, cancele e atualize cobranças automatizadas com facilidade.
+- [Cancelamento Agendado](https://docs.malga.io/documentations/more/recurrence/engine/scheduled-cancellation.md): Agende o cancelamento de assinaturas para o final do período atual com cancelAtPeriodEnd, preservando o acesso do cliente até a data efetiva.
+- [Trial](https://docs.malga.io/documentations/more/recurrence/engine/trial-system.md): Ofereça período de trial gratuito em assinaturas da Malga antes da primeira cobrança, configurando data de início, duração e cobrança automática.
+- [Webhooks](https://docs.malga.io/documentations/more/recurrence/engine/webhooks.md): Receba notificações em tempo real via webhooks sobre eventos do motor de assinaturas da Malga, como mudanças de status e novas cobranças.
+- [Introdução](https://docs.malga.io/documentations/more/recurrence/intro.md): Configure cobranças recorrentes e assinaturas na Malga via repasse ao provedor ou pelo motor próprio de assinaturas, com mais controle e flexibilidade.
+- [Sessões](https://docs.malga.io/documentations/more/sessions.md): Crie sessões na Malga para representar pedidos com um ou múltiplos pagamentos via Pix, boleto ou cartão, integrando ao Malga Checkout no front-end.
+- [3DS2 Agnóstico no Link de Pagamento](https://docs.malga.io/documentations/payment-link/3ds2.md)
+- [Criando Links via API](https://docs.malga.io/documentations/payment-link/create-link-using-api.md): Aprenda a criar links de pagamento via API, com as funcionalidades disponíveis e como utilizar o serviço de Sessões para criar links de pagamento.
+- [Criando Links via Dashboard](https://docs.malga.io/documentations/payment-link/create-link-using-dashboard.md): Aprenda a criar links de pagamento pelo Dashboard da Malga, com limite configurável para múltiplos pagamentos quando necessário.
+- [Introdução](https://docs.malga.io/documentations/payment-link/intro.md): Crie Links de Pagamento na Malga pelo Dashboard ou via API com checkout pronto e personalizável, ideais para vendas avulsas e cobranças rápidas.
+- [Tema personalizado para o Link](https://docs.malga.io/documentations/payment-link/set-up-custom-theme-link.md): Configure o tema personalizado do Link de Pagamento da Malga via API de Settings: defina cores, logo e URL para refletir a identidade da sua marca.
+- [Split em Link de Pagamento](https://docs.malga.io/documentations/payment-link/split.md): Aprenda a configurar split em um Link de Pagamento
+- [Configuração de certificados](https://docs.malga.io/documentations/payment-methods/apple-pay/certificates-setup.md)
+- [Guia de integração](https://docs.malga.io/documentations/payment-methods/apple-pay/getting-started.md)
+- [Começando em ApplePay](https://docs.malga.io/documentations/payment-methods/apple-pay/intro.md)
+- [Boleto](https://docs.malga.io/documentations/payment-methods/boleto.md)
+- [Integração via API de Cobranças com Click to Pay](https://docs.malga.io/documentations/payment-methods/click-to-pay/integracao-api-charges.md)
+- [Começando em Click to Pay](https://docs.malga.io/documentations/payment-methods/click-to-pay/intro.md)
+- [Link de Pagamento com Click to Pay](https://docs.malga.io/documentations/payment-methods/click-to-pay/link-de-pagamento.md)
+- [Cartão de crédito](https://docs.malga.io/documentations/payment-methods/credit-card.md)
+- [Drip](https://docs.malga.io/documentations/payment-methods/drip.md)
+- [Começando em meios de pagamento](https://docs.malga.io/documentations/payment-methods/intro.md)
+- [NuPay](https://docs.malga.io/documentations/payment-methods/nupay.md)
+- [Picpay](https://docs.malga.io/documentations/payment-methods/picpay.md)
+- [Pix](https://docs.malga.io/documentations/payment-methods/pix.md)
+- [Voucher](https://docs.malga.io/documentations/payment-methods/voucher.md)
+- [B2E](https://docs.malga.io/documentations/providers-antifraud/b2e.md): Integração com o provedor de antifraude B2E na Malga, com análise assíncrona de risco para prevenção de fraudes em transações online.
+- [ClearSale](https://docs.malga.io/documentations/providers-antifraud/clearsale.md): Integração com o provedor de antifraude ClearSale na Malga, com análise de risco em modo realtime e assíncrono para e-commerce e pagamentos.
+- [Konduto](https://docs.malga.io/documentations/providers-antifraud/konduto.md): Integração com o provedor de antifraude Konduto na Malga, com análise de risco baseada em machine learning em modo realtime e assíncrono.
+- [Adyen](https://docs.malga.io/documentations/providers/adyen.md): Provedor de pagamento
+- [Banco do Brasil](https://docs.malga.io/documentations/providers/banco-do-brasil.md): Provedor de pagamento
+- [Banrisul](https://docs.malga.io/documentations/providers/banrisul.md): Provedor de pagamento
+- [Barte](https://docs.malga.io/documentations/providers/barte.md): Provedor de pagamento
+- [Bolt](https://docs.malga.io/documentations/providers/bolt.md): Provedor de pagamento
+- [Braintree](https://docs.malga.io/documentations/providers/braintree.md): Provedor de pagamento
+- [Braspag](https://docs.malga.io/documentations/providers/braspag.md): Provedor de pagamento
+- [BS2](https://docs.malga.io/documentations/providers/bs2.md): Provedor de pagamento
+- [Cielo](https://docs.malga.io/documentations/providers/cielo.md): Provedor de pagamento
+- [Drip](https://docs.malga.io/documentations/providers/drip.md): Método de pagamento
+- [Getnet SEP](https://docs.malga.io/documentations/providers/getnet-sep.md): Provedor de pagamento
+- [Itaú](https://docs.malga.io/documentations/providers/itau.md): Provedor de pagamento
+- [Klap](https://docs.malga.io/documentations/providers/klap.md): Provedor de pagamento
+- [Malga](https://docs.malga.io/documentations/providers/malga.md): Provedor de pagamento
+- [MapInvest](https://docs.malga.io/documentations/providers/mapinvest.md): Provedor de pagamento
+- [Mercado Pago](https://docs.malga.io/documentations/providers/mercado-pago.md): Provedor de pagamento
+- [NuPay](https://docs.malga.io/documentations/providers/nupay.md): Provedor de pagamento
+- [Owempay](https://docs.malga.io/documentations/providers/owempay.md): Provedor de pagamento
+- [Pagar.me v5](https://docs.malga.io/documentations/providers/pagarme-v5.md): Provedor de pagamento
+- [PagSeguro](https://docs.malga.io/documentations/providers/pagseguro.md): Provedor de pagamento
+- [PayPal](https://docs.malga.io/documentations/providers/paypal.md): Provedor de pagamento
+- [PicPay](https://docs.malga.io/documentations/providers/picpay.md): Provedor de pagamento
+- [Rede](https://docs.malga.io/documentations/providers/rede.md): Provedor de pagamento
+- [SafraPay](https://docs.malga.io/documentations/providers/safrapay.md): Provedor de pagamento
+- [Sandbox](https://docs.malga.io/documentations/providers/sandbox.md): Provedor de pagamento
+- [Stripe](https://docs.malga.io/documentations/providers/stripe.md): Provedor de pagamento
+- [VR](https://docs.malga.io/documentations/providers/vr.md): Provedor de pagamento
+- [WorldPay](https://docs.malga.io/documentations/providers/worldpay.md): Provedor de pagamento
+- [Zoop](https://docs.malga.io/documentations/providers/zoop.md): Provedor de pagamento
+- [Começando em Split de pagamentos](https://docs.malga.io/documentations/split/intro.md): Conheça os modos de uso do split de pagamentos na Malga: cobrança direta via POST /v1/charges ou regras configuradas na criação da sessão e link.
+- [Taxa da plataforma](https://docs.malga.io/documentations/split/platform-fee.md)
+- [Recebedor (seller)](https://docs.malga.io/documentations/split/seller.md)
+- [Cobrança com Split](https://docs.malga.io/documentations/split/split.md): Configure split em cobranças diretas via POST /v1/charges enviando splitRules no corpo da requisição para repasse automático entre recebedores.
+- [Split em sessão ou link de pagamento](https://docs.malga.io/documentations/split/split-em-sessao-link.md): Configure regras de splitRules na criação da sessão na Malga; o pagamento da sessão ou link herda automaticamente o split já definido.
+- [Migração de cartões](https://docs.malga.io/documentations/tokenization/card-migrations.md)
+- [Serviço de Tokenização da Malga](https://docs.malga.io/documentations/tokenization/intro.md): Conheça o Serviço de Tokenização da Malga: processe dados sensíveis de cartões de forma segura usando tokens criptografados em vez do número real.
+- [Tokenização de Bandeira](https://docs.malga.io/documentations/tokenization/network-tokens.md): Tokenização de Bandeira na Malga: substitua dados sensíveis por tokens criptografados registrados diretamente nas bandeiras dos cartões.
+- [Token CVV](https://docs.malga.io/documentations/tokenization/token-cvv.md)
+- [Validação de Cartões](https://docs.malga.io/documentations/tokenization/zero-dollar.md)
+- [Introdução](https://docs.malga.io/documentations/type-tables/antifraude-providers.md)
+- [Tabela tipos de moedas aceitas](https://docs.malga.io/documentations/type-tables/currency-not-supportted.md)
+- [Tabela tipos de países e documentos de cadastro de Customer](https://docs.malga.io/documentations/type-tables/customer-document-by-country.md)
+- [Tabela de DeclinedCode da Malga](https://docs.malga.io/documentations/type-tables/declined-code.md): Tabela com os códigos de recusa (declinedCode) retornados pela Malga, suas mensagens, retentabilidade e orientação ABECS para cada caso.
+- [Tabela de códigos COMPE dos principais bancos](https://docs.malga.io/documentations/type-tables/main-banks.md): Códigos COMPE (3 dígitos) usados em `bankAccount.bank` na criação e atualização de recebedores.
+- [Tabela de códigos MCC](https://docs.malga.io/documentations/type-tables/mcc-code.md): Lista completa dos códigos MCC (Merchant Category Code) suportados pela Malga, com a descrição da categoria de negócio para cada código.
+- [Introdução](https://docs.malga.io/documentations/type-tables/payment-methods-by-providers.md)
+- [Começando em Vendors](https://docs.malga.io/documentations/vendors/intro.md)
+- [Provedores suportados](https://docs.malga.io/documentations/vendors/provedores.md)
+- [Recebendo webhooks com filas de mensagens](https://docs.malga.io/documentations/webhooks/webhook-receiver-aws-sqs.md): Implemente um receiver de webhooks da Malga resiliente usando filas de mensagens AWS SQS para evitar timeouts e garantir processamento assíncrono.
+- [Webhooks v1.0 (obsoleto)](https://docs.malga.io/documentations/webhooks/webhook1-0.md)
+- [Webhooks v1.1](https://docs.malga.io/documentations/webhooks/webhook1-1.md)
+- [Sobre o produto](https://docs.malga.io/documentations/welcome/about-the-product.md)
+- [Ativando sua conta](https://docs.malga.io/documentations/welcome/activating-account.md)
+- [Autentique-se com a Malga](https://docs.malga.io/documentations/welcome/authentication.md)
+- [Tratamento de erros na integração](https://docs.malga.io/documentations/welcome/errors.md)
+- [Sobre a Malga](https://docs.malga.io/documentations/welcome/introduction.md)
+- [Primeiros passos](https://docs.malga.io/documentations/welcome/primeiros-passos.md): Siga os primeiros passos na Malga: crie sua conta no Dashboard e obtenha credenciais como client-id e api-key para iniciar suas integrações.
+- [Guia de teste](https://docs.malga.io/documentations/welcome/testing.md): Guia de teste da integração com a Malga: use cartões fictícios e regras por final do número para simular aprovação, recusa e antifraude no Sandbox.
+- [Feb 21 - Parcelas pela Drip](https://docs.malga.io/release-notes/2024-02-21-Release-Notes.md): Adição do campo de quantidade de parcelas máximas (opcional) para determinada transação realizada pela DRIP
+- [Feb 28 - Safrapay](https://docs.malga.io/release-notes/2024-02-28-Release-Notes.md): Adição de Safrapay
+- [Mar 05 - Reversão de estorno](https://docs.malga.io/release-notes/2024-03-05-Release-Notes.md): Reversão de uma operação de estorno bem-sucedido
+- [Mar 06 - Cobrança por status](https://docs.malga.io/release-notes/2024-03-06-Release-Notes.md): Novas visões no Painel de Dados 🔢
+- [Mar 11 - Pesquisa por NSU](https://docs.malga.io/release-notes/2024-03-11-Release-Notes.md): Grandes novidades no Dashboard 🤩
+- [Apr 02 - Filtro por provedor](https://docs.malga.io/release-notes/2024-04-02-Release-Notes.md): Nova forma de encontrar cobranças pelo Dashboard Malga 🙌
+- [Apr 18 - Export relatórios](https://docs.malga.io/release-notes/2024-04-18-Release-Notes.md): Export V2 🚀
+- [May 09 - Filtro de disputa](https://docs.malga.io/release-notes/2024-05-09-Release-Notes.md)
+- [May 23 - Correções Dash](https://docs.malga.io/release-notes/2024-05-23-Release-Notes.md)
+- [May 28 - Tokens de Bandeira](https://docs.malga.io/release-notes/2024-05-28-Release-Notes.md)
+- [May 28 - Barte](https://docs.malga.io/release-notes/2024-05-28-Release-Notes-2.md): Adição da Barte como novo provedor de crédito
+- [Jun 24 - Exportação de Cobranças](https://docs.malga.io/release-notes/2024-06-24-Release-Notes.md): Novos campos de Tokenização de Bandeira
+- [June 28 - Estorno Parcial de Split](https://docs.malga.io/release-notes/2024-06-28-Release-Notes.md): Adição do parâmetro splitRules no estorno para possibilitar o estorno parcial de split
+- [July 03 - Facilitadores de pagamentos](https://docs.malga.io/release-notes/2024-07-03-Release-Notes.md)
+- [July 05 - Busca de cobranças](https://docs.malga.io/release-notes/2024-07-05-Release-Notes.md)
+- [Aug 19 - Picpay](https://docs.malga.io/release-notes/2024-08-19-Release-Notes.md): Novo método Picpay
+- [Aug 29 - Dashboard](https://docs.malga.io/release-notes/2024-08-29-Release-Notes.md): Melhorias de UX no Dashboard e novas documentações
+- [Sep 04 - PicPay PIX](https://docs.malga.io/release-notes/2024-09-04-Release-Notes.md): Novo método de pagamento na PicPay
+- [Sep 10 - Usuários e permissões](https://docs.malga.io/release-notes/2024-09-10-Release-Notes.md): Gestão de contas do Dashboard
+- [Sep 19 - Barte](https://docs.malga.io/release-notes/2024-09-19-Release-Notes.md): Pré-autorização e captura
+- [Oct 07 - Novos filtros](https://docs.malga.io/release-notes/2024-10-07-Release-Notes.md): Novos filtros de provedor e método de pagamento
+- [Oct 21 - Bandeira de cartão | Painel](https://docs.malga.io/release-notes/2024-10-21-Release-Notes.md)
+- [Nov 11 - Query Cards | Analytics](https://docs.malga.io/release-notes/2024-11-11-Release-Notes.md)
+- [Nov 14 - API Settings](https://docs.malga.io/release-notes/2024-11-14-Release-Notes.md): Personalização do Link de Pagamento
+- [Dez 10 - Performance | Painel de Dados](https://docs.malga.io/release-notes/2024-12-10-Release-Notes.md)
+- [Dez 13 - 3DSecure2 Agnóstico](https://docs.malga.io/release-notes/2024-12-13-Release-Notes.md)
+- [Dec 18 - Barte](https://docs.malga.io/release-notes/2024-12-18-Release-Notes.md): Novo campo de antifraude
+- [Dez 23 - Painel de dados em tempo real](https://docs.malga.io/release-notes/2024-12-23-Release-Notes.md): Painel de dados real time
+- [Jan 02 - Apple Pay](https://docs.malga.io/release-notes/2025-01-02-Release-Notes.md): Apple Pay
+- [Jan 03 - Exportação de Cobranças](https://docs.malga.io/release-notes/2025-01-03-Release-Notes.md): Novos campos de 3DSecure2
+- [Jan 03 - Barte](https://docs.malga.io/release-notes/2025-01-03-Release-Notes2.md): Estorno parcial
+- [Jan 30 - 3DS DataOnly](https://docs.malga.io/release-notes/2025-01-30-Release-Notes.md): Nova funcionalidade 3DS DataOnly
+- [Mar 25 -  Tokenization V2](https://docs.malga.io/release-notes/2025-03-25-Release-Notes.md)
+- [May 2025 - Convite de Usuários](https://docs.malga.io/release-notes/2025-05-07-Release-Notes.md)
+- [May 16 - Split Pagarme](https://docs.malga.io/release-notes/2025-05-16-Release-Notes.md)
+- [Jul 29, 2025 - GETNET SEP](https://docs.malga.io/release-notes/2025-07-29-Release-Notes.md)
+- [Sep 08, 2025 - MapInvest](https://docs.malga.io/release-notes/2025-09-08-Release-Notes.md): Novo provedor
+- [Set 12, 2025 - Bolt](https://docs.malga.io/release-notes/2025-09-12-Release-Notes.md): Inclusão da Bolt na lista de provedores suportados pela Malga.
+- [Sep 15, 2025 - Split PagSeguro](https://docs.malga.io/release-notes/2025-09-15-Release-Notes.md)
+- [Sep 16, 2025 - Assinaturas](https://docs.malga.io/release-notes/2025-09-16-Release-Notes.md): Gestão de Assinaturas
+- [Oct 02, 2025 - Trial, retentativas personalizadas e mais](https://docs.malga.io/release-notes/2025-10-02-Release-Notes.md): Melhorias no Motor de Assinaturas
+- [Nov 11, 2025 - B2E](https://docs.malga.io/release-notes/2025-11-11-Release-Notes.md): Atualização da Malga em novembro de 2025 com a integração da B2E como novo provedor antifraude, com análise assíncrona contra fraudes.
+- [Nov 12, 2025 - ApplePay na Pagseguro](https://docs.malga.io/release-notes/2025-11-12-Release-Notes.md): ApplePay na Pagseguro
+- [Nov 19, 2025 - Novo Link de Pagamento](https://docs.malga.io/release-notes/2025-11-19-Release-Notes.md): Design renovado e mais agilidade no Link de Pagamento
+- [Nov 24, 2025 - Pix e Boleto na GETNET SEP](https://docs.malga.io/release-notes/2025-11-24-Release-Notes.md): Pix e Boleto na GETNET SEP
+- [Nov 25, 2025 - 3DS2 Malga no Link](https://docs.malga.io/release-notes/2025-11-25-Release-Notes.md): 🛡️ Suporte a 3DS2 agora disponível no Link de Pagamento
+- [Dez 19, 2025 - Zero dollar Safra Pay](https://docs.malga.io/release-notes/2025-12-19-Release-Notes.md): 🛡️ Zero dollar Safra Pay
+- [Dez 22, 2025 - Click to Pay](https://docs.malga.io/release-notes/2025-12-22-Release-Notes.md): Suporte a Click to Pay na Malga
+- [Jan 05, 2026 - Recorrência | Agendar cancelamento](https://docs.malga.io/release-notes/2026-01-05-Release-Notes.md): Suporte a agendamento de cancelamento de assinaturas
+- [Jan 06, 2026 - Paypal](https://docs.malga.io/release-notes/2026-01-06-Release-Notes.md): Suporte a Paypal na Malga
+- [Jan 15, 2026 - Banrisul](https://docs.malga.io/release-notes/2026-01-15-Release-Notes.md): Suporte a Banrisul na Malga
+- [Mar 09, 2026 - Suporte a recorrência no adapter Barte](https://docs.malga.io/release-notes/2026-03-09-Release-Notes.md): A partir de agora é possível realizar transações de recorrência com provedor Barte através da Malga
+- [Abr 08, 2026 - Upload de documentos para Sellers](https://docs.malga.io/release-notes/2026-04-08-Release-Notes.md): Novos endpoints para upload e gerenciamento de documentos de identidade (KYC) para sellers
+- [Apr 15, 2026 - Konduto](https://docs.malga.io/release-notes/2026-04-15-Release-Notes.md): Atualização da Malga em abril de 2026 com a integração da Konduto como novo provedor antifraude, com análise em tempo real e machine learning.
+- [Abr 23, 2026 - Nova experiência da Dashboard](https://docs.malga.io/release-notes/2026-04-23-Release-Notes.md): Nova experiência da Dashboard
+- [Abr 29, 2026 - Split no Link de Pagamento](https://docs.malga.io/release-notes/2026-04-29-Release-Notes.md): Agora é possível configurar split de pagamentos direto no Link de Pagamento, com regras reutilizáveis no cadastro do recebedor
+- [Abr 30, 2026 - APIs de payouts e novo campo totalPaidAmount](https://docs.malga.io/release-notes/2026-04-30-Release-Notes.md): Lançamento das APIs de payouts, salesPlanId em Sellers e novo campo totalPaidAmount na query allCharges da Analytics API da Malga.
+- [Mai 08, 2026 - Link de Pagamento 1:N](https://docs.malga.io/release-notes/2026-05-08-Release-Notes.md): Crie links de pagamento com múltiplos pagamentos e limite de pagamentos configurável.
+- [Mai 29, 2026 - Beneficiário final NuPay e Antecipação avulsa](https://docs.malga.io/release-notes/2026-05-29-Release-Notes.md): Informe os beneficiários finais de uma cobrança NuPay com o novo campo recipients e antecipe seus recebíveis sob demanda com simulação e aceite via API.
+- [Jun 12, 2026 - Descontinuação de split agnóstico e payout eligible](https://docs.malga.io/release-notes/2026-06-12-Release-Notes.md): Encerramento do split agnóstico e do indicador payout eligible; orientações para integrações que listavam sellers sem merchantId ou dependiam desses sinalizadores
+- [June 18, 2026 - Platform Fee](https://docs.malga.io/release-notes/2026-06-18-Release-Notes.md): Taxas de plataforma por método de pagamento nos merchants
+- [June 30, 2026 - Instruções de boleto em sessões](https://docs.malga.io/release-notes/2026-06-30-Release-Notes.md): Envie instruções de boleto (vencimento, juros, multa) ao criar uma sessão de link de pagamento por meio do campo instructions no paymentMethod do boleto.
+- [July 13, 2026 - Antifraude no link de pagamento](https://docs.malga.io/release-notes/2026-07-13-Release-Notes.md): Monitoramento de dispositivos no link de pagamento
+- [July 16, 2026 - Analytics API: Subacquirer e filtro updatedAt no Charges](https://docs.malga.io/release-notes/2026-07-16-Release-Notes.md): Novo grupo de queries Subacquirer na Analytics API com a query balance, e novos filtros por updated_at e o campo updatedAt no grupo Charges.
+- [Mais releases](https://docs.malga.io/release-notes/releases.md)
+- [untitled-page](https://docs.malga.io/release-notes/untitled-page.md)
+- [Criar chave pública](https://docs.malga.io/sdks/api-sdks/docs/auth/create-public-key.md): Gere uma chave pública temporária (client-token) para uso no client-side da Malga via API SDK em Node.js ou PHP, garantindo segurança PCI.
+- [Criar cartão](https://docs.malga.io/sdks/api-sdks/docs/cards/create-card.md): Crie e armazene cartões de crédito com segurança PCI usando o método de criação de cartões da API SDK da Malga em Node.js, PHP e mais.
+- [Buscar cartão](https://docs.malga.io/sdks/api-sdks/docs/cards/find-card.md): Recupere os detalhes de um cartão armazenado a partir do seu identificador usando o método de busca de cartão da API SDK da Malga.
+- [Listar os cartões](https://docs.malga.io/sdks/api-sdks/docs/cards/list-cards.md): Liste de forma paginada os cartões armazenados na sua conta Malga usando o método de listagem de cartões da API SDK em Node.js ou PHP.
+- [Tokenização de cartão](https://docs.malga.io/sdks/api-sdks/docs/cards/tokenization-card.md): Tokenize dados de cartão de crédito de forma segura para uso em cobranças posteriores usando o método de tokenização da API SDK da Malga.
+- [Tokenização de CVV](https://docs.malga.io/sdks/api-sdks/docs/cards/tokenization-cvv.md): Tokenize o código CVV de um cartão para reutilizá-lo em novas cobranças com segurança usando a API SDK da Malga em Node.js ou PHP.
+- [Capturar cobrança](https://docs.malga.io/sdks/api-sdks/docs/charges/capture-charge.md): Capture cobranças pré-autorizadas em cartão de crédito de forma total ou parcial via API SDK da Malga em Node.js ou PHP, com payload completo.
+- [Criar cobrança com boleto](https://docs.malga.io/sdks/api-sdks/docs/charges/create-charge-boleto.md): Crie cobranças com boleto bancário através da API SDK da Malga em Node.js ou PHP, com geração automática do boleto e linha digitável.
+- [Criar cobrança com cartão de crédito](https://docs.malga.io/sdks/api-sdks/docs/charges/create-charge-credit.md): Crie cobranças com cartão de crédito usando a API SDK da Malga em Node.js ou PHP, com suporte a parcelamento, antifraude e captura.
+- [Criar cobrança com Drip](https://docs.malga.io/sdks/api-sdks/docs/charges/create-charge-drip.md): Crie cobranças com o método de pagamento Drip pela API SDK da Malga em Node.js ou PHP, com toda a estrutura de payload necessária.
+- [Criar cobrança com NuPay](https://docs.malga.io/sdks/api-sdks/docs/charges/create-charge-nupay.md): Crie cobranças com o método de pagamento NuPay usando a API SDK da Malga em Node.js ou PHP, com exemplo completo de payload e fluxo.
+- [Criar cobrança com PIX](https://docs.malga.io/sdks/api-sdks/docs/charges/create-charge-pix.md): Crie cobranças com PIX usando a API SDK da Malga em Node.js ou PHP, com geração de QR Code e copia-e-cola para pagamento instantâneo.
+- [Criar cobrança com cartão armazenado](https://docs.malga.io/sdks/api-sdks/docs/charges/create-charge-saved-card.md): Realize cobranças usando um cartão previamente salvo (cardId) na Malga via API SDK em Node.js ou PHP, sem digitar dados novamente.
+- [Criar cobrança com session](https://docs.malga.io/sdks/api-sdks/docs/charges/create-charge-session.md): Realize o pagamento de uma sessão na Malga via API SDK em Node.js ou PHP; as regras de split são herdadas da sessão e não desta chamada.
+- [Criar cobrança com cartão tokenizado](https://docs.malga.io/sdks/api-sdks/docs/charges/create-charge-tokenized-card.md): Crie cobranças com cartão tokenizado pela API SDK da Malga em Node.js ou PHP, processando os dados sensíveis com segurança via tokenId.
+- [Criar cobrança com voucher](https://docs.malga.io/sdks/api-sdks/docs/charges/create-charge-voucher.md): Crie cobranças com cartão voucher (vale-refeição e vale-alimentação) através da API SDK da Malga em Node.js ou PHP, com payload completo.
+- [Buscar cobrança](https://docs.malga.io/sdks/api-sdks/docs/charges/find-charge.md): Recupere os detalhes de uma cobrança específica pelo seu identificador usando o método de busca de cobrança da API SDK da Malga em Node.js.
+- [Listar as cobranças](https://docs.malga.io/sdks/api-sdks/docs/charges/list-charges.md): Liste cobranças de forma paginada com filtros usando o método de listagem da API SDK da Malga em Node.js ou PHP, com parâmetros completos.
+- [Estornar cobrança](https://docs.malga.io/sdks/api-sdks/docs/charges/refund-charge.md): Estorne cobranças aprovadas de forma total ou parcial usando o método de estorno da API SDK da Malga em Node.js ou PHP, com suporte a split.
+- [Criar cliente](https://docs.malga.io/sdks/api-sdks/docs/customers/create-customer.md): Cadastre novos customers (clientes) na Malga via API SDK em Node.js ou PHP, com suporte aos campos de endereço, documento e contato.
+- [Buscar cliente](https://docs.malga.io/sdks/api-sdks/docs/customers/find-customer.md): Recupere os detalhes de um customer cadastrado pelo seu identificador usando o método de busca de cliente da API SDK da Malga em Node.js.
+- [Vincular cartão](https://docs.malga.io/sdks/api-sdks/docs/customers/link-card-customer.md): Vincule um cartão de crédito a um customer cadastrado na Malga via API SDK em Node.js ou PHP para reutilizá-lo em cobranças futuras.
+- [Listar cartões vinculados](https://docs.malga.io/sdks/api-sdks/docs/customers/list-cards-customer.md): Liste os cartões de crédito vinculados a um customer cadastrado na Malga usando o método de listagem de cartões da API SDK em Node.js ou PHP.
+- [Listar clientes](https://docs.malga.io/sdks/api-sdks/docs/customers/list-customers.md): Liste customers cadastrados na Malga com paginação e filtros usando o método de listagem de clientes da API SDK em Node.js ou PHP.
+- [Remover cliente](https://docs.malga.io/sdks/api-sdks/docs/customers/remove-customer.md): Remova um customer cadastrado na Malga pelo seu identificador usando o método de exclusão de cliente da API SDK em Node.js ou PHP.
+- [Atualizar cliente](https://docs.malga.io/sdks/api-sdks/docs/customers/update-customer.md): Atualize os dados cadastrais de um customer existente na Malga usando o método de atualização de cliente da API SDK em Node.js ou PHP.
+- [Entendendo Malga API SDK](https://docs.malga.io/sdks/api-sdks/docs/intro.md)
+- [Alterar status do antifraude](https://docs.malga.io/sdks/api-sdks/docs/sandbox/change-antifraud-status.md): Altere o status do antifraude em transações de teste no ambiente Sandbox da Malga via API SDK para validar fluxos de aprovação e negação.
+- [Alterar status da cobrança](https://docs.malga.io/sdks/api-sdks/docs/sandbox/change-charge-status.md): Altere o status de uma cobrança no ambiente Sandbox da Malga via API SDK em Node.js ou PHP para simular cenários de aprovação e recusa.
+- [Gerar cartão](https://docs.malga.io/sdks/api-sdks/docs/sandbox/generate-card.md): Gere cartões de teste no ambiente Sandbox da Malga usando a API SDK em Node.js ou PHP para validar suas integrações com pagamentos.
+- [Criar recebedores](https://docs.malga.io/sdks/api-sdks/docs/sellers/create-seller.md): Cadastre novos sellers (recebedores) para uso em split de pagamentos na Malga via API SDK em Node.js ou PHP, com dados bancários e fiscais.
+- [Buscar recebedor](https://docs.malga.io/sdks/api-sdks/docs/sellers/find-seller.md): Recupere os detalhes de um seller cadastrado pelo seu identificador usando o método de busca de recebedor da API SDK da Malga em Node.js.
+- [Listar recebedores](https://docs.malga.io/sdks/api-sdks/docs/sellers/list-sellers.md): Liste de forma paginada os sellers cadastrados para split na Malga usando o método de listagem de recebedores da API SDK em Node.js ou PHP.
+- [Remover recebedor](https://docs.malga.io/sdks/api-sdks/docs/sellers/remove-seller.md): Remova um seller cadastrado pelo seu identificador usando o método de exclusão de recebedor da API SDK da Malga em Node.js ou PHP.
+- [Atualizar recebedor](https://docs.malga.io/sdks/api-sdks/docs/sellers/update-seller.md): Atualize os dados cadastrais de um seller existente na Malga usando o método de atualização de recebedor da API SDK em Node.js ou PHP.
+- [Cancelar sessão](https://docs.malga.io/sdks/api-sdks/docs/sessions/cancel-session.md): Cancele uma sessão pendente na Malga pelo seu identificador usando o método de cancelamento de sessão da API SDK em Node.js ou PHP.
+- [Criar sessão](https://docs.malga.io/sdks/api-sdks/docs/sessions/create-session.md): Crie sessões de pagamento (pedidos com itens e métodos de pagamento) na Malga via API SDK em Node.js ou PHP, com suporte a split de pagamentos.
+- [Desabilitar sessão](https://docs.malga.io/sdks/api-sdks/docs/sessions/disable-session.md): Desabilite uma sessão ativa na Malga pelo seu identificador usando o método de desabilitar sessão da API SDK em Node.js ou PHP, sem removê-la.
+- [Habilitar sessão](https://docs.malga.io/sdks/api-sdks/docs/sessions/enable-session.md): Habilite uma sessão desabilitada na Malga pelo seu identificador usando o método de habilitar sessão da API SDK em Node.js ou PHP.
+- [Buscar sessão](https://docs.malga.io/sdks/api-sdks/docs/sessions/find-session.md): Recupere os detalhes de uma sessão de pagamento pelo seu identificador usando o método de busca de sessão da API SDK da Malga em Node.js.
+- [Listar sessões](https://docs.malga.io/sdks/api-sdks/docs/sessions/list-sessions.md): Liste sessões de pagamento criadas na Malga com paginação e filtros usando o método de listagem de sessões da API SDK em Node.js ou PHP.
+- [Verificar assinatura do evento](https://docs.malga.io/sdks/api-sdks/docs/webhooks/verify-event.md): Verifique a assinatura HMAC dos eventos de webhook recebidos da Malga usando a API SDK em Node.js ou PHP para garantir autenticidade.
+- [Exemplos API SDKs](https://docs.malga.io/sdks/api-sdks/examples.md)
+- [Iniciando em Malga API SDKs](https://docs.malga.io/sdks/api-sdks/introduction.md)
+- [Express](https://docs.malga.io/sdks/api-sdks/quickstart/nodejs/express.md): Quickstart de integração da API SDK Malga com Express no Node.js, com instruções passo a passo para criar rotas e processar pagamentos.
+- [Node.js](https://docs.malga.io/sdks/api-sdks/quickstart/nodejs/intro.md): Quickstart da API SDK Malga em Node.js: instalação, autenticação e primeiros passos para integrar pagamentos no seu backend JavaScript.
+- [Começando em UI SDK's](https://docs.malga.io/sdks/intro-sdk.md)
+- [SDK Angular.js](https://docs.malga.io/sdks/malga-checkout-full/angular.md)
+- [Checkout Full SDK em Javascript](https://docs.malga.io/sdks/malga-checkout-full/js.md)
+- [SDK React.js](https://docs.malga.io/sdks/malga-checkout-full/react.md)
+- [SDK Vue.js](https://docs.malga.io/sdks/malga-checkout-full/vue.md)
+- [SDK Angular.js](https://docs.malga.io/sdks/malga-checkout/angular.md)
+- [Checkout SDK em Javascript](https://docs.malga.io/sdks/malga-checkout/js.md)
+- [SDK React.js](https://docs.malga.io/sdks/malga-checkout/react.md)
+- [SDK Vue.js](https://docs.malga.io/sdks/malga-checkout/vue.md)
+- [Conector VTEX](https://docs.malga.io/sdks/plugins/vtex-connector.md)
+- [Exemplos de Tokenização](https://docs.malga.io/sdks/tokenization/v1/examples.md)
+- [Começando em SDK de Tokenização](https://docs.malga.io/sdks/tokenization/v1/intro.md): Tokenize dados de cartão no client-side com o SDK de Tokenização v1 da Malga, mantendo informações sensíveis fora dos seus servidores (PCI).
+- [Getting Started](https://docs.malga.io/sdks/tokenization/v1/quickstart.md)
+- [Configuração](https://docs.malga.io/sdks/tokenization/v2/configuration.md)
+- [Utilizando os eventos](https://docs.malga.io/sdks/tokenization/v2/events.md)
+- [Exemplos de Tokenização](https://docs.malga.io/sdks/tokenization/v2/examples.md)
+- [Começando em SDK de Tokenização](https://docs.malga.io/sdks/tokenization/v2/intro.md)
+- [Getting Started](https://docs.malga.io/sdks/tokenization/v2/quickstart.md)
+- [Estilizando os campos](https://docs.malga.io/sdks/tokenization/v2/styles.md)
+
+## OpenAPI Specs
+
+- [api-spec](https://docs.malga.io/api-reference/api-spec.yaml)
+- [openapi](https://docs.malga.io/api-reference/openapi.json)
+
+## Optional
+
+- [Dashboard](https://dashboard.malga.io/)
+- [Nosso Blog](https://malga.io/blog/)
+- [Status Page](https://status.malga.io/)

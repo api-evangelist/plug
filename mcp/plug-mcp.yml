@@ -1,0 +1,23 @@
+generated: '2026-07-20'
+method: derived
+status: candidate
+source: openapi/plug-openapi-original.yml
+note: >
+  No official hosted/remote Malga MCP server was found. This is a DERIVED candidate
+  tool list — a starting point for an MCP server that fronts the Malga REST API,
+  one tool per marquee operation. Not published by Malga.
+server:
+  name: malga
+  transport: http
+tools:
+  - {name: create_charge, description: Create a new charge/transaction, source_operation: "openapi/plug-openapi-original.yml#charge"}
+  - {name: get_charge, description: Retrieve charge details, source_operation: "openapi/plug-openapi-original.yml#getChargesByid"}
+  - {name: list_charges, description: List charges, source_operation: "openapi/plug-openapi-original.yml#getCharges"}
+  - {name: capture_charge, description: Capture a pre-authorized charge, source_operation: "openapi/plug-openapi-original.yml#captureCharge"}
+  - {name: refund_charge, description: Void/refund an approved charge, source_operation: "openapi/plug-openapi-original.yml#refundCharge"}
+  - {name: create_customer, description: Create a customer, source_operation: "openapi/plug-openapi-original.yml#createCustomer"}
+  - {name: list_customers, description: List customers, source_operation: "openapi/plug-openapi-original.yml#ListCustomers"}
+  - {name: create_card, description: Save a card from a token, source_operation: "openapi/plug-openapi-original.yml#saveCard"}
+  - {name: create_session, description: Create a payment session, source_operation: "openapi/plug-openapi-original.yml#createSession"}
+  - {name: create_subscription, description: Create a recurring subscription, source_operation: "openapi/plug-openapi-original.yml#createSubscription"}
+  - {name: create_webhook, description: Register a webhook, source_operation: "openapi/plug-openapi-original.yml#createWebhook"}
