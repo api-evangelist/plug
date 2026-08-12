@@ -585,7 +585,7 @@ common:
 - type: GitHubOrganization
   url: https://github.com/plughacker
 - type: OpenAPI
-  url: openapi/plug-openapi-original.yml
+  url: openapi/_original/plug-openapi-original.yml
 - type: Authentication
   url: authentication/plug-authentication.yml
 - type: AgenticAccess
