@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "3DS2 Malga",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Criar um novo setup",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/charges/3ds/setup",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Criar um novo setup"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

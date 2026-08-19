@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Providers API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Providers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Atualizar configurações de provedores do merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/providers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id do provedor"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atualizar configurações de provedores do merchant"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

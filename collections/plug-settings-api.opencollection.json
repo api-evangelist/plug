@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Settings API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Recupera configuração do link de pagamento personalizado do cliente",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/settings",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Recupera configuração do link de pagamento personalizado do cliente"
+        },
+        {
+          "info": {
+            "name": "Configurações da empresa para personalização do checkout do link de pagamento, com imagem. O body deve ser enviado com form-data. Todos os campos são string com exceção do campo logo que é do tipo File.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/settings",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Configurações da empresa para personalização do checkout do link de pagamento, com imagem. O body deve ser enviado com form-data. Todos os campos são string com exceção do campo logo que é do tipo File."
+        },
+        {
+          "info": {
+            "name": "Atualiza configurações do link de pagamento (form-data ou JSON)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/settings",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atualiza a configuração do escopo informado (`X-Client-Id` e, opcionalmente, `X-Merchant-Id`).\n\n- **`multipart/form-data`:** todos os campos textuais e upload opcional de `logo` (File).\n- **`application/json`:** apenas campos textuais (sem upload de logo).\n\nCampos vazios (`\"\"`) não são persistidos. Se nenhum campo efetivo for enviado (por exemplo `{}` ou somente `companyUrl` vazio) e não houver logo, retorna **422**.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

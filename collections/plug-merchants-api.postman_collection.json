@@ -1,0 +1,1602 @@
+{
+  "item": [
+    {
+      "id": "36453f17-462e-4f2c-9eb6-18d592771972",
+      "name": "Merchants",
+      "description": {
+        "content": "\nAtravés das APIs de `merchants` é possível realizar a criação e configuração de sub contas na Malga. Uma sub conta, ou um `merchant`, é um cadastro de estabelecimento comercial que você tenha junto há um dos provedores de pagamentos integrados pela Malga. Uma vez que você tenha uma conta criada em um dos provedores aceitos, basta você solicitar suas credenciais de acesso ao parceiro e configurar seu cadastro na Malga.\n\nNo cadastro de `merchant` é necessário informar o código da categoria `mcc` do seu cadastro junto ao provedor, escolher um dos tipos de provedores suportados pela Malga, e definir a prioridade do provedor com suas credenciais de acesso à API do provedor.\n\nO sistema de roteamento inteligente de transações da Malga foi desenvolvido de maneira a suportar o uso de múltiplos provedores por cadastro de estabelecimento. Usamos a prioridade definida no cadastro dos provedores para priorizar um determinado provedor em relação à outro, dessa forma você consegue gerenciar a ordem de provedores que será utilizado para fazer as retentativas.\n\n### Consulte a [tabela de provedores aceitos](#section/Provedores-e-meios-de-pagamentos-suportados) para cadastro de credenciais\n\n### Consulte a [tabela de código MCC](api-reference/type-tables/mcc-code.mdx) para cadastro de Merchants\n\n**Dados básicos do objeto do tipo merchant**\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Merchant\" exampleRef=\"#/components/examples/Merchant\" />\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0ac4cc97-4b21-4a9d-b159-5ec0c72a0afe",
+          "name": "Criação de novo merchant para cobrança",
+          "request": {
+            "name": "Criação de novo merchant para cobrança",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "merchants"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mcc\": \"<string>\",\n  \"name\": \"<string>\",\n  \"merchantName\": \"<string>\",\n  \"merchantUrl\": \"<string>\",\n  \"providers\": {\n    \"name\": \"<string>\",\n    \"priority\": \"<number>\",\n    \"credentials\": {\n      \"type\": \"<string>\",\n      \"token\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"options\": {\n      \"type\": \"<string>\",\n      \"captureOnError\": \"<boolean>\",\n      \"captureOnApproved\": \"<boolean>\",\n      \"refundOnError\": \"<boolean>\",\n      \"refundOnReproved\": \"<boolean>\",\n      \"runBeforeCharge\": \"<boolean>\",\n      \"productType\": \"<string>\"\n    },\n    \"acquirer\": {\n      \"merchantId\": \"<string>\",\n      \"bin\": [\n        {\n          \"brand\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"brand\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bea9876d-1f11-4358-8344-ecb598db84fe",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mcc\": \"4040\",\n  \"status\": true,\n  \"providers\": [\n    {\n      \"name\": \"PagSeguro\",\n      \"priority\": 1,\n      \"credentials\": {\n        \"type\": \"PAGSEGURO\",\n        \"token\": \"1B2B32530CA24641324AB63843240F5633\",\n        \"email\": \"email@gmail.com\"\n      },\n      \"acquirer\": {\n        \"merchantId\": \"1111111111\",\n        \"bin\": [\n          {\n            \"brand\": \"Mastercard\",\n            \"value\": \"550259\",\n            \"merchantId\": \"2222222222\"\n          },\n          {\n            \"brand\": \"Visa\",\n            \"value\": \"448768\",\n            \"merchantId\": \"3333333333\"\n          }\n        ]\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"69aea152-ba70-49a3-a31c-044ac1651146\",\n  \"updatedAt\": \"2021-03-12T15:57:20.239Z\",\n  \"createdAt\": \"2021-03-12T15:57:20.239Z\",\n  \"clientId\": \"523afbe7-36dc-4654-9dba-e7167d0e5e2d\",\n  \"mcc\": \"4040\",\n  \"status\": true,\n  \"platformFeeEnabled\": true,\n  \"platformFees\": [\n    {\n      \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"paymentMethod\": \"credit\",\n      \"percentage\": 2.5,\n      \"fixedAmount\": null,\n      \"installment\": null,\n      \"createdAt\": \"2021-03-12T15:57:20.239Z\",\n      \"updatedAt\": \"2021-03-12T15:57:20.239Z\"\n    },\n    {\n      \"id\": \"b2c3d4e5-f6a7-8901-bcde-f12345678901\",\n      \"paymentMethod\": \"pix\",\n      \"percentage\": null,\n      \"fixedAmount\": 50,\n      \"installment\": null,\n      \"createdAt\": \"2021-03-12T15:57:20.239Z\",\n      \"updatedAt\": \"2021-03-12T15:57:20.239Z\"\n    }\n  ],\n  \"providers\": [\n    {\n      \"id\": \"72cc1ff1-5f6e-4eb2-9cc5-6a3a85525e4b\",\n      \"updatedAt\": \"2021-03-12T15:57:20.239Z\",\n      \"createdAt\": \"2021-03-12T15:57:20.239Z\",\n      \"name\": \"PagSeguro\",\n      \"priority\": 1,\n      \"credentials\": {\n        \"type\": \"PAGSEGURO\",\n        \"token\": \"1B2B32530CA23412AB63843240F5633\",\n        \"email\": \"email@gmail.com\"\n      },\n      \"acquirer\": {\n        \"merchantId\": \"1111111111\",\n        \"bin\": [\n          {\n            \"brand\": \"Mastercard\",\n            \"value\": \"550259\",\n            \"merchantId\": \"2222222222\"\n          },\n          {\n            \"brand\": \"Visa\",\n            \"value\": \"448768\",\n            \"merchantId\": \"3333333333\"\n          }\n        ]\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c0d95bf6-f621-43ed-992e-a22812b9a965",
+          "name": "Listagem de merchants cadastrados",
+          "request": {
+            "name": "Listagem de merchants cadastrados",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "merchants"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<number>",
+                  "description": "Número da página"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<number>",
+                  "description": "Quantidade de itens por página"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "68ee55df-3fd5-4976-b413-ab5e7a14f01e",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<number>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"itemCount\": 10,\n    \"totalItems\": 20,\n    \"itemsPerPage\": 10,\n    \"totalPages\": 5,\n    \"currentPage\": 2\n  },\n  \"items\": [\n    {\n      \"id\": \"69aea152-ba70-49a3-a31c-044ac1651146\",\n      \"updatedAt\": \"2021-03-12T15:57:20.239Z\",\n      \"createdAt\": \"2021-03-12T15:57:20.239Z\",\n      \"clientId\": \"523afbe7-36dc-4654-9dba-e7167d0e5e2d\",\n      \"mcc\": \"4040\",\n      \"status\": true,\n      \"providers\": [\n        {\n          \"id\": \"72cc1ff1-5f6e-4eb2-9cc5-6a3a85525e4b\",\n          \"updatedAt\": \"2021-03-12T15:57:20.239Z\",\n          \"createdAt\": \"2021-03-12T15:57:20.239Z\",\n          \"name\": \"PagSeguro\",\n          \"priority\": 1,\n          \"credentials\": {\n            \"type\": \"PAGSEGURO\",\n            \"token\": \"1B2B32530CA2464F8AB63843240F5633\",\n            \"email\": \"email@gmail.com\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3863d5c6-1ce3-4862-bafc-b8dbcd9532ce",
+          "name": "Recuperar detalhes de merchant pelo id",
+          "request": {
+            "name": "Recuperar detalhes de merchant pelo id",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "merchants",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id do merchant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a3271690-dec5-4b35-81d7-9c7582717662",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"69aea152-ba70-49a3-a31c-044ac1651146\",\n  \"updatedAt\": \"2021-03-12T15:57:20.239Z\",\n  \"createdAt\": \"2021-03-12T15:57:20.239Z\",\n  \"clientId\": \"523afbe7-36dc-4654-9dba-e7167d0e5e2d\",\n  \"mcc\": \"4040\",\n  \"status\": true,\n  \"platformFeeEnabled\": true,\n  \"platformFees\": [\n    {\n      \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"paymentMethod\": \"credit\",\n      \"percentage\": 2.5,\n      \"fixedAmount\": null,\n      \"installment\": null,\n      \"createdAt\": \"2021-03-12T15:57:20.239Z\",\n      \"updatedAt\": \"2021-03-12T15:57:20.239Z\"\n    },\n    {\n      \"id\": \"b2c3d4e5-f6a7-8901-bcde-f12345678901\",\n      \"paymentMethod\": \"pix\",\n      \"percentage\": null,\n      \"fixedAmount\": 50,\n      \"installment\": null,\n      \"createdAt\": \"2021-03-12T15:57:20.239Z\",\n      \"updatedAt\": \"2021-03-12T15:57:20.239Z\"\n    }\n  ],\n  \"providers\": [\n    {\n      \"id\": \"72cc1ff1-5f6e-4eb2-9cc5-6a3a85525e4b\",\n      \"updatedAt\": \"2021-03-12T15:57:20.239Z\",\n      \"createdAt\": \"2021-03-12T15:57:20.239Z\",\n      \"name\": \"PagSeguro\",\n      \"priority\": 1,\n      \"credentials\": {\n        \"type\": \"PAGSEGURO\",\n        \"token\": \"1B2B32530CA23412AB63843240F5633\",\n        \"email\": \"email@gmail.com\"\n      },\n      \"acquirer\": {\n        \"merchantId\": \"1111111111\",\n        \"bin\": [\n          {\n            \"brand\": \"Mastercard\",\n            \"value\": \"550259\",\n            \"merchantId\": \"2222222222\"\n          },\n          {\n            \"brand\": \"Visa\",\n            \"value\": \"448768\",\n            \"merchantId\": \"3333333333\"\n          }\n        ]\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a4835d66-b6d6-46b8-ab19-1325ab46cd69",
+          "name": "Atualizar configurações de merchant",
+          "request": {
+            "name": "Atualizar configurações de merchant",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "merchants",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id do merchant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mcc\": \"<string>\",\n  \"name\": \"<string>\",\n  \"merchantName\": \"<string>\",\n  \"merchantUrl\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "949c857d-82d2-488f-932a-5bcc1f8680fe",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mcc\": \"<string>\",\n  \"name\": \"<string>\",\n  \"merchantName\": \"<string>\",\n  \"merchantUrl\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5d5fa5e3-c0f4-4151-9bb9-39c1f66d1abc",
+          "name": "Deletar merchant pelo id",
+          "request": {
+            "name": "Deletar merchant pelo id",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "merchants",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id do merchant"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a9ca2f0a-1ee2-4d9b-aa55-e587061979ee",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "18df6b15-fcd3-40b5-9fa3-5981d6b51732",
+          "name": "Ativar ou desativar platform fee do merchant",
+          "request": {
+            "name": "Ativar ou desativar platform fee do merchant",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "merchants",
+                ":merchantId",
+                "platform-fee",
+                "enabled"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "merchantId",
+                  "description": "(Required) Identificador do merchant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"enabled\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "46758bb2-8e22-4715-9f68-9959121a0631",
+              "name": "Platform fee atualizado com sucesso",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee",
+                    "enabled"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enabled\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"platformFeeEnabled\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1a5be3b-0bae-43d3-8ae5-47582a0186c3",
+              "name": "Merchant não encontrado",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee",
+                    "enabled"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enabled\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "899b63dc-169c-4e91-9e59-a40bdcfe3817",
+          "name": "Criar regras de platform fee",
+          "request": {
+            "name": "Criar regras de platform fee",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "merchants",
+                ":merchantId",
+                "platform-fee"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "merchantId",
+                  "description": "(Required) Identificador do merchant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"paymentMethod\": \"<string>\",\n    \"percentage\": \"<float>\",\n    \"fixedAmount\": \"<integer>\",\n    \"installment\": \"<integer>\"\n  },\n  {\n    \"paymentMethod\": \"<string>\",\n    \"percentage\": \"<float>\",\n    \"fixedAmount\": \"<integer>\",\n    \"installment\": \"<integer>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "928eb76c-1625-4af0-843b-c3b9247ffbdd",
+              "name": "Regras criadas com sucesso",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"paymentMethod\": \"credit\",\n    \"percentage\": 3.5,\n    \"fixedAmount\": 50,\n    \"installment\": 3\n  },\n  {\n    \"paymentMethod\": \"pix\",\n    \"fixedAmount\": 50\n  },\n  {\n    \"paymentMethod\": \"boleto\",\n    \"percentage\": 1,\n    \"fixedAmount\": 100\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n    \"paymentMethod\": \"credit\",\n    \"percentage\": 3.5,\n    \"fixedAmount\": 50,\n    \"installment\": 3,\n    \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n    \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n  },\n  {\n    \"id\": \"b2c3d4e5-f6a7-8901-bcde-f12345678901\",\n    \"paymentMethod\": \"pix\",\n    \"percentage\": null,\n    \"fixedAmount\": 50,\n    \"installment\": null,\n    \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n    \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n  },\n  {\n    \"id\": \"c3d4e5f6-a7b8-9012-cdef-123456789012\",\n    \"paymentMethod\": \"boleto\",\n    \"percentage\": 1,\n    \"fixedAmount\": 100,\n    \"installment\": null,\n    \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n    \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4d883183-bfb1-4a78-a395-780e4b896d03",
+              "name": "Dados inválidos",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"paymentMethod\": \"credit\",\n    \"percentage\": 3.5,\n    \"fixedAmount\": 50,\n    \"installment\": 3\n  },\n  {\n    \"paymentMethod\": \"pix\",\n    \"fixedAmount\": 50\n  },\n  {\n    \"paymentMethod\": \"boleto\",\n    \"percentage\": 1,\n    \"fixedAmount\": 100\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8b290369-686e-40e0-b3fa-bfeb84435885",
+              "name": "Merchant não encontrado",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"paymentMethod\": \"credit\",\n    \"percentage\": 3.5,\n    \"fixedAmount\": 50,\n    \"installment\": 3\n  },\n  {\n    \"paymentMethod\": \"pix\",\n    \"fixedAmount\": 50\n  },\n  {\n    \"paymentMethod\": \"boleto\",\n    \"percentage\": 1,\n    \"fixedAmount\": 100\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "192a59e6-b2da-4bc1-99e9-c6c82e5868e0",
+              "name": "Regra já existente para o método de pagamento informado",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"paymentMethod\": \"credit\",\n    \"percentage\": 3.5,\n    \"fixedAmount\": 50,\n    \"installment\": 3\n  },\n  {\n    \"paymentMethod\": \"pix\",\n    \"fixedAmount\": 50\n  },\n  {\n    \"paymentMethod\": \"boleto\",\n    \"percentage\": 1,\n    \"fixedAmount\": 100\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ed04bf34-14e4-4e67-bde0-28b0db58f06e",
+          "name": "Listar regras de platform fee",
+          "request": {
+            "name": "Listar regras de platform fee",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "merchants",
+                ":merchantId",
+                "platform-fee"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "merchantId",
+                  "description": "(Required) Identificador do merchant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8368345e-81ec-44d1-888f-78d727d96559",
+              "name": "Lista de regras de platform fee e flag de ativação do merchant",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"platformFeeEnabled\": true,\n  \"rules\": [\n    {\n      \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"paymentMethod\": \"credit\",\n      \"percentage\": 3.5,\n      \"fixedAmount\": 50,\n      \"installment\": 3,\n      \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n      \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n    },\n    {\n      \"id\": \"b2c3d4e5-f6a7-8901-bcde-f12345678901\",\n      \"paymentMethod\": \"pix\",\n      \"percentage\": null,\n      \"fixedAmount\": 50,\n      \"installment\": null,\n      \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n      \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n    },\n    {\n      \"id\": \"c3d4e5f6-a7b8-9012-cdef-123456789012\",\n      \"paymentMethod\": \"boleto\",\n      \"percentage\": 1,\n      \"fixedAmount\": 100,\n      \"installment\": null,\n      \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n      \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72f501ab-4748-4846-8bcb-c9aefd7e11ad",
+              "name": "Merchant não encontrado",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "63649620-4e39-46e3-8052-404beff20a31",
+          "name": "Atualizar regras de platform fee",
+          "request": {
+            "name": "Atualizar regras de platform fee",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "merchants",
+                ":merchantId",
+                "platform-fee"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "merchantId",
+                  "description": "(Required) Identificador do merchant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"paymentMethod\": \"<string>\",\n    \"percentage\": \"<float>\",\n    \"fixedAmount\": \"<integer>\",\n    \"installment\": \"<integer>\"\n  },\n  {\n    \"paymentMethod\": \"<string>\",\n    \"percentage\": \"<float>\",\n    \"fixedAmount\": \"<integer>\",\n    \"installment\": \"<integer>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bbaca562-fdd6-4dc0-9f6d-34ae08560523",
+              "name": "Regras atualizadas com sucesso",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"paymentMethod\": \"credit\",\n    \"percentage\": 3.5,\n    \"fixedAmount\": 50,\n    \"installment\": 3\n  },\n  {\n    \"paymentMethod\": \"pix\",\n    \"fixedAmount\": 50\n  },\n  {\n    \"paymentMethod\": \"boleto\",\n    \"percentage\": 1,\n    \"fixedAmount\": 100\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n    \"paymentMethod\": \"credit\",\n    \"percentage\": 3.5,\n    \"fixedAmount\": 50,\n    \"installment\": 3,\n    \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n    \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n  },\n  {\n    \"id\": \"b2c3d4e5-f6a7-8901-bcde-f12345678901\",\n    \"paymentMethod\": \"pix\",\n    \"percentage\": null,\n    \"fixedAmount\": 50,\n    \"installment\": null,\n    \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n    \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n  },\n  {\n    \"id\": \"c3d4e5f6-a7b8-9012-cdef-123456789012\",\n    \"paymentMethod\": \"boleto\",\n    \"percentage\": 1,\n    \"fixedAmount\": 100,\n    \"installment\": null,\n    \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n    \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f215424-b7e2-42ea-80ae-1bd8933ab720",
+              "name": "Dados inválidos",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"paymentMethod\": \"credit\",\n    \"percentage\": 3.5,\n    \"fixedAmount\": 50,\n    \"installment\": 3\n  },\n  {\n    \"paymentMethod\": \"pix\",\n    \"fixedAmount\": 50\n  },\n  {\n    \"paymentMethod\": \"boleto\",\n    \"percentage\": 1,\n    \"fixedAmount\": 100\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4c8e22ec-9d7e-4072-b2eb-443bbda2bff3",
+              "name": "Merchant ou regra não encontrada",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"paymentMethod\": \"credit\",\n    \"percentage\": 3.5,\n    \"fixedAmount\": 50,\n    \"installment\": 3\n  },\n  {\n    \"paymentMethod\": \"pix\",\n    \"fixedAmount\": 50\n  },\n  {\n    \"paymentMethod\": \"boleto\",\n    \"percentage\": 1,\n    \"fixedAmount\": 100\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5287c369-dc58-4a88-bd44-f7ee914af121",
+              "name": "Regra já existente para o método de pagamento informado",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"paymentMethod\": \"credit\",\n    \"percentage\": 3.5,\n    \"fixedAmount\": 50,\n    \"installment\": 3\n  },\n  {\n    \"paymentMethod\": \"pix\",\n    \"fixedAmount\": 50\n  },\n  {\n    \"paymentMethod\": \"boleto\",\n    \"percentage\": 1,\n    \"fixedAmount\": 100\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "09a38dfb-f0d9-4cd4-a4ed-c014783febc5",
+          "name": "Deletar uma regra de platform fee pelo ID",
+          "request": {
+            "name": "Deletar uma regra de platform fee pelo ID",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "merchants",
+                ":merchantId",
+                "platform-fee",
+                ":platformFeeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "merchantId",
+                  "description": "(Required) Identificador do merchant"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "platformFeeId",
+                  "description": "(Required) Identificador da regra de platform fee"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "105bc252-175e-46e4-b8f2-0fb94aa62680",
+              "name": "Regra deletada com sucesso",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee",
+                    ":platformFeeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "platformFeeId",
+                      "description": "(Required) Identificador da regra de platform fee"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "36a6d397-5c51-4424-89e0-6ea015d6c19e",
+              "name": "Merchant ou regra não encontrada",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "merchants",
+                    ":merchantId",
+                    "platform-fee",
+                    ":platformFeeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "merchantId",
+                      "description": "(Required) Identificador do merchant"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "platformFeeId",
+                      "description": "(Required) Identificador da regra de platform fee"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.malga.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f35754be-dece-44de-b5e8-e12567ec6d28",
+    "name": "Documentação Malga 3DS2 Malga Merchants API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

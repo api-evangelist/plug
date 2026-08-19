@@ -1,0 +1,1702 @@
+{
+  "item": [
+    {
+      "id": "dec551a0-988c-42a2-8c90-dd291c4e9c9a",
+      "name": "Payouts",
+      "description": {
+        "content": "\nAtravés das APIs de `payouts` é possível consultar o saldo disponível, listar repasses e visualizar as ordens de pagamento liquidadas para um cliente.\n\nEsses endpoints são read-only e atendem a fluxos de conciliação financeira de Split de pagamentos. As consultas são restritas ao `X-Client-Id` autenticado e podem ser filtradas por `sellerId` quando aplicável.\n\n**Status possíveis de repasse:** `pending`, `paid`, `failed`, `offset`.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ab48cbc8-13df-4230-b659-1ac1d6622677",
+          "name": "Consultar saldo",
+          "request": {
+            "name": "Consultar saldo",
+            "description": {
+              "content": "Retorna o saldo disponível e a receber da nossa subadquirente\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "payouts",
+                "balance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sellerId",
+                  "value": "<uuid>",
+                  "description": "Filtra o saldo por seller específico"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3ba76ed3-fd06-41cd-8a61-554720b24c89",
+              "name": "Saldo retornado com sucesso",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"available\": 1500000,\n  \"receivable\": 320000\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3f51e6a3-d3ae-4f4a-9e25-f6eb5f2509d4",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8fe4ac6a-cecc-470c-963c-2d04fb0e724b",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1aa7ba80-8114-4d09-b266-c2de18a12f51",
+          "name": "Listar repasses",
+          "request": {
+            "name": "Listar repasses",
+            "description": {
+              "content": "Listagem paginada dos repasses realizados na subadquirente\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "payouts",
+                "payment-batches"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Número da página"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Quantidade de itens por página (máx. 100)"
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "desc",
+                  "description": "Ordenação por data de criação"
+                },
+                {
+                  "disabled": false,
+                  "key": "sellerId",
+                  "value": "<uuid>",
+                  "description": "Filtra por seller"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Status separados por vírgula (ex. `pending,paid`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "<dateTime>",
+                  "description": "Data inicial em RFC 3339 (ex. `2026-04-01T00:00:00Z`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "<dateTime>",
+                  "description": "Data final em RFC 3339 (ex. `2026-04-30T23:59:59Z`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "paymentDate",
+                  "value": "<date>",
+                  "description": "Data de pagamento no formato `YYYY-MM-DD`"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7ebe6721-5c05-4748-8b28-95dc2eec8796",
+              "name": "Lista paginada de repasses",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "payment-batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "pending,paid"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "paymentDate",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"9b1a3a3e-2f87-4b2f-ae59-1234567890ab\",\n      \"createdAt\": \"2026-04-25T18:00:00.000Z\",\n      \"updatedAt\": \"2026-04-25T18:00:00.000Z\",\n      \"amount\": 250000,\n      \"feeAmount\": 5000,\n      \"totalFeeAmount\": 7500,\n      \"balanceAmount\": 0,\n      \"creditAmount\": 0,\n      \"refundAmount\": 0,\n      \"debitAdjustmentAmount\": 0,\n      \"creditAdjustmentAmount\": 0,\n      \"finalBalance\": 242500,\n      \"withdrawalFeeAmount\": 0,\n      \"reportUrl\": null,\n      \"paymentDate\": \"2026-04-28\",\n      \"payoutDate\": \"2026-04-28\",\n      \"status\": \"paid\",\n      \"feature\": \"subacquirer\",\n      \"paymentMethod\": \"credit\",\n      \"paymentArrangement\": \"VCC\",\n      \"error\": null\n    }\n  ],\n  \"meta\": {\n    \"totalItems\": 1,\n    \"itemCount\": 1,\n    \"itemsPerPage\": 10,\n    \"totalPages\": 1,\n    \"currentPage\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "406a9e95-e009-427b-bcde-4a0bd21b13dc",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "payment-batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "pending,paid"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "paymentDate",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "129e5dd7-33c9-46dc-bffa-ac048cf7cf27",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "payment-batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "pending,paid"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "paymentDate",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b7f5074f-5049-4949-ab11-6d376bd2c7b0",
+          "name": "Consultar repasse pelo ID",
+          "request": {
+            "name": "Consultar repasse pelo ID",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "payouts",
+                "payment-batches",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sellerId",
+                  "value": "<uuid>",
+                  "description": "Filtra o repasse por seller"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificador do repasse"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ed2f912b-8d06-4237-9700-3f7ce5289410",
+              "name": "Detalhes do repasse",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "payment-batches",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador do repasse"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9b1a3a3e-2f87-4b2f-ae59-1234567890ab\",\n  \"createdAt\": \"2026-04-25T18:00:00.000Z\",\n  \"updatedAt\": \"2026-04-25T18:00:00.000Z\",\n  \"amount\": 250000,\n  \"feeAmount\": 5000,\n  \"totalFeeAmount\": 7500,\n  \"balanceAmount\": 0,\n  \"creditAmount\": 0,\n  \"refundAmount\": 0,\n  \"debitAdjustmentAmount\": 0,\n  \"creditAdjustmentAmount\": 0,\n  \"finalBalance\": 242500,\n  \"withdrawalFeeAmount\": 0,\n  \"reportUrl\": null,\n  \"paymentDate\": \"2026-04-28\",\n  \"payoutDate\": \"2026-04-28\",\n  \"status\": \"paid\",\n  \"feature\": \"subacquirer\",\n  \"paymentMethod\": \"credit\",\n  \"paymentArrangement\": \"VCC\",\n  \"error\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1334c20c-3965-4d23-bfb6-fb1d0c7e51b9",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "payment-batches",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador do repasse"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4d8b0a73-4911-475c-8577-1ad78e1acb85",
+              "name": "Repasse não encontrado",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "payment-batches",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador do repasse"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c5e24062-3b55-4222-aaba-0a7ab5d73a81",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "payment-batches",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador do repasse"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c18f446d-f7f1-42d7-865f-b793cb58d12a",
+          "name": "Listar ordens de pagamento de um repasse",
+          "request": {
+            "name": "Listar ordens de pagamento de um repasse",
+            "description": {
+              "content": "Lista paginada das ordens de pagamento que compõem um repasse.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "payouts",
+                "payment-batches",
+                ":id",
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Quantidade de itens por página (máx. 100)"
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "desc"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificador do repasse"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d8970e94-00e8-4f37-80a5-9c585b18b8e9",
+              "name": "Lista paginada de ordens de pagamento do repasse",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "payment-batches",
+                    ":id",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador do repasse"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"0f3d5b1a-7c89-4f23-9bd6-aabbccddeeff\",\n      \"chargeId\": \"1c1e6a87-44ab-44d9-9311-9876543210ab\",\n      \"amount\": 9700,\n      \"grossAmount\": 10000,\n      \"totalFeeAmount\": 300,\n      \"currency\": \"BRL\",\n      \"installment\": 1,\n      \"totalInstallments\": 1,\n      \"paymentMethod\": \"credit\",\n      \"type\": \"capture\",\n      \"paymentArrangement\": \"VCC\",\n      \"paymentScheduledAt\": \"2026-04-28\",\n      \"paymentBatchId\": \"9b1a3a3e-2f87-4b2f-ae59-1234567890ab\",\n      \"createdAt\": \"2026-04-20T15:30:00.000Z\",\n      \"updatedAt\": \"2026-04-20T15:30:00.000Z\"\n    }\n  ],\n  \"meta\": {\n    \"totalItems\": 1,\n    \"itemCount\": 1,\n    \"itemsPerPage\": 10,\n    \"totalPages\": 1,\n    \"currentPage\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e5f81105-4f52-41d7-8aac-6684bfe03a1f",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "payment-batches",
+                    ":id",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador do repasse"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ac68198c-0c3c-45aa-800f-a6211aff47e4",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "payment-batches",
+                    ":id",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador do repasse"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a5a34e17-ef4d-4390-b42e-bdf06f4d0306",
+          "name": "Listar ordens de pagamento",
+          "request": {
+            "name": "Listar ordens de pagamento",
+            "description": {
+              "content": "Lista paginada das ordens de pagamento da nossa subadquirente.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "payouts",
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Quantidade de itens por página (máx. 100)"
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "desc"
+                },
+                {
+                  "disabled": false,
+                  "key": "sellerId",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "<dateTime>",
+                  "description": "Data inicial em RFC 3339 (ex. `2026-04-01T00:00:00Z`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "<dateTime>",
+                  "description": "Data final em RFC 3339 (ex. `2026-04-30T23:59:59Z`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "chargeId",
+                  "value": "<uuid>",
+                  "description": "Filtra ordens de pagamento por cobrança específica"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c6e94486-8c31-43ec-9e90-53a6c4f97040",
+              "name": "Lista paginada das ordens de pagamento",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "chargeId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"0f3d5b1a-7c89-4f23-9bd6-aabbccddeeff\",\n      \"chargeId\": \"1c1e6a87-44ab-44d9-9311-9876543210ab\",\n      \"amount\": 9700,\n      \"grossAmount\": 10000,\n      \"totalFeeAmount\": 300,\n      \"currency\": \"BRL\",\n      \"installment\": 1,\n      \"totalInstallments\": 1,\n      \"paymentMethod\": \"credit\",\n      \"type\": \"capture\",\n      \"paymentArrangement\": \"VCC\",\n      \"paymentScheduledAt\": \"2026-04-28\",\n      \"paymentBatchId\": \"9b1a3a3e-2f87-4b2f-ae59-1234567890ab\",\n      \"createdAt\": \"2026-04-20T15:30:00.000Z\",\n      \"updatedAt\": \"2026-04-20T15:30:00.000Z\"\n    }\n  ],\n  \"meta\": {\n    \"totalItems\": 1,\n    \"itemCount\": 1,\n    \"itemsPerPage\": 10,\n    \"totalPages\": 1,\n    \"currentPage\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88c451f3-cdec-400c-8feb-6bc05f3aa93e",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "chargeId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8b94990-8950-4ea2-8867-5da67f0f82aa",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "chargeId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d4466d00-ae86-4631-8bc8-02345f741f4a",
+          "name": "Consultar ordem de pagamento pelo ID",
+          "request": {
+            "name": "Consultar ordem de pagamento pelo ID",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "payouts",
+                "orders",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sellerId",
+                  "value": "<uuid>",
+                  "description": "Filtra a ordem de pagamento por seller"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificador da ordem de pagamento"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2ffa5060-45bb-482c-a2e5-f0adbd0cf17a",
+              "name": "Detalhes da ordem de pagamento",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "orders",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da ordem de pagamento"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"0f3d5b1a-7c89-4f23-9bd6-aabbccddeeff\",\n  \"chargeId\": \"1c1e6a87-44ab-44d9-9311-9876543210ab\",\n  \"amount\": 9700,\n  \"grossAmount\": 10000,\n  \"totalFeeAmount\": 300,\n  \"currency\": \"BRL\",\n  \"installment\": 1,\n  \"totalInstallments\": 1,\n  \"paymentMethod\": \"credit\",\n  \"type\": \"capture\",\n  \"paymentArrangement\": \"VCC\",\n  \"paymentScheduledAt\": \"2026-04-28\",\n  \"paymentBatchId\": \"9b1a3a3e-2f87-4b2f-ae59-1234567890ab\",\n  \"createdAt\": \"2026-04-20T15:30:00.000Z\",\n  \"updatedAt\": \"2026-04-20T15:30:00.000Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e33f027a-94df-4696-9159-f5b7c10c3881",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "orders",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da ordem de pagamento"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1a185d0e-ac93-42a9-8c0a-453b2b1fa384",
+              "name": "Ordem de pagamento não encontrada",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "orders",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da ordem de pagamento"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e268ba8-60f9-488c-b755-be23abd4d6d0",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payouts",
+                    "orders",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da ordem de pagamento"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 5003,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.malga.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "cd82e542-4017-4e05-bb14-891b7e6677d4",
+    "name": "Documentação Malga 3DS2 Malga Payouts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

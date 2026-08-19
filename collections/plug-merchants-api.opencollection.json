@@ -1,0 +1,240 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Merchants API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Merchants",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Listagem de merchants cadastrados",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/merchants",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Número da página"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Quantidade de itens por página"
+              }
+            ]
+          },
+          "docs": "Listagem de merchants cadastrados"
+        },
+        {
+          "info": {
+            "name": "Criação de novo merchant para cobrança",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/merchants",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Criação de novo merchant para cobrança"
+        },
+        {
+          "info": {
+            "name": "Recuperar detalhes de merchant pelo id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/merchants/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id do merchant"
+              }
+            ]
+          },
+          "docs": "Recuperar detalhes de merchant pelo id"
+        },
+        {
+          "info": {
+            "name": "Atualizar configurações de merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/merchants/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id do merchant"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atualizar configurações de merchant"
+        },
+        {
+          "info": {
+            "name": "Deletar merchant pelo id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.malga.io/v1/merchants/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id do merchant"
+              }
+            ]
+          },
+          "docs": "Deletar merchant pelo id"
+        },
+        {
+          "info": {
+            "name": "Ativar ou desativar platform fee do merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/merchants/:merchantId/platform-fee/enabled",
+            "params": [
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Identificador do merchant"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Ativar ou desativar platform fee do merchant"
+        },
+        {
+          "info": {
+            "name": "Listar regras de platform fee",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/merchants/:merchantId/platform-fee",
+            "params": [
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Identificador do merchant"
+              }
+            ]
+          },
+          "docs": "Listar regras de platform fee"
+        },
+        {
+          "info": {
+            "name": "Criar regras de platform fee",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/merchants/:merchantId/platform-fee",
+            "params": [
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Identificador do merchant"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Criar regras de platform fee"
+        },
+        {
+          "info": {
+            "name": "Atualizar regras de platform fee",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.malga.io/v1/merchants/:merchantId/platform-fee",
+            "params": [
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Identificador do merchant"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atualizar regras de platform fee"
+        },
+        {
+          "info": {
+            "name": "Deletar uma regra de platform fee pelo ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.malga.io/v1/merchants/:merchantId/platform-fee/:platformFeeId",
+            "params": [
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Identificador do merchant"
+              },
+              {
+                "name": "platformFeeId",
+                "value": "",
+                "type": "path",
+                "description": "Identificador da regra de platform fee"
+              }
+            ]
+          },
+          "docs": "Deletar uma regra de platform fee pelo ID"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

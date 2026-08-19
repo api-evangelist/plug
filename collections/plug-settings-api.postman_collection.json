@@ -1,0 +1,1443 @@
+{
+  "item": [
+    {
+      "id": "c53c7313-607e-4c9a-9fc6-3e56cf5c58c2",
+      "name": "Settings",
+      "description": {
+        "content": "\nAtravés da API de `settings` é possível recuperar, criar e atualizar configurações de personalização de link de pagamento de um determinado `clientId`. É possível também configurar branding específico por merchant, enviando o header opcional `X-Merchant-Id`. Quando o header é enviado no **GET**, o sistema busca primeiro a configuração do merchant; se não existir, retorna a configuração padrão do cliente (fallback automático). Em **POST/PATCH**, o escopo é exato (sem fallback).\n\n**PATCH:** aceita `multipart/form-data` (inclui upload de logo) ou `application/json` (somente campos textuais). Campos vazios são ignorados no update. Se nenhum campo efetivo for enviado, a API retorna `422`.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "93ab64ca-433f-4f5a-80ae-89705a2a9054",
+          "name": "Configurações da empresa para personalização do checkout do link de pagamento, com imagem. O body deve ser enviado com form-data. Todos os campos são string com exceção do campo logo que é do tipo File.",
+          "request": {
+            "name": "Configurações da empresa para personalização do checkout do link de pagamento, com imagem. O body deve ser enviado com form-data. Todos os campos são string com exceção do campo logo que é do tipo File.",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Identificador do merchant. Quando informado, cria configuração específica para o merchant. Se omitido, cria a configuração padrão do cliente.",
+                "key": "X-Merchant-Id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "logo",
+                  "type": "file",
+                  "description": "Arquivo de imagem do logo da empresa. Esse campo é do tipo \"File\" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg"
+                },
+                {
+                  "key": "mainColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor primária"
+                },
+                {
+                  "key": "secondaryColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor secundária"
+                },
+                {
+                  "key": "attentionColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor utilizada para alertas"
+                },
+                {
+                  "key": "errorColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor utilizada para as mensagens de erro"
+                },
+                {
+                  "key": "successColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor utilizada nas mensagens de sucesso"
+                },
+                {
+                  "key": "backgroundColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor de fundo"
+                },
+                {
+                  "key": "companyUrl",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com"
+                },
+                {
+                  "key": "mastercardClickToPayDpaid",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Digital Payment Application ID (dpaId) para habilitar Mastercard Click to Pay no Link de Pagamento. Campo opcional."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "46304f72-5aec-4b43-a53d-efdec0d1c58c",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identificador do merchant. Quando informado, cria configuração específica para o merchant. Se omitido, cria a configuração padrão do cliente.",
+                    "key": "X-Merchant-Id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "Cor primária",
+                        "type": "text/plain"
+                      },
+                      "key": "mainColor",
+                      "value": "#000000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "SecondaryColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para alertas",
+                        "type": "text/plain"
+                      },
+                      "key": "attentionColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para as mensagens de erro",
+                        "type": "text/plain"
+                      },
+                      "key": "errorColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada nas mensagens de sucesso",
+                        "type": "text/plain"
+                      },
+                      "key": "successColor",
+                      "value": "#00FF00",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor de fundo",
+                        "type": "text/plain"
+                      },
+                      "key": "backgroundColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Arquivo de imagem do logo da empresa. Esse campo é do tipo \"File\" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg",
+                        "type": "text/plain"
+                      },
+                      "key": "logo",
+                      "type": "file"
+                    },
+                    {
+                      "description": {
+                        "content": "Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com",
+                        "type": "text/plain"
+                      },
+                      "key": "companyUrl",
+                      "value": "https://www.company.com",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"id da setting\",\n  \"clientId\": \"id da setting\",\n  \"mainColor\": \"#000000\",\n  \"SecondaryColor\": \"#FFFFFF\",\n  \"attentionColor\": \"#FF0000\",\n  \"errorColor\": \"#FF0000\",\n  \"successColor\": \"#00FF00\",\n  \"backgroundColor\": \"#FFFFFF\",\n  \"logo\": \"https://url.com/logo.jpg\",\n  \"companyUrl\": \"https://www.company.com\",\n  \"mastercardClickToPayDpaid\": \"223efa95-a0bc-43d6-aea9-715281b6b062\",\n  \"merchantId\": \"df601922-e024-6394-8f12-af21ec4218b1\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1ea92bc-0476-4bed-9669-919f8cd430f0",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identificador do merchant. Quando informado, cria configuração específica para o merchant. Se omitido, cria a configuração padrão do cliente.",
+                    "key": "X-Merchant-Id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "Cor primária",
+                        "type": "text/plain"
+                      },
+                      "key": "mainColor",
+                      "value": "#000000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "SecondaryColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para alertas",
+                        "type": "text/plain"
+                      },
+                      "key": "attentionColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para as mensagens de erro",
+                        "type": "text/plain"
+                      },
+                      "key": "errorColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada nas mensagens de sucesso",
+                        "type": "text/plain"
+                      },
+                      "key": "successColor",
+                      "value": "#00FF00",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor de fundo",
+                        "type": "text/plain"
+                      },
+                      "key": "backgroundColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Arquivo de imagem do logo da empresa. Esse campo é do tipo \"File\" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg",
+                        "type": "text/plain"
+                      },
+                      "key": "logo",
+                      "type": "file"
+                    },
+                    {
+                      "description": {
+                        "content": "Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com",
+                        "type": "text/plain"
+                      },
+                      "key": "companyUrl",
+                      "value": "https://www.company.com",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6559,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1531431-2094-421f-a658-94454c5346d1",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identificador do merchant. Quando informado, cria configuração específica para o merchant. Se omitido, cria a configuração padrão do cliente.",
+                    "key": "X-Merchant-Id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "Cor primária",
+                        "type": "text/plain"
+                      },
+                      "key": "mainColor",
+                      "value": "#000000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "SecondaryColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para alertas",
+                        "type": "text/plain"
+                      },
+                      "key": "attentionColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para as mensagens de erro",
+                        "type": "text/plain"
+                      },
+                      "key": "errorColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada nas mensagens de sucesso",
+                        "type": "text/plain"
+                      },
+                      "key": "successColor",
+                      "value": "#00FF00",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor de fundo",
+                        "type": "text/plain"
+                      },
+                      "key": "backgroundColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Arquivo de imagem do logo da empresa. Esse campo é do tipo \"File\" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg",
+                        "type": "text/plain"
+                      },
+                      "key": "logo",
+                      "type": "file"
+                    },
+                    {
+                      "description": {
+                        "content": "Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com",
+                        "type": "text/plain"
+                      },
+                      "key": "companyUrl",
+                      "value": "https://www.company.com",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6559,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d270d6c0-3ad3-43a2-9d82-f0b23eca53c3",
+          "name": "Atualiza configurações do link de pagamento (form-data ou JSON)",
+          "request": {
+            "name": "Atualiza configurações do link de pagamento (form-data ou JSON)",
+            "description": {
+              "content": "Atualiza a configuração do escopo informado (`X-Client-Id` e, opcionalmente, `X-Merchant-Id`).\n\n- **`multipart/form-data`:** todos os campos textuais e upload opcional de `logo` (File).\n- **`application/json`:** apenas campos textuais (sem upload de logo).\n\nCampos vazios (`\"\"`) não são persistidos. Se nenhum campo efetivo for enviado (por exemplo `{}` ou somente `companyUrl` vazio) e não houver logo, retorna **422**.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Identificador do merchant. Quando informado, atualiza a configuração específica do merchant. Se omitido, atualiza a configuração padrão do cliente.",
+                "key": "X-Merchant-Id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "logo",
+                  "type": "file",
+                  "description": "Arquivo de imagem do logo da empresa. Esse campo é do tipo \"File\" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg"
+                },
+                {
+                  "key": "mainColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor primária"
+                },
+                {
+                  "key": "secondaryColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor secundária"
+                },
+                {
+                  "key": "attentionColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor utilizada para alertas"
+                },
+                {
+                  "key": "errorColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor utilizada para as mensagens de erro"
+                },
+                {
+                  "key": "successColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor utilizada nas mensagens de sucesso"
+                },
+                {
+                  "key": "backgroundColor",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Cor de fundo"
+                },
+                {
+                  "key": "companyUrl",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com"
+                },
+                {
+                  "key": "mastercardClickToPayDpaid",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Digital Payment Application ID (dpaId) para habilitar Mastercard Click to Pay no Link de Pagamento. Campo opcional."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "379489e4-dba0-411b-8dfd-79605197f402",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identificador do merchant. Quando informado, atualiza a configuração específica do merchant. Se omitido, atualiza a configuração padrão do cliente.",
+                    "key": "X-Merchant-Id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "Cor primária",
+                        "type": "text/plain"
+                      },
+                      "key": "mainColor",
+                      "value": "#000000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "SecondaryColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para alertas",
+                        "type": "text/plain"
+                      },
+                      "key": "attentionColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para as mensagens de erro",
+                        "type": "text/plain"
+                      },
+                      "key": "errorColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada nas mensagens de sucesso",
+                        "type": "text/plain"
+                      },
+                      "key": "successColor",
+                      "value": "#00FF00",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor de fundo",
+                        "type": "text/plain"
+                      },
+                      "key": "backgroundColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Arquivo de imagem do logo da empresa. Esse campo é do tipo \"File\" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg",
+                        "type": "text/plain"
+                      },
+                      "key": "logo",
+                      "type": "file"
+                    },
+                    {
+                      "description": {
+                        "content": "Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com",
+                        "type": "text/plain"
+                      },
+                      "key": "companyUrl",
+                      "value": "https://www.company.com",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"id da setting\",\n  \"clientId\": \"id da setting\",\n  \"mainColor\": \"#000000\",\n  \"SecondaryColor\": \"#FFFFFF\",\n  \"attentionColor\": \"#FF0000\",\n  \"errorColor\": \"#FF0000\",\n  \"successColor\": \"#00FF00\",\n  \"backgroundColor\": \"#FFFFFF\",\n  \"logo\": \"https://url.com/logo.jpg\",\n  \"companyUrl\": \"https://www.company.com\",\n  \"mastercardClickToPayDpaid\": \"223efa95-a0bc-43d6-aea9-715281b6b062\",\n  \"merchantId\": \"df601922-e024-6394-8f12-af21ec4218b1\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4ee3fac1-4f2e-4315-b945-68f13155a39c",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identificador do merchant. Quando informado, atualiza a configuração específica do merchant. Se omitido, atualiza a configuração padrão do cliente.",
+                    "key": "X-Merchant-Id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "Cor primária",
+                        "type": "text/plain"
+                      },
+                      "key": "mainColor",
+                      "value": "#000000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "SecondaryColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para alertas",
+                        "type": "text/plain"
+                      },
+                      "key": "attentionColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para as mensagens de erro",
+                        "type": "text/plain"
+                      },
+                      "key": "errorColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada nas mensagens de sucesso",
+                        "type": "text/plain"
+                      },
+                      "key": "successColor",
+                      "value": "#00FF00",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor de fundo",
+                        "type": "text/plain"
+                      },
+                      "key": "backgroundColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Arquivo de imagem do logo da empresa. Esse campo é do tipo \"File\" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg",
+                        "type": "text/plain"
+                      },
+                      "key": "logo",
+                      "type": "file"
+                    },
+                    {
+                      "description": {
+                        "content": "Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com",
+                        "type": "text/plain"
+                      },
+                      "key": "companyUrl",
+                      "value": "https://www.company.com",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6559,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cfc463d2-a3c6-4e76-950d-2c403f9d1243",
+              "name": "Configuração não encontrada para o escopo informado",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identificador do merchant. Quando informado, atualiza a configuração específica do merchant. Se omitido, atualiza a configuração padrão do cliente.",
+                    "key": "X-Merchant-Id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "Cor primária",
+                        "type": "text/plain"
+                      },
+                      "key": "mainColor",
+                      "value": "#000000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "SecondaryColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para alertas",
+                        "type": "text/plain"
+                      },
+                      "key": "attentionColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para as mensagens de erro",
+                        "type": "text/plain"
+                      },
+                      "key": "errorColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada nas mensagens de sucesso",
+                        "type": "text/plain"
+                      },
+                      "key": "successColor",
+                      "value": "#00FF00",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor de fundo",
+                        "type": "text/plain"
+                      },
+                      "key": "backgroundColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Arquivo de imagem do logo da empresa. Esse campo é do tipo \"File\" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg",
+                        "type": "text/plain"
+                      },
+                      "key": "logo",
+                      "type": "file"
+                    },
+                    {
+                      "description": {
+                        "content": "Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com",
+                        "type": "text/plain"
+                      },
+                      "key": "companyUrl",
+                      "value": "https://www.company.com",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6559,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94068aa4-b950-4fb3-9a09-786c0a29c796",
+              "name": "Nenhum campo efetivo para atualizar (body vazio ou apenas campos ignorados)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identificador do merchant. Quando informado, atualiza a configuração específica do merchant. Se omitido, atualiza a configuração padrão do cliente.",
+                    "key": "X-Merchant-Id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "Cor primária",
+                        "type": "text/plain"
+                      },
+                      "key": "mainColor",
+                      "value": "#000000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "SecondaryColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para alertas",
+                        "type": "text/plain"
+                      },
+                      "key": "attentionColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para as mensagens de erro",
+                        "type": "text/plain"
+                      },
+                      "key": "errorColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada nas mensagens de sucesso",
+                        "type": "text/plain"
+                      },
+                      "key": "successColor",
+                      "value": "#00FF00",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor de fundo",
+                        "type": "text/plain"
+                      },
+                      "key": "backgroundColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Arquivo de imagem do logo da empresa. Esse campo é do tipo \"File\" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg",
+                        "type": "text/plain"
+                      },
+                      "key": "logo",
+                      "type": "file"
+                    },
+                    {
+                      "description": {
+                        "content": "Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com",
+                        "type": "text/plain"
+                      },
+                      "key": "companyUrl",
+                      "value": "https://www.company.com",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6559,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "efd5c327-5f39-4bfd-b04e-be24bf5c113e",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identificador do merchant. Quando informado, atualiza a configuração específica do merchant. Se omitido, atualiza a configuração padrão do cliente.",
+                    "key": "X-Merchant-Id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "Cor primária",
+                        "type": "text/plain"
+                      },
+                      "key": "mainColor",
+                      "value": "#000000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "SecondaryColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para alertas",
+                        "type": "text/plain"
+                      },
+                      "key": "attentionColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada para as mensagens de erro",
+                        "type": "text/plain"
+                      },
+                      "key": "errorColor",
+                      "value": "#FF0000",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor utilizada nas mensagens de sucesso",
+                        "type": "text/plain"
+                      },
+                      "key": "successColor",
+                      "value": "#00FF00",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Cor de fundo",
+                        "type": "text/plain"
+                      },
+                      "key": "backgroundColor",
+                      "value": "#FFFFFF",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Arquivo de imagem do logo da empresa. Esse campo é do tipo \"File\" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg",
+                        "type": "text/plain"
+                      },
+                      "key": "logo",
+                      "type": "file"
+                    },
+                    {
+                      "description": {
+                        "content": "Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com",
+                        "type": "text/plain"
+                      },
+                      "key": "companyUrl",
+                      "value": "https://www.company.com",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6559,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "133bc604-dd71-4c61-8ec2-ef37fcc5977e",
+          "name": "Recupera configuração do link de pagamento personalizado do cliente",
+          "request": {
+            "name": "Recupera configuração do link de pagamento personalizado do cliente",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Identificador do merchant. Quando informado, busca primeiro a configuração do merchant; se não existir, retorna a configuração padrão do cliente (fallback automático).",
+                "key": "X-Merchant-Id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "47d6db28-abf6-4fb1-830a-b1d5c8a89cde",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identificador do merchant. Quando informado, busca primeiro a configuração do merchant; se não existir, retorna a configuração padrão do cliente (fallback automático).",
+                    "key": "X-Merchant-Id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"id da setting\",\n  \"clientId\": \"id da setting\",\n  \"mainColor\": \"#000000\",\n  \"SecondaryColor\": \"#FFFFFF\",\n  \"attentionColor\": \"#FF0000\",\n  \"errorColor\": \"#FF0000\",\n  \"successColor\": \"#00FF00\",\n  \"backgroundColor\": \"#FFFFFF\",\n  \"logo\": \"https://url.com/logo.jpg\",\n  \"companyUrl\": \"https://www.company.com\",\n  \"mastercardClickToPayDpaid\": \"223efa95-a0bc-43d6-aea9-715281b6b062\",\n  \"merchantId\": \"df601922-e024-6394-8f12-af21ec4218b1\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9b3a3da-3861-46c6-8aa5-c20af621800e",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identificador do merchant. Quando informado, busca primeiro a configuração do merchant; se não existir, retorna a configuração padrão do cliente (fallback automático).",
+                    "key": "X-Merchant-Id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6559,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff253caa-d0fb-47bc-a522-a94befc3841e",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identificador do merchant. Quando informado, busca primeiro a configuração do merchant; se não existir, retorna a configuração padrão do cliente (fallback automático).",
+                    "key": "X-Merchant-Id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6559,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.malga.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "370d6aac-8755-48e5-ad33-a627e6e72313",
+    "name": "Documentação Malga 3DS2 Malga Settings API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

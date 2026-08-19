@@ -1,0 +1,1016 @@
+{
+  "item": [
+    {
+      "id": "e7aa826a-9bb8-43f2-b6b7-3369cfc57317",
+      "name": "Customers",
+      "description": {
+        "content": "\nAtravés da API de `customers` é possível realizar a criação, edição, listagem e exclusão de dados de compradores para uso nos serviços de tokenização de cartões, cobrança por PIX, Boleto, uso em análise de motores de antifraude e recorrência.\n\n*A fim de manter maior integridade dos dados, as informações de email e documento (CPF/CNJP) são únicos para customers na sua conta Malga, não podendo existir dois compradores iguais.*\n\n### Consulte a [tabela de tipos de paises e documentos suportados](#section/Tabela-tipos-de-paises-e-documentos-cadastro-de-Customer) para criação de customer\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6d431f82-d472-45af-9996-bef1e2ed0493",
+          "name": "Criação de novo customer para cobrança",
+          "request": {
+            "name": "Criação de novo customer para cobrança",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"phoneNumber\": \"<string>\",\n  \"email\": \"<string>\",\n  \"document\": {\n    \"type\": \"<string>\",\n    \"number\": \"<string>\",\n    \"country\": \"BR\"\n  },\n  \"address\": {\n    \"street\": \"<string>\",\n    \"streetNumber\": \"<string>\",\n    \"zipCode\": \"<string>\",\n    \"country\": \"BR\",\n    \"state\": \"<string>\",\n    \"city\": \"<string>\",\n    \"district\": \"<string>\",\n    \"complement\": \"<string>\"\n  },\n  \"billingAddress\": {\n    \"street\": \"<string>\",\n    \"streetNumber\": \"<string>\",\n    \"complement\": \"<string>\",\n    \"zipCode\": \"<string>\",\n    \"country\": \"BR\",\n    \"state\": \"<string>\",\n    \"city\": \"<string>\",\n    \"district\": \"<string>\"\n  },\n  \"deliveryAddress\": {\n    \"country\": \"BR\",\n    \"state\": \"<string>\",\n    \"city\": \"<string>\",\n    \"district\": \"<string>\",\n    \"zipCode\": \"<string>\",\n    \"street\": \"<string>\",\n    \"streetNumber\": \"<string>\",\n    \"complement\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "922ff955-da14-4e10-b3d7-f4b3842b24d4",
+              "name": "Created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Customer test\",\n  \"email\": \"jose2@gmail.com\",\n  \"phoneNumber\": \"21 98889999099\",\n  \"document\": {\n    \"number\": \"97055503019\",\n    \"type\": \"cpf\",\n    \"country\": \"BR\"\n  },\n  \"address\": {\n    \"country\": \"BR\",\n    \"state\": \"Rio de Janeiro\",\n    \"city\": \"Rio de Janeiro\",\n    \"district\": \"Leblon\",\n    \"zipCode\": \"25650011\",\n    \"street\": \"Av Geraldo Cardoso\",\n    \"streetNumber\": \"205\",\n    \"complement\": \"Apto 203\"\n  },\n  \"billingAddress\": {\n    \"country\": \"BR\",\n    \"state\": \"Rio de Janeiro\",\n    \"city\": \"Rio de Janeiro\",\n    \"district\": \"Leblon\",\n    \"zipCode\": \"25650011\",\n    \"street\": \"Av Geraldo Cardoso\",\n    \"streetNumber\": \"205\",\n    \"complement\": \"Apto 203\"\n  },\n  \"deliveryAddress\": {\n    \"country\": \"BR\",\n    \"state\": \"Rio de Janeiro\",\n    \"city\": \"Rio de Janeiro\",\n    \"district\": \"Leblon\",\n    \"zipCode\": \"25650011\",\n    \"street\": \"Av Geraldo Cardoso\",\n    \"streetNumber\": \"205\",\n    \"complement\": \"Apto 203\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c8393eb2-d7f7-47d4-acfe-6b6eef03f420",
+          "name": "Listagem de customers cadastrados",
+          "request": {
+            "name": "Listagem de customers cadastrados",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<number>",
+                  "description": "Número da página"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<number>",
+                  "description": "Quantidade de itens por página"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Ordenação dos itens"
+                },
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<string>",
+                  "description": "Identificador de um customer"
+                },
+                {
+                  "disabled": false,
+                  "key": "document.type",
+                  "value": "<string>",
+                  "description": "Tipo de documento"
+                },
+                {
+                  "disabled": false,
+                  "key": "document.number",
+                  "value": "<string>",
+                  "description": "Número do documento"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ae5e7a4e-ea7b-41eb-b7bc-094771294041",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "document.type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "document.number",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"string\",\n      \"createdAt\": \"string\",\n      \"clientId\": \"c5aa6565-e51c-3776-84be-ef72fe209dfc\",\n      \"name\": \"string\",\n      \"email\": \"string\",\n      \"phoneNumber\": \"string\",\n      \"document\": {\n        \"type\": \"string\",\n        \"number\": \"string\",\n        \"country\": \"BR\"\n      },\n      \"address\": {\n        \"street\": \"string\",\n        \"streetNumber\": \"string\",\n        \"zipCode\": \"string\",\n        \"country\": \"BR\",\n        \"state\": \"string\",\n        \"city\": \"string\",\n        \"district\": \"string\",\n        \"complement\": \"string\"\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"createdAt\": \"string\",\n      \"clientId\": \"e3b11fb8-e528-c4ee-3e6d-17517915465b\",\n      \"name\": \"string\",\n      \"email\": \"string\",\n      \"phoneNumber\": \"string\",\n      \"document\": {\n        \"type\": \"string\",\n        \"number\": \"string\",\n        \"country\": \"BR\"\n      },\n      \"address\": {\n        \"street\": \"string\",\n        \"streetNumber\": \"string\",\n        \"zipCode\": \"string\",\n        \"country\": \"BR\",\n        \"state\": \"string\",\n        \"city\": \"string\",\n        \"district\": \"string\",\n        \"complement\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2bbed267-07d1-42fe-b3ab-950138b463d3",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "document.type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "document.number",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 4187,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2efa5017-8c03-4bab-9726-188a1d43dc3d",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "document.type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "document.number",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 4187,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "039a4a31-30e3-408f-9593-936b183d3f96",
+          "name": "Recuperar detalhes de customer",
+          "request": {
+            "name": "Recuperar detalhes de customer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id do customers que deseja recuperar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2fa86b74-c29f-4618-a651-b899ff4e94ab",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id do customers que deseja recuperar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"82aba896-9e37-45b6-aa90-d510c9050596\",\n  \"clientId\": \"cc0b1e41-2936-45c5-947f-93995ffcdc00\",\n  \"createdAt\": \"2012-06-30 23:59:59 +0000\",\n  \"name\": \"Customer test\",\n  \"email\": \"jose2@gmail.com\",\n  \"document\": {\n    \"number\": \"97055503019\",\n    \"type\": \"cpf\",\n    \"country\": \"BR\"\n  },\n  \"phoneNumber\": \"21 98889999099\",\n  \"address\": {\n    \"country\": \"BR\",\n    \"state\": \"Rio de Janeiro\",\n    \"city\": \"Rio de Janeiro\",\n    \"district\": \"Leblon\",\n    \"zipCode\": \"25650011\",\n    \"street\": \"Av Geraldo Cardoso\",\n    \"streetNumber\": \"205\",\n    \"complement\": \"Apto 203\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "43a68797-7bbc-4dbf-ae26-85a815d3f7f9",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id do customers que deseja recuperar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 4187,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "08bb23d7-5eb4-4c46-9793-803f2fb46e7a",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id do customers que deseja recuperar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 4187,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4ef9067c-24f3-4150-b30e-6a137b602d22",
+          "name": "Deletar customer pelo id",
+          "request": {
+            "name": "Deletar customer pelo id",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id do customers que deseja deletar"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "30c9e313-83fb-42a1-9f13-7a17409b823b",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id do customers que deseja deletar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b3d51963-6ceb-492a-af00-2084104cf80f",
+          "name": "Atualizar customer pelo id",
+          "request": {
+            "name": "Atualizar customer pelo id",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id do customers que deseja alterar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"phoneNumber\": \"<string>\",\n  \"address\": {\n    \"street\": \"<string>\",\n    \"streetNumber\": \"<string>\",\n    \"zipCode\": \"<string>\",\n    \"country\": \"BR\",\n    \"state\": \"<string>\",\n    \"city\": \"<string>\",\n    \"district\": \"<string>\",\n    \"complement\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a1777fae-2d6e-4350-a626-bf6871c8b7ed",
+              "name": "The record has been successfully updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id do customers que deseja alterar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"phoneNumber\": \"<string>\",\n  \"address\": {\n    \"street\": \"string\",\n    \"streetNumber\": \"string\",\n    \"zipCode\": \"string\",\n    \"country\": \"BR\",\n    \"state\": \"string\",\n    \"city\": \"string\",\n    \"district\": \"string\",\n    \"complement\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5a14a6f6-5450-4aa8-950d-a782f746a921",
+          "name": "Adicionar cartão de crédito ao customer",
+          "request": {
+            "name": "Adicionar cartão de crédito ao customer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customers",
+                ":customer_id",
+                "cards"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "customer_id",
+                  "description": "(Required) Id do customers que deseja alterar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5f3d65a9-fbdb-4c4d-b287-392264758d25",
+              "name": "The card has been linked successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":customer_id",
+                    "cards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "customer_id",
+                      "description": "(Required) Id do customers que deseja alterar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cardId\": \"82aba896-9e37-45b6-aa90-d510c9050596\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6b70d27a-36f7-46e2-b454-a22a03840cdf",
+          "name": "Listagem dos cartões do customer",
+          "request": {
+            "name": "Listagem dos cartões do customer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customers",
+                ":customer_id",
+                "cards"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "customer_id",
+                  "description": "(Required) Id do customers que deseja alterar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1e3ecd69-425c-489f-8d92-90050544bb99",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":customer_id",
+                    "cards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "customer_id",
+                      "description": "(Required) Id do customers que deseja alterar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"itemCount\": 10,\n    \"totalItems\": 20,\n    \"itemsPerPage\": 10,\n    \"totalPages\": 5,\n    \"currentPage\": 2\n  },\n  \"items\": [\n    {\n      \"id\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\",\n      \"customerId\": \"82aba896-9e37-45b6-aa90-d510c9050596\",\n      \"clientId\": \"cc0b1e41-2936-45c5-947f-93995ffcdc00\",\n      \"expirationMonth\": \"12\",\n      \"expirationYear\": \"2026\",\n      \"brand\": \"Visa\",\n      \"cvvChecked\": true,\n      \"fingerprint\": \"cbd4a441-c63c-4dee-ac6b-bfa7fa1df818\",\n      \"first6digits\": \"401959\",\n      \"last4digits\": \"9339\",\n      \"createdAt\": \"2012-06-30 23:59:59 +0000\",\n      \"status\": \"active\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.malga.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "aa845711-ad82-463e-8f5f-059966767f93",
+    "name": "Documentação Malga 3DS2 Malga Customers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

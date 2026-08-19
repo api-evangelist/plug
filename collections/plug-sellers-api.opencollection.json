@@ -1,0 +1,167 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Sellers API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sellers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Consultar recebedores por listagem paginada",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/sellers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "Identificador do seller"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "E-mail do seller (busca em `owner.email` ou `business.email`)"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Status do seller. Aceita múltiplos valores separados por vírgula (ex. `pending,active`)."
+              },
+              {
+                "name": "businessName",
+                "value": "",
+                "type": "query",
+                "description": "Nome do estabelecimento (busca parcial, mínimo 3 caracteres)"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "query",
+                "description": "Identificador do merchant"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limite de itens retornados na consulta (máximo 100)"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Página da consulta"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Ordenação por data de criação"
+              }
+            ]
+          },
+          "docs": "Consultar recebedores por listagem paginada"
+        },
+        {
+          "info": {
+            "name": "Criação de um novo recebedor",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/sellers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Criação de um novo recebedor"
+        },
+        {
+          "info": {
+            "name": "Consultar um recebedor pelo ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/sellers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificador do seller"
+              }
+            ]
+          },
+          "docs": "Consultar um recebedor pelo ID"
+        },
+        {
+          "info": {
+            "name": "Atualização de recebedor pelo ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/sellers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificador do seller"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atualização **parcial** do recebedor. Envie apenas os campos que deseja alterar; campos omitidos permanecem inalterados.\n\n**Atenção (Provedor Pagar.me V5):**\nAo atualizar a conta bancária (`bankAccount`) de um seller, o IP do servidor que realiza a requisição **deve** estar previamente cadastrado na **Allow List** (Lista de Permissões) no dashboard da Pagar.me.\n[Saiba como configurar a Allow List aqui.](https://docs.pagar.me/reference/atualizar-conta-banc%C3%A1ria-do-recebedor-1)\n"
+        },
+        {
+          "info": {
+            "name": "Deletar recebedor por ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.malga.io/v1/sellers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID do seller"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletar recebedor por ID"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

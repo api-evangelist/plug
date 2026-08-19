@@ -1,0 +1,1133 @@
+{
+  "item": [
+    {
+      "id": "8fd3b726-a38b-481f-b5c3-fdec64120c75",
+      "name": "Sellers",
+      "description": {
+        "content": "\nPara realizar uma cobrança com Split, antes é necessário criar um `seller`. Os `sellers` são identificados a partir de um id único.\n\nAtravés das APIs de `sellers` é possível realizar a criação e configuração de recebedores que serão beneficiados em um Split. Um recebedor, ou `seller`, é um cadastro de pessoa física ou jurídica para quem você deseja repassar automaticamente valores de uma cobrança.\n\nÉ obrigatório informar o campo `owner` para recebedores do tipo pessoa física. Para pessoa jurídica, informe `owner` e `business`.\n\nStatus possíveis: `pending`, `active`, `partial`, `inactive` e `blocked`.\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Seller\" exampleRef=\"#/components/examples/SellerRequestBusiness\" />\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "61fff994-293d-4ee4-952b-38f4fdbfecd0",
+          "name": "Criação de um novo recebedor",
+          "request": {
+            "name": "Criação de um novo recebedor",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "sellers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"merchantId\": \"<string>\",\n  \"mcc\": \"<number>\",\n  \"bankAccount\": {\n    \"holderName\": \"<string>\",\n    \"holderDocument\": \"<string>\",\n    \"branchNumber\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"type\": \"<string>\",\n    \"holdeType\": \"<string>\",\n    \"bank\": \"<string>\",\n    \"ispb\": \"<string>\",\n    \"branchCheckDigit\": \"<string>\",\n    \"accountCheckDigit\": \"<string>\",\n    \"pixKey\": \"<string>\"\n  },\n  \"owner\": {\n    \"name\": \"<string>\",\n    \"email\": \"<string>\",\n    \"phoneNumber\": \"<string>\",\n    \"birthdate\": \"<string>\",\n    \"document\": {\n      \"type\": \"<string>\",\n      \"number\": \"<string>\",\n      \"country\": \"BR\"\n    },\n    \"address\": {\n      \"street\": \"<string>\",\n      \"streetNumber\": \"<string>\",\n      \"zipCode\": \"<string>\",\n      \"country\": \"BR\",\n      \"state\": \"<string>\",\n      \"city\": \"<string>\",\n      \"district\": \"<string>\",\n      \"complement\": \"<string>\",\n      \"referencePoint\": \"<string>\"\n    },\n    \"monthlyIncome\": \"<number>\",\n    \"professionalOccupation\": \"<string>\",\n    \"isBusinessRepresentative\": \"<boolean>\",\n    \"annualRevenue\": \"<number>\",\n    \"businessCategory\": \"<string>\"\n  },\n  \"business\": {\n    \"name\": \"<string>\",\n    \"phoneNumber\": \"<string>\",\n    \"email\": \"<string>\",\n    \"address\": {\n      \"street\": \"<string>\",\n      \"streetNumber\": \"<string>\",\n      \"zipCode\": \"<string>\",\n      \"country\": \"BR\",\n      \"state\": \"<string>\",\n      \"city\": \"<string>\",\n      \"district\": \"<string>\",\n      \"complement\": \"<string>\",\n      \"referencePoint\": \"<string>\"\n    },\n    \"document\": {\n      \"type\": \"<string>\",\n      \"number\": \"<string>\",\n      \"country\": \"BR\"\n    },\n    \"corporateReason\": \"<string>\",\n    \"website\": \"<string>\",\n    \"description\": \"<string>\",\n    \"facebook\": \"<string>\",\n    \"twitter\": \"<string>\",\n    \"openingDate\": \"<string>\",\n    \"annualRevenue\": \"<number>\"\n  },\n  \"transferPolicy\": {\n    \"transferDay\": \"<string>\",\n    \"transferEnabled\": \"<boolean>\",\n    \"transferInterval\": \"<string>\",\n    \"automaticAnticipationEnabled\": \"<boolean>\",\n    \"anticipatableVolumePercentage\": \"<string>\",\n    \"automaticAnticipationType\": \"<string>\",\n    \"automaticAnticipationDays\": \"<string>\",\n    \"automaticAnticipation1025Delay\": \"<string>\"\n  },\n  \"rateAgreements\": [\n    {\n      \"fee\": \"<number>\",\n      \"type\": \"<string>\",\n      \"percent\": \"<number>\",\n      \"merchantDiscountRates\": [\n        {\n          \"paymentArrangement\": {\n            \"product\": \"<string>\",\n            \"brand\": \"<string>\"\n          },\n          \"initialInstallmentNumber\": \"<number>\",\n          \"finalInstallmentNumber\": \"<number>\",\n          \"percent\": \"<number>\"\n        },\n        {\n          \"paymentArrangement\": {\n            \"product\": \"<string>\",\n            \"brand\": \"<string>\"\n          },\n          \"initialInstallmentNumber\": \"<number>\",\n          \"finalInstallmentNumber\": \"<number>\",\n          \"percent\": \"<number>\"\n        }\n      ]\n    },\n    {\n      \"fee\": \"<number>\",\n      \"type\": \"<string>\",\n      \"percent\": \"<number>\",\n      \"merchantDiscountRates\": [\n        {\n          \"paymentArrangement\": {\n            \"product\": \"<string>\",\n            \"brand\": \"<string>\"\n          },\n          \"initialInstallmentNumber\": \"<number>\",\n          \"finalInstallmentNumber\": \"<number>\",\n          \"percent\": \"<number>\"\n        },\n        {\n          \"paymentArrangement\": {\n            \"product\": \"<string>\",\n            \"brand\": \"<string>\"\n          },\n          \"initialInstallmentNumber\": \"<number>\",\n          \"finalInstallmentNumber\": \"<number>\",\n          \"percent\": \"<number>\"\n        }\n      ]\n    }\n  ],\n  \"documentIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"salesPlanId\": \"<string>\",\n  \"metadata\": [\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ],\n  \"processingFee\": \"<boolean>\",\n  \"liable\": \"<boolean>\",\n  \"fareMdr\": \"<number>\",\n  \"fareFee\": \"<number>\",\n  \"minNegativeBalance\": \"<number>\",\n  \"maxRefundDays\": \"<number>\",\n  \"createAsync\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "db406c18-6d5c-4412-9caf-84bdc796af0e",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"merchantId\": \"b1612460-0fef-447d-9590-97825cf60cf6\",\n  \"owner\": {\n    \"name\": \"Seller test\",\n    \"email\": \"seller@gmail.com\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"birthdate\": \"1995-01-27\",\n    \"document\": {\n      \"type\": \"cpf\",\n      \"number\": \"36243319067\",\n      \"country\": \"BR\"\n    },\n    \"address\": {\n      \"street\": \"Av Geraldo Cardoso\",\n      \"streetNumber\": \"205\",\n      \"complement\": \"Apto 203\",\n      \"zipCode\": \"25650011\",\n      \"country\": \"BR\",\n      \"state\": \"Rio de Janeiro\",\n      \"city\": \"Rio de Janeiro\",\n      \"district\": \"Leblon\",\n      \"referencePoint\": \"Proximo a praia\"\n    },\n    \"businessCategory\": \"OTHER_SERVICES\"\n  },\n  \"business\": {\n    \"name\": \"Seller business test\",\n    \"corporateReason\": \"Seller company social reason\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"email\": \"seller@gmail.com\",\n    \"website\": \"https://sellerbusiness.com.br\",\n    \"description\": \"Seller business\",\n    \"facebook\": \"facebook Seller business\",\n    \"twitter\": \"twitter Seller business\",\n    \"openingDate\": \"1995-01-27\",\n    \"annualRevenue\": 2500000,\n    \"address\": {\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"sala 100\",\n      \"zipCode\": \"61000-320\",\n      \"country\": \"BR\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"type\": \"cnpj\",\n      \"number\": \"94938591000196\",\n      \"country\": \"BR\"\n    }\n  },\n  \"mcc\": 4040,\n  \"bankAccount\": {\n    \"holderName\": \"Seller Name\",\n    \"holderDocument\": \"94938591000196\",\n    \"bank\": \"077\",\n    \"branchNumber\": \"492\",\n    \"branchCheckDigit\": \"1\",\n    \"accountNumber\": \"4929\",\n    \"accountCheckDigit\": \"12\",\n    \"type\": \"conta_corrente\",\n    \"pixKey\": \"1234567890\"\n  },\n  \"transferPolicy\": {\n    \"transferDay\": \"5\",\n    \"transferEnabled\": true,\n    \"transferInterval\": \"weekly\",\n    \"automaticAnticipationEnabled\": false,\n    \"anticipatableVolumePercentage\": \"\",\n    \"automaticAnticipationType\": \"\",\n    \"automaticAnticipationDays\": \"\",\n    \"automaticAnticipation1025Delay\": \"\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"19d05a45-0e92-478e-8366-955231bcf3d6\",\n  \"providers\": {\n    \"providerType\": \"SANDBOX\",\n    \"externalId\": \"1966811\",\n    \"externalStatus\": \"active\",\n    \"externalStatusReason\": \"ok\",\n    \"status\": \"pending\",\n    \"createdAt\": \"2022-12-21T23:10:13.498Z\",\n    \"updatedAt\": \"2022-12-21T20:10:13.951Z\"\n  },\n  \"merchantId\": \"5616b19e-4d99-4bd3-b415-4990e5cab4f4\",\n  \"clientid\": \"e234eeb3-483d-4df2-87eb-1e2be5cdaccd\",\n  \"metadata\": null,\n  \"owner\": {\n    \"id\": \"8231ba21-3758-4bd7-b664-5b5fdeda37a0\",\n    \"updatedAt\": \"2023-07-11T23:02:51.581Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.581Z\",\n    \"name\": \"Seller\",\n    \"email\": \"seller@email.com\",\n    \"phoneNumber\": \"85988350264\",\n    \"birthdate\": \"1995-01-27T02:00:00.000Z\",\n    \"address\": {\n      \"country\": \"BR\",\n      \"id\": \"883631f0-fea0-4682-ae1a-f4ac6349e0d9\",\n      \"updatedAt\": \"2023-07-11T23:02:51.585Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.585Z\",\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"casa 4\",\n      \"zipCode\": \"61000-320\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"country\": \"BR\",\n      \"id\": \"32543bbe-42c1-4000-9b68-d01a2735708e\",\n      \"updatedAt\": \"2023-07-11T23:02:51.588Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.588Z\",\n      \"type\": \"cpf\",\n      \"number\": \"36243319067\"\n    }\n  },\n  \"business\": {\n    \"id\": \"607bb56a-974a-4d1d-9f56-cda865dfafbd\",\n    \"updatedAt\": \"2023-07-11T23:02:51.571Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.571Z\",\n    \"name\": \"Seller business\",\n    \"corporateReason\": \"Seller company social reason\",\n    \"phoneNumber\": \"85988350264\",\n    \"email\": \"seller@email.com\",\n    \"website\": \"www.sellerbusiness.com.br\",\n    \"description\": \"Seller business\",\n    \"facebook\": \"facebook Seller business\",\n    \"twitter\": \"twitter Seller business\",\n    \"openingDate\": \"1995-01-27\",\n    \"address\": {\n      \"country\": \"BR\",\n      \"id\": \"b681dd2e-ebdb-4fad-8c8b-e703a17825ce\",\n      \"updatedAt\": \"2023-07-11T23:02:51.574Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.574Z\",\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"sala 100\",\n      \"zipCode\": \"61000-320\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"country\": \"BR\",\n      \"id\": \"b9380f2c-a657-4f47-a7da-21f3bf08182c\",\n      \"updatedAt\": \"2023-07-11T23:02:51.578Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.578Z\",\n      \"type\": \"cnpj\",\n      \"number\": \"94938591000196\"\n    }\n  },\n  \"bankAccount\": {\n    \"id\": \"f7ac3221-8f69-4276-b88b-34ddbe5ec24a\",\n    \"updatedAt\": \"2023-07-11T23:02:51.563Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.563Z\",\n    \"holderName\": \"Seller name\",\n    \"holderDocument\": \"36243319067\",\n    \"bank\": \"077\",\n    \"ispb\": \"60746948\",\n    \"branchNumber\": \"492\",\n    \"branchCheckDigit\": \"1\",\n    \"accountNumber\": \"4929\",\n    \"accountCheckDigit\": \"22\",\n    \"type\": \"conta_corrente\"\n  },\n  \"transferPolicy\": {\n    \"id\": \"a04bca24-f7d1-4cb5-acce-41f12680e5bf\",\n    \"updatedAt\": \"2023-07-11T23:02:51.567Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.567Z\",\n    \"transferDay\": \"5\",\n    \"transferEnabled\": true,\n    \"transferInterval\": \"weekly\",\n    \"automaticAnticipationEnabled\": false,\n    \"anticipatableVolumePercentage\": \"\",\n    \"automaticAnticipationType\": \"\",\n    \"automaticAnticipationDays\": \"\",\n    \"automaticAnticipation1025Delay\": \"\"\n  },\n  \"mcc\": 4040,\n  \"status\": \"active\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e050007b-976d-4ead-bee8-0e377f2b8f4b",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"merchantId\": \"b1612460-0fef-447d-9590-97825cf60cf6\",\n  \"owner\": {\n    \"name\": \"Seller test\",\n    \"email\": \"seller@gmail.com\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"birthdate\": \"1995-01-27\",\n    \"document\": {\n      \"type\": \"cpf\",\n      \"number\": \"36243319067\",\n      \"country\": \"BR\"\n    },\n    \"address\": {\n      \"street\": \"Av Geraldo Cardoso\",\n      \"streetNumber\": \"205\",\n      \"complement\": \"Apto 203\",\n      \"zipCode\": \"25650011\",\n      \"country\": \"BR\",\n      \"state\": \"Rio de Janeiro\",\n      \"city\": \"Rio de Janeiro\",\n      \"district\": \"Leblon\",\n      \"referencePoint\": \"Proximo a praia\"\n    },\n    \"businessCategory\": \"OTHER_SERVICES\"\n  },\n  \"business\": {\n    \"name\": \"Seller business test\",\n    \"corporateReason\": \"Seller company social reason\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"email\": \"seller@gmail.com\",\n    \"website\": \"https://sellerbusiness.com.br\",\n    \"description\": \"Seller business\",\n    \"facebook\": \"facebook Seller business\",\n    \"twitter\": \"twitter Seller business\",\n    \"openingDate\": \"1995-01-27\",\n    \"annualRevenue\": 2500000,\n    \"address\": {\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"sala 100\",\n      \"zipCode\": \"61000-320\",\n      \"country\": \"BR\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"type\": \"cnpj\",\n      \"number\": \"94938591000196\",\n      \"country\": \"BR\"\n    }\n  },\n  \"mcc\": 4040,\n  \"bankAccount\": {\n    \"holderName\": \"Seller Name\",\n    \"holderDocument\": \"94938591000196\",\n    \"bank\": \"077\",\n    \"branchNumber\": \"492\",\n    \"branchCheckDigit\": \"1\",\n    \"accountNumber\": \"4929\",\n    \"accountCheckDigit\": \"12\",\n    \"type\": \"conta_corrente\",\n    \"pixKey\": \"1234567890\"\n  },\n  \"transferPolicy\": {\n    \"transferDay\": \"5\",\n    \"transferEnabled\": true,\n    \"transferInterval\": \"weekly\",\n    \"automaticAnticipationEnabled\": false,\n    \"anticipatableVolumePercentage\": \"\",\n    \"automaticAnticipationType\": \"\",\n    \"automaticAnticipationDays\": \"\",\n    \"automaticAnticipation1025Delay\": \"\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 400,\n    \"key\": \"bank_identifier_required\",\n    \"details\": [\n      \"bank account must keep at least one of bank (COMPE) or ispb after update\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1798b090-50ea-4c66-a28d-070637a5dd54",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"merchantId\": \"b1612460-0fef-447d-9590-97825cf60cf6\",\n  \"owner\": {\n    \"name\": \"Seller test\",\n    \"email\": \"seller@gmail.com\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"birthdate\": \"1995-01-27\",\n    \"document\": {\n      \"type\": \"cpf\",\n      \"number\": \"36243319067\",\n      \"country\": \"BR\"\n    },\n    \"address\": {\n      \"street\": \"Av Geraldo Cardoso\",\n      \"streetNumber\": \"205\",\n      \"complement\": \"Apto 203\",\n      \"zipCode\": \"25650011\",\n      \"country\": \"BR\",\n      \"state\": \"Rio de Janeiro\",\n      \"city\": \"Rio de Janeiro\",\n      \"district\": \"Leblon\",\n      \"referencePoint\": \"Proximo a praia\"\n    },\n    \"businessCategory\": \"OTHER_SERVICES\"\n  },\n  \"business\": {\n    \"name\": \"Seller business test\",\n    \"corporateReason\": \"Seller company social reason\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"email\": \"seller@gmail.com\",\n    \"website\": \"https://sellerbusiness.com.br\",\n    \"description\": \"Seller business\",\n    \"facebook\": \"facebook Seller business\",\n    \"twitter\": \"twitter Seller business\",\n    \"openingDate\": \"1995-01-27\",\n    \"annualRevenue\": 2500000,\n    \"address\": {\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"sala 100\",\n      \"zipCode\": \"61000-320\",\n      \"country\": \"BR\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"type\": \"cnpj\",\n      \"number\": \"94938591000196\",\n      \"country\": \"BR\"\n    }\n  },\n  \"mcc\": 4040,\n  \"bankAccount\": {\n    \"holderName\": \"Seller Name\",\n    \"holderDocument\": \"94938591000196\",\n    \"bank\": \"077\",\n    \"branchNumber\": \"492\",\n    \"branchCheckDigit\": \"1\",\n    \"accountNumber\": \"4929\",\n    \"accountCheckDigit\": \"12\",\n    \"type\": \"conta_corrente\",\n    \"pixKey\": \"1234567890\"\n  },\n  \"transferPolicy\": {\n    \"transferDay\": \"5\",\n    \"transferEnabled\": true,\n    \"transferInterval\": \"weekly\",\n    \"automaticAnticipationEnabled\": false,\n    \"anticipatableVolumePercentage\": \"\",\n    \"automaticAnticipationType\": \"\",\n    \"automaticAnticipationDays\": \"\",\n    \"automaticAnticipation1025Delay\": \"\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 9303,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9ce51512-a8e8-4542-9b5d-18a1c812cbf2",
+          "name": "Consultar recebedores por listagem paginada",
+          "request": {
+            "name": "Consultar recebedores por listagem paginada",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "sellers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<uuid>",
+                  "description": "Identificador do seller"
+                },
+                {
+                  "disabled": false,
+                  "key": "email",
+                  "value": "<string>",
+                  "description": "E-mail do seller (busca em `owner.email` ou `business.email`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Status do seller. Aceita múltiplos valores separados por vírgula (ex. `pending,active`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "businessName",
+                  "value": "<string>",
+                  "description": "Nome do estabelecimento (busca parcial, mínimo 3 caracteres)"
+                },
+                {
+                  "disabled": false,
+                  "key": "merchantId",
+                  "value": "<uuid>",
+                  "description": "Identificador do merchant"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limite de itens retornados na consulta (máximo 100)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Página da consulta"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "DESC",
+                  "description": "Ordenação por data de criação"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "938b0b97-dc00-4006-858c-3e4a8fb406e3",
+              "name": "Lista paginada de recebedores",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "email",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "businessName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchantId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "DESC"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"ea115e44-7048-11ed-a1eb-0242ac120002\",\n      \"providers\": [\n        {\n          \"providerType\": \"PLUG_SANDBOX\",\n          \"externalStatus\": \"active\",\n          \"externalStatusReason\": \"ok\",\n          \"status\": \"pending\",\n          \"createdAt\": \"2021-08-12T16:08:39.536Z\",\n          \"updatedAt\": \"2021-08-12T16:08:39.536Z\"\n        }\n      ],\n      \"merchantId\": \"5616b19e-4d99-4bd3-b415-4990e5cab4f4\",\n      \"clientId\": \"5616b19e-4d99-4bd3-b415-4990e5cab4f4\",\n      \"business\": {\n        \"id\": \"72a574b8-e97e-409c-8402-04208f63e027\",\n        \"updatedAt\": \"2023-05-15T22:27:48.267Z\",\n        \"createdAt\": \"2023-05-15T22:27:48.267Z\",\n        \"name\": \"Seller test\",\n        \"phoneNumber\": \"21 98889999099\",\n        \"email\": \"seller@gmail.com\",\n        \"website\": null,\n        \"description\": \"Description\",\n        \"facebooks\": null,\n        \"twitter\": null,\n        \"openingDate\": \"1995-01-27\"\n      },\n      \"mcc\": 4040\n    }\n  ],\n  \"meta\": {\n    \"totalItems\": 16,\n    \"itemCount\": 1,\n    \"itemsPerPage\": 1,\n    \"totalPages\": 2,\n    \"currentPage\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14a33937-f695-4742-b47c-bdaf3959d965",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "email",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "businessName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchantId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "DESC"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 9303,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b71cafa8-f6c3-4372-9799-f4fe6f620da8",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "email",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "businessName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchantId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "DESC"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 9303,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8ac9d8a8-0fbb-4cf3-9151-e56998aade59",
+          "name": "Atualização de recebedor pelo ID",
+          "request": {
+            "name": "Atualização de recebedor pelo ID",
+            "description": {
+              "content": "Atualização **parcial** do recebedor. Envie apenas os campos que deseja alterar; campos omitidos permanecem inalterados.\n\n**Atenção (Provedor Pagar.me V5):**\nAo atualizar a conta bancária (`bankAccount`) de um seller, o IP do servidor que realiza a requisição **deve** estar previamente cadastrado na **Allow List** (Lista de Permissões) no dashboard da Pagar.me.\n[Saiba como configurar a Allow List aqui.](https://docs.pagar.me/reference/atualizar-conta-banc%C3%A1ria-do-recebedor-1)\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sellers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificador do seller"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"merchantId\": \"<string>\",\n  \"mcc\": \"<number>\",\n  \"metadata\": [\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ],\n  \"owner\": {\n    \"name\": \"<string>\",\n    \"email\": \"<string>\",\n    \"phoneNumber\": \"<string>\",\n    \"birthdate\": \"<string>\",\n    \"document\": {\n      \"type\": \"<string>\",\n      \"number\": \"<string>\",\n      \"country\": \"BR\"\n    },\n    \"address\": {\n      \"street\": \"<string>\",\n      \"streetNumber\": \"<string>\",\n      \"zipCode\": \"<string>\",\n      \"country\": \"BR\",\n      \"state\": \"<string>\",\n      \"city\": \"<string>\",\n      \"district\": \"<string>\",\n      \"complement\": \"<string>\",\n      \"referencePoint\": \"<string>\"\n    },\n    \"monthlyIncome\": \"<number>\",\n    \"professionalOccupation\": \"<string>\",\n    \"isBusinessRepresentative\": \"<boolean>\",\n    \"annualRevenue\": \"<number>\",\n    \"businessCategory\": \"<string>\"\n  },\n  \"business\": {\n    \"name\": \"<string>\",\n    \"phoneNumber\": \"<string>\",\n    \"email\": \"<string>\",\n    \"address\": {\n      \"street\": \"<string>\",\n      \"streetNumber\": \"<string>\",\n      \"zipCode\": \"<string>\",\n      \"country\": \"BR\",\n      \"state\": \"<string>\",\n      \"city\": \"<string>\",\n      \"district\": \"<string>\",\n      \"complement\": \"<string>\",\n      \"referencePoint\": \"<string>\"\n    },\n    \"document\": {\n      \"type\": \"<string>\",\n      \"number\": \"<string>\",\n      \"country\": \"BR\"\n    },\n    \"corporateReason\": \"<string>\",\n    \"website\": \"<string>\",\n    \"description\": \"<string>\",\n    \"facebook\": \"<string>\",\n    \"twitter\": \"<string>\",\n    \"openingDate\": \"<string>\",\n    \"annualRevenue\": \"<number>\"\n  },\n  \"bankAccount\": {\n    \"holderName\": \"<string>\",\n    \"holderDocument\": \"<string>\",\n    \"branchNumber\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"type\": \"<string>\",\n    \"holdeType\": \"<string>\",\n    \"bank\": \"<string>\",\n    \"ispb\": \"<string>\",\n    \"branchCheckDigit\": \"<string>\",\n    \"accountCheckDigit\": \"<string>\",\n    \"pixKey\": \"<string>\"\n  },\n  \"transferPolicy\": {\n    \"transferDay\": \"<string>\",\n    \"transferEnabled\": \"<boolean>\",\n    \"transferInterval\": \"<string>\",\n    \"automaticAnticipationEnabled\": \"<boolean>\",\n    \"anticipatableVolumePercentage\": \"<string>\",\n    \"automaticAnticipationType\": \"<string>\",\n    \"automaticAnticipationDays\": \"<string>\",\n    \"automaticAnticipation1025Delay\": \"<string>\"\n  },\n  \"rateAgreements\": [\n    {\n      \"fee\": \"<number>\",\n      \"type\": \"<string>\",\n      \"percent\": \"<number>\",\n      \"merchantDiscountRates\": [\n        {\n          \"paymentArrangement\": {\n            \"product\": \"<string>\",\n            \"brand\": \"<string>\"\n          },\n          \"initialInstallmentNumber\": \"<number>\",\n          \"finalInstallmentNumber\": \"<number>\",\n          \"percent\": \"<number>\"\n        },\n        {\n          \"paymentArrangement\": {\n            \"product\": \"<string>\",\n            \"brand\": \"<string>\"\n          },\n          \"initialInstallmentNumber\": \"<number>\",\n          \"finalInstallmentNumber\": \"<number>\",\n          \"percent\": \"<number>\"\n        }\n      ]\n    },\n    {\n      \"fee\": \"<number>\",\n      \"type\": \"<string>\",\n      \"percent\": \"<number>\",\n      \"merchantDiscountRates\": [\n        {\n          \"paymentArrangement\": {\n            \"product\": \"<string>\",\n            \"brand\": \"<string>\"\n          },\n          \"initialInstallmentNumber\": \"<number>\",\n          \"finalInstallmentNumber\": \"<number>\",\n          \"percent\": \"<number>\"\n        },\n        {\n          \"paymentArrangement\": {\n            \"product\": \"<string>\",\n            \"brand\": \"<string>\"\n          },\n          \"initialInstallmentNumber\": \"<number>\",\n          \"finalInstallmentNumber\": \"<number>\",\n          \"percent\": \"<number>\"\n        }\n      ]\n    }\n  ],\n  \"status\": \"<string>\",\n  \"statusReason\": \"<string>\",\n  \"reasonType\": \"<string>\",\n  \"documentIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"processingFee\": \"<boolean>\",\n  \"liable\": \"<boolean>\",\n  \"fareMdr\": \"<number>\",\n  \"fareFee\": \"<number>\",\n  \"salesPlanId\": \"<string>\",\n  \"minNegativeBalance\": \"<number>\",\n  \"maxRefundDays\": \"<number>\",\n  \"createAsync\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "84daf971-da25-476f-a58b-90928511297f",
+              "name": "Updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador do seller"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"merchantId\": \"b1612460-0fef-447d-9590-97825cf60cf6\",\n  \"owner\": {\n    \"name\": \"Seller test\",\n    \"email\": \"seller@gmail.com\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"birthdate\": \"1995-01-27\",\n    \"document\": {\n      \"type\": \"cpf\",\n      \"number\": \"36243319067\",\n      \"country\": \"BR\"\n    },\n    \"address\": {\n      \"street\": \"Av Geraldo Cardoso\",\n      \"streetNumber\": \"205\",\n      \"complement\": \"Apto 203\",\n      \"zipCode\": \"25650011\",\n      \"country\": \"BR\",\n      \"state\": \"Rio de Janeiro\",\n      \"city\": \"Rio de Janeiro\",\n      \"district\": \"Leblon\",\n      \"referencePoint\": \"Proximo a praia\"\n    },\n    \"businessCategory\": \"OTHER_SERVICES\"\n  },\n  \"business\": {\n    \"name\": \"Seller business test\",\n    \"corporateReason\": \"Seller company social reason\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"email\": \"seller@gmail.com\",\n    \"website\": \"https://sellerbusiness.com.br\",\n    \"description\": \"Seller business\",\n    \"facebook\": \"facebook Seller business\",\n    \"twitter\": \"twitter Seller business\",\n    \"openingDate\": \"1995-01-27\",\n    \"annualRevenue\": 2500000,\n    \"address\": {\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"sala 100\",\n      \"zipCode\": \"61000-320\",\n      \"country\": \"BR\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"type\": \"cnpj\",\n      \"number\": \"94938591000196\",\n      \"country\": \"BR\"\n    }\n  },\n  \"mcc\": 4040,\n  \"bankAccount\": {\n    \"holderName\": \"Seller Name\",\n    \"holderDocument\": \"94938591000196\",\n    \"bank\": \"077\",\n    \"branchNumber\": \"492\",\n    \"branchCheckDigit\": \"1\",\n    \"accountNumber\": \"4929\",\n    \"accountCheckDigit\": \"12\",\n    \"type\": \"conta_corrente\",\n    \"pixKey\": \"1234567890\"\n  },\n  \"transferPolicy\": {\n    \"transferDay\": \"5\",\n    \"transferEnabled\": true,\n    \"transferInterval\": \"weekly\",\n    \"automaticAnticipationEnabled\": false,\n    \"anticipatableVolumePercentage\": \"\",\n    \"automaticAnticipationType\": \"\",\n    \"automaticAnticipationDays\": \"\",\n    \"automaticAnticipation1025Delay\": \"\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"19d05a45-0e92-478e-8366-955231bcf3d6\",\n  \"providers\": {\n    \"providerType\": \"SANDBOX\",\n    \"externalId\": \"1966811\",\n    \"externalStatus\": \"active\",\n    \"externalStatusReason\": \"ok\",\n    \"status\": \"pending\",\n    \"createdAt\": \"2022-12-21T23:10:13.498Z\",\n    \"updatedAt\": \"2022-12-21T20:10:13.951Z\"\n  },\n  \"merchantId\": \"5616b19e-4d99-4bd3-b415-4990e5cab4f4\",\n  \"clientid\": \"e234eeb3-483d-4df2-87eb-1e2be5cdaccd\",\n  \"metadata\": null,\n  \"owner\": {\n    \"id\": \"8231ba21-3758-4bd7-b664-5b5fdeda37a0\",\n    \"updatedAt\": \"2023-07-11T23:02:51.581Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.581Z\",\n    \"name\": \"Seller\",\n    \"email\": \"seller@email.com\",\n    \"phoneNumber\": \"85988350264\",\n    \"birthdate\": \"1995-01-27T02:00:00.000Z\",\n    \"address\": {\n      \"country\": \"BR\",\n      \"id\": \"883631f0-fea0-4682-ae1a-f4ac6349e0d9\",\n      \"updatedAt\": \"2023-07-11T23:02:51.585Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.585Z\",\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"casa 4\",\n      \"zipCode\": \"61000-320\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"country\": \"BR\",\n      \"id\": \"32543bbe-42c1-4000-9b68-d01a2735708e\",\n      \"updatedAt\": \"2023-07-11T23:02:51.588Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.588Z\",\n      \"type\": \"cpf\",\n      \"number\": \"36243319067\"\n    }\n  },\n  \"business\": {\n    \"id\": \"607bb56a-974a-4d1d-9f56-cda865dfafbd\",\n    \"updatedAt\": \"2023-07-11T23:02:51.571Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.571Z\",\n    \"name\": \"Seller business\",\n    \"corporateReason\": \"Seller company social reason\",\n    \"phoneNumber\": \"85988350264\",\n    \"email\": \"seller@email.com\",\n    \"website\": \"www.sellerbusiness.com.br\",\n    \"description\": \"Seller business\",\n    \"facebook\": \"facebook Seller business\",\n    \"twitter\": \"twitter Seller business\",\n    \"openingDate\": \"1995-01-27\",\n    \"address\": {\n      \"country\": \"BR\",\n      \"id\": \"b681dd2e-ebdb-4fad-8c8b-e703a17825ce\",\n      \"updatedAt\": \"2023-07-11T23:02:51.574Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.574Z\",\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"sala 100\",\n      \"zipCode\": \"61000-320\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"country\": \"BR\",\n      \"id\": \"b9380f2c-a657-4f47-a7da-21f3bf08182c\",\n      \"updatedAt\": \"2023-07-11T23:02:51.578Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.578Z\",\n      \"type\": \"cnpj\",\n      \"number\": \"94938591000196\"\n    }\n  },\n  \"bankAccount\": {\n    \"id\": \"f7ac3221-8f69-4276-b88b-34ddbe5ec24a\",\n    \"updatedAt\": \"2023-07-11T23:02:51.563Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.563Z\",\n    \"holderName\": \"Seller name\",\n    \"holderDocument\": \"36243319067\",\n    \"bank\": \"077\",\n    \"ispb\": \"60746948\",\n    \"branchNumber\": \"492\",\n    \"branchCheckDigit\": \"1\",\n    \"accountNumber\": \"4929\",\n    \"accountCheckDigit\": \"22\",\n    \"type\": \"conta_corrente\"\n  },\n  \"transferPolicy\": {\n    \"id\": \"a04bca24-f7d1-4cb5-acce-41f12680e5bf\",\n    \"updatedAt\": \"2023-07-11T23:02:51.567Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.567Z\",\n    \"transferDay\": \"5\",\n    \"transferEnabled\": true,\n    \"transferInterval\": \"weekly\",\n    \"automaticAnticipationEnabled\": false,\n    \"anticipatableVolumePercentage\": \"\",\n    \"automaticAnticipationType\": \"\",\n    \"automaticAnticipationDays\": \"\",\n    \"automaticAnticipation1025Delay\": \"\"\n  },\n  \"mcc\": 4040,\n  \"status\": \"active\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4a51be92-6213-4eb1-a410-8d599174548d",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador do seller"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"merchantId\": \"b1612460-0fef-447d-9590-97825cf60cf6\",\n  \"owner\": {\n    \"name\": \"Seller test\",\n    \"email\": \"seller@gmail.com\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"birthdate\": \"1995-01-27\",\n    \"document\": {\n      \"type\": \"cpf\",\n      \"number\": \"36243319067\",\n      \"country\": \"BR\"\n    },\n    \"address\": {\n      \"street\": \"Av Geraldo Cardoso\",\n      \"streetNumber\": \"205\",\n      \"complement\": \"Apto 203\",\n      \"zipCode\": \"25650011\",\n      \"country\": \"BR\",\n      \"state\": \"Rio de Janeiro\",\n      \"city\": \"Rio de Janeiro\",\n      \"district\": \"Leblon\",\n      \"referencePoint\": \"Proximo a praia\"\n    },\n    \"businessCategory\": \"OTHER_SERVICES\"\n  },\n  \"business\": {\n    \"name\": \"Seller business test\",\n    \"corporateReason\": \"Seller company social reason\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"email\": \"seller@gmail.com\",\n    \"website\": \"https://sellerbusiness.com.br\",\n    \"description\": \"Seller business\",\n    \"facebook\": \"facebook Seller business\",\n    \"twitter\": \"twitter Seller business\",\n    \"openingDate\": \"1995-01-27\",\n    \"annualRevenue\": 2500000,\n    \"address\": {\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"sala 100\",\n      \"zipCode\": \"61000-320\",\n      \"country\": \"BR\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"type\": \"cnpj\",\n      \"number\": \"94938591000196\",\n      \"country\": \"BR\"\n    }\n  },\n  \"mcc\": 4040,\n  \"bankAccount\": {\n    \"holderName\": \"Seller Name\",\n    \"holderDocument\": \"94938591000196\",\n    \"bank\": \"077\",\n    \"branchNumber\": \"492\",\n    \"branchCheckDigit\": \"1\",\n    \"accountNumber\": \"4929\",\n    \"accountCheckDigit\": \"12\",\n    \"type\": \"conta_corrente\",\n    \"pixKey\": \"1234567890\"\n  },\n  \"transferPolicy\": {\n    \"transferDay\": \"5\",\n    \"transferEnabled\": true,\n    \"transferInterval\": \"weekly\",\n    \"automaticAnticipationEnabled\": false,\n    \"anticipatableVolumePercentage\": \"\",\n    \"automaticAnticipationType\": \"\",\n    \"automaticAnticipationDays\": \"\",\n    \"automaticAnticipation1025Delay\": \"\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 400,\n    \"key\": \"bank_identifier_required\",\n    \"details\": [\n      \"bank account must keep at least one of bank (COMPE) or ispb after update\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "acbb5db8-450e-48d3-b290-a490e241f010",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador do seller"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"merchantId\": \"b1612460-0fef-447d-9590-97825cf60cf6\",\n  \"owner\": {\n    \"name\": \"Seller test\",\n    \"email\": \"seller@gmail.com\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"birthdate\": \"1995-01-27\",\n    \"document\": {\n      \"type\": \"cpf\",\n      \"number\": \"36243319067\",\n      \"country\": \"BR\"\n    },\n    \"address\": {\n      \"street\": \"Av Geraldo Cardoso\",\n      \"streetNumber\": \"205\",\n      \"complement\": \"Apto 203\",\n      \"zipCode\": \"25650011\",\n      \"country\": \"BR\",\n      \"state\": \"Rio de Janeiro\",\n      \"city\": \"Rio de Janeiro\",\n      \"district\": \"Leblon\",\n      \"referencePoint\": \"Proximo a praia\"\n    },\n    \"businessCategory\": \"OTHER_SERVICES\"\n  },\n  \"business\": {\n    \"name\": \"Seller business test\",\n    \"corporateReason\": \"Seller company social reason\",\n    \"phoneNumber\": \"21 98889999099\",\n    \"email\": \"seller@gmail.com\",\n    \"website\": \"https://sellerbusiness.com.br\",\n    \"description\": \"Seller business\",\n    \"facebook\": \"facebook Seller business\",\n    \"twitter\": \"twitter Seller business\",\n    \"openingDate\": \"1995-01-27\",\n    \"annualRevenue\": 2500000,\n    \"address\": {\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"sala 100\",\n      \"zipCode\": \"61000-320\",\n      \"country\": \"BR\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"type\": \"cnpj\",\n      \"number\": \"94938591000196\",\n      \"country\": \"BR\"\n    }\n  },\n  \"mcc\": 4040,\n  \"bankAccount\": {\n    \"holderName\": \"Seller Name\",\n    \"holderDocument\": \"94938591000196\",\n    \"bank\": \"077\",\n    \"branchNumber\": \"492\",\n    \"branchCheckDigit\": \"1\",\n    \"accountNumber\": \"4929\",\n    \"accountCheckDigit\": \"12\",\n    \"type\": \"conta_corrente\",\n    \"pixKey\": \"1234567890\"\n  },\n  \"transferPolicy\": {\n    \"transferDay\": \"5\",\n    \"transferEnabled\": true,\n    \"transferInterval\": \"weekly\",\n    \"automaticAnticipationEnabled\": false,\n    \"anticipatableVolumePercentage\": \"\",\n    \"automaticAnticipationType\": \"\",\n    \"automaticAnticipationDays\": \"\",\n    \"automaticAnticipation1025Delay\": \"\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 9303,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d051189c-b64a-4941-b053-609eefed9739",
+          "name": "Deletar recebedor por ID",
+          "request": {
+            "name": "Deletar recebedor por ID",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "sellers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) ID do seller"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"merchantId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "64089f8e-64cc-4ba4-bbbd-0385940da35a",
+              "name": "Recebedor removido com sucesso",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) ID do seller"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"merchantId\": \"4dbe1e43-7605-4e71-8973-76cfe16ce496\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "50ba2975-804b-442e-a6e9-0cf72c31f1df",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) ID do seller"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"merchantId\": \"4dbe1e43-7605-4e71-8973-76cfe16ce496\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 9303,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1f03d39-3f13-4d21-ae1b-5033f6f7dd4d",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) ID do seller"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"merchantId\": \"4dbe1e43-7605-4e71-8973-76cfe16ce496\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 9303,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "04984795-15cf-4cae-affb-d3b076134f24",
+          "name": "Consultar um recebedor pelo ID",
+          "request": {
+            "name": "Consultar um recebedor pelo ID",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "sellers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificador do seller"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a06a1876-beed-4560-b75b-664d8020ef16",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sellers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador do seller"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"19d05a45-0e92-478e-8366-955231bcf3d6\",\n  \"providers\": {\n    \"providerType\": \"SANDBOX\",\n    \"externalId\": \"1966811\",\n    \"externalStatus\": \"active\",\n    \"externalStatusReason\": \"ok\",\n    \"status\": \"pending\",\n    \"createdAt\": \"2022-12-21T23:10:13.498Z\",\n    \"updatedAt\": \"2022-12-21T20:10:13.951Z\"\n  },\n  \"merchantId\": \"5616b19e-4d99-4bd3-b415-4990e5cab4f4\",\n  \"clientid\": \"e234eeb3-483d-4df2-87eb-1e2be5cdaccd\",\n  \"metadata\": null,\n  \"owner\": {\n    \"id\": \"8231ba21-3758-4bd7-b664-5b5fdeda37a0\",\n    \"updatedAt\": \"2023-07-11T23:02:51.581Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.581Z\",\n    \"name\": \"Seller\",\n    \"email\": \"seller@email.com\",\n    \"phoneNumber\": \"85988350264\",\n    \"birthdate\": \"1995-01-27T02:00:00.000Z\",\n    \"address\": {\n      \"country\": \"BR\",\n      \"id\": \"883631f0-fea0-4682-ae1a-f4ac6349e0d9\",\n      \"updatedAt\": \"2023-07-11T23:02:51.585Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.585Z\",\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"casa 4\",\n      \"zipCode\": \"61000-320\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"country\": \"BR\",\n      \"id\": \"32543bbe-42c1-4000-9b68-d01a2735708e\",\n      \"updatedAt\": \"2023-07-11T23:02:51.588Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.588Z\",\n      \"type\": \"cpf\",\n      \"number\": \"36243319067\"\n    }\n  },\n  \"business\": {\n    \"id\": \"607bb56a-974a-4d1d-9f56-cda865dfafbd\",\n    \"updatedAt\": \"2023-07-11T23:02:51.571Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.571Z\",\n    \"name\": \"Seller business\",\n    \"corporateReason\": \"Seller company social reason\",\n    \"phoneNumber\": \"85988350264\",\n    \"email\": \"seller@email.com\",\n    \"website\": \"www.sellerbusiness.com.br\",\n    \"description\": \"Seller business\",\n    \"facebook\": \"facebook Seller business\",\n    \"twitter\": \"twitter Seller business\",\n    \"openingDate\": \"1995-01-27\",\n    \"address\": {\n      \"country\": \"BR\",\n      \"id\": \"b681dd2e-ebdb-4fad-8c8b-e703a17825ce\",\n      \"updatedAt\": \"2023-07-11T23:02:51.574Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.574Z\",\n      \"street\": \"Rua Nova Lua\",\n      \"streetNumber\": \"30\",\n      \"complement\": \"sala 100\",\n      \"zipCode\": \"61000-320\",\n      \"state\": \"CE\",\n      \"city\": \"Maracanaú\",\n      \"district\": \"AB\"\n    },\n    \"document\": {\n      \"country\": \"BR\",\n      \"id\": \"b9380f2c-a657-4f47-a7da-21f3bf08182c\",\n      \"updatedAt\": \"2023-07-11T23:02:51.578Z\",\n      \"createdAt\": \"2023-07-11T23:02:51.578Z\",\n      \"type\": \"cnpj\",\n      \"number\": \"94938591000196\"\n    }\n  },\n  \"bankAccount\": {\n    \"id\": \"f7ac3221-8f69-4276-b88b-34ddbe5ec24a\",\n    \"updatedAt\": \"2023-07-11T23:02:51.563Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.563Z\",\n    \"holderName\": \"Seller name\",\n    \"holderDocument\": \"36243319067\",\n    \"bank\": \"077\",\n    \"ispb\": \"60746948\",\n    \"branchNumber\": \"492\",\n    \"branchCheckDigit\": \"1\",\n    \"accountNumber\": \"4929\",\n    \"accountCheckDigit\": \"22\",\n    \"type\": \"conta_corrente\"\n  },\n  \"transferPolicy\": {\n    \"id\": \"a04bca24-f7d1-4cb5-acce-41f12680e5bf\",\n    \"updatedAt\": \"2023-07-11T23:02:51.567Z\",\n    \"createdAt\": \"2023-07-11T23:02:51.567Z\",\n    \"transferDay\": \"5\",\n    \"transferEnabled\": true,\n    \"transferInterval\": \"weekly\",\n    \"automaticAnticipationEnabled\": false,\n    \"anticipatableVolumePercentage\": \"\",\n    \"automaticAnticipationType\": \"\",\n    \"automaticAnticipationDays\": \"\",\n    \"automaticAnticipation1025Delay\": \"\"\n  },\n  \"mcc\": 4040,\n  \"status\": \"active\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.malga.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "dae5ae22-48ac-44fc-8e3f-238ebd33dc62",
+    "name": "Documentação Malga 3DS2 Malga Sellers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

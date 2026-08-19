@@ -1,0 +1,127 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Vendors API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Vendors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Listagem de vendedores paginada",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/vendors",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limite de itens retornados na consulta"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Páginas da consulta"
+              }
+            ]
+          },
+          "docs": "Listagem de vendedores paginada"
+        },
+        {
+          "info": {
+            "name": "Criação de um novo vendedor",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/vendors",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Criação de um novo vendedor"
+        },
+        {
+          "info": {
+            "name": "Recuperar detalhes de um vendedor",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/vendors/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id do vendedor"
+              }
+            ]
+          },
+          "docs": "Recuperar detalhes de um vendedor"
+        },
+        {
+          "info": {
+            "name": "Atualizar um vendedor",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/vendors/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id do vendedor que deseja alterar"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atualizar um vendedor"
+        },
+        {
+          "info": {
+            "name": "Deletar vededor pelo id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.malga.io/v1/vendors/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id do vendedor"
+              }
+            ]
+          },
+          "docs": "Deletar vededor pelo id"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

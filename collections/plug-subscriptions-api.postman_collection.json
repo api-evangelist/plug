@@ -1,0 +1,1263 @@
+{
+  "item": [
+    {
+      "id": "abf8dcc5-bd95-4f68-8832-5f4cbf082e27",
+      "name": "Subscriptions",
+      "description": {
+        "content": "Através da API de `subscriptions` é possível realizar a criação, edição, listagem e exclusão de assinaturas.\n\n**Dados básicos de um objeto do tipo subscription**\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Subscription\" exampleRef=\"#/components/examples/Subscription\" />\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "30fa74a0-3837-425d-9d63-bab74d50498d",
+          "name": "Criação de uma nova assinatura",
+          "request": {
+            "name": "Criação de uma nova assinatura",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "subscriptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"merchantId\": \"<uuid>\",\n  \"customerId\": \"<uuid>\",\n  \"items\": [\n    {\n      \"amount\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"quantity\": \"<integer>\",\n      \"description\": \"<string>\",\n      \"sku\": \"<string>\",\n      \"risk\": \"<string>\",\n      \"categoryId\": \"<string>\",\n      \"locality\": \"<string>\",\n      \"date\": \"<date>\",\n      \"type\": \"<integer>\",\n      \"genre\": \"<string>\",\n      \"tickets\": {\n        \"quantityTicketSale\": \"<integer>\",\n        \"quantityEventHouse\": \"<integer>\",\n        \"convenienceFeeValue\": \"<float>\",\n        \"quantityFull\": \"<integer>\",\n        \"quantityHalf\": \"<integer>\",\n        \"batch\": \"<integer>\"\n      },\n      \"location\": {\n        \"street\": \"<string>\",\n        \"number\": \"<string>\",\n        \"complement\": \"<string>\",\n        \"zipCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"country\": \"<string>\",\n        \"district\": \"<string>\",\n        \"reference\": \"<string>\",\n        \"quantityHalf\": \"<integer>\",\n        \"batch\": \"<integer>\"\n      }\n    },\n    {\n      \"amount\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"quantity\": \"<integer>\",\n      \"description\": \"<string>\",\n      \"sku\": \"<string>\",\n      \"risk\": \"<string>\",\n      \"categoryId\": \"<string>\",\n      \"locality\": \"<string>\",\n      \"date\": \"<date>\",\n      \"type\": \"<integer>\",\n      \"genre\": \"<string>\",\n      \"tickets\": {\n        \"quantityTicketSale\": \"<integer>\",\n        \"quantityEventHouse\": \"<integer>\",\n        \"convenienceFeeValue\": \"<float>\",\n        \"quantityFull\": \"<integer>\",\n        \"quantityHalf\": \"<integer>\",\n        \"batch\": \"<integer>\"\n      },\n      \"location\": {\n        \"street\": \"<string>\",\n        \"number\": \"<string>\",\n        \"complement\": \"<string>\",\n        \"zipCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"country\": \"<string>\",\n        \"district\": \"<string>\",\n        \"reference\": \"<string>\",\n        \"quantityHalf\": \"<integer>\",\n        \"batch\": \"<integer>\"\n      }\n    }\n  ],\n  \"recurrence\": {\n    \"interval\": \"<string>\",\n    \"cycles\": \"<number>\",\n    \"startAt\": \"<string>\"\n  },\n  \"paymentMethod\": {\n    \"type\": \"<string>\",\n    \"card\": {\n      \"cardId\": \"<uuid>\",\n      \"cvv\": \"<string>\"\n    },\n    \"installments\": \"<integer>\"\n  },\n  \"referenceKey\": \"<string>\",\n  \"trial\": {\n    \"endAt\": \"<date>\"\n  },\n  \"splitRules\": [\n    {\n      \"sellerId\": \"<uuid>\",\n      \"percentage\": \"<integer>\",\n      \"amount\": \"<integer>\",\n      \"processingFee\": \"<boolean>\",\n      \"chargeEntireFee\": \"<boolean>\",\n      \"chargeRemainderFee\": \"<boolean>\",\n      \"liable\": \"<boolean>\",\n      \"transactionOwner\": \"<boolean>\",\n      \"fares\": {\n        \"mdr\": \"<number>\",\n        \"fee\": \"<number>\"\n      }\n    },\n    {\n      \"sellerId\": \"<uuid>\",\n      \"percentage\": \"<integer>\",\n      \"amount\": \"<integer>\",\n      \"processingFee\": \"<boolean>\",\n      \"chargeEntireFee\": \"<boolean>\",\n      \"chargeRemainderFee\": \"<boolean>\",\n      \"liable\": \"<boolean>\",\n      \"transactionOwner\": \"<boolean>\",\n      \"fares\": {\n        \"mdr\": \"<number>\",\n        \"fee\": \"<number>\"\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e11606cb-f16e-409c-97b3-a41bb66939dc",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Assinatura Premium com Eventos\",\n  \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n  \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n  \"items\": [\n    {\n      \"amount\": 29900,\n      \"name\": \"Ingresso VIP Mensal\",\n      \"quantity\": 1,\n      \"description\": \"Acesso VIP premium a eventos mensais\",\n      \"sku\": \"VIP-EVENT-001\",\n      \"risk\": \"Low\",\n      \"categoryId\": \"entertainment\",\n      \"locality\": \"São Paulo\",\n      \"date\": \"2025-12-01\",\n      \"type\": 1,\n      \"genre\": \"Shows e Eventos\",\n      \"tickets\": {\n        \"quantityTicketSale\": 1,\n        \"quantityEventHouse\": 0,\n        \"convenienceFeeValue\": 15.5,\n        \"quantityFull\": 1,\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      },\n      \"location\": {\n        \"street\": \"Av. Paulista\",\n        \"number\": \"1000\",\n        \"complement\": \"Centro de Convenções\",\n        \"zipCode\": \"01310-100\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"country\": \"Brasil\",\n        \"district\": \"Bela Vista\",\n        \"reference\": \"Próximo ao MASP\",\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      }\n    },\n    {\n      \"amount\": 29900,\n      \"name\": \"Ingresso VIP Mensal\",\n      \"quantity\": 1,\n      \"description\": \"Acesso VIP premium a eventos mensais\",\n      \"sku\": \"VIP-EVENT-001\",\n      \"risk\": \"Low\",\n      \"categoryId\": \"entertainment\",\n      \"locality\": \"São Paulo\",\n      \"date\": \"2025-12-01\",\n      \"type\": 1,\n      \"genre\": \"Shows e Eventos\",\n      \"tickets\": {\n        \"quantityTicketSale\": 1,\n        \"quantityEventHouse\": 0,\n        \"convenienceFeeValue\": 15.5,\n        \"quantityFull\": 1,\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      },\n      \"location\": {\n        \"street\": \"Av. Paulista\",\n        \"number\": \"1000\",\n        \"complement\": \"Centro de Convenções\",\n        \"zipCode\": \"01310-100\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"country\": \"Brasil\",\n        \"district\": \"Bela Vista\",\n        \"reference\": \"Próximo ao MASP\",\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      }\n    }\n  ],\n  \"recurrence\": {\n    \"interval\": \"monthly\",\n    \"cycles\": \"<number>\",\n    \"startAt\": \"2025-07-30\"\n  },\n  \"paymentMethod\": {\n    \"type\": \"credit\",\n    \"card\": {\n      \"cardId\": \"ebef4e7e-b5d3-49d8-ac8f-b973faaa3ac5\",\n      \"cvv\": \"123\"\n    },\n    \"installments\": 1\n  },\n  \"referenceKey\": \"SUB-PREMIUM-001\",\n  \"trial\": {\n    \"endAt\": \"2025-08-15\"\n  },\n  \"splitRules\": [\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 70,\n      \"amount\": 5000,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 0.3\n      }\n    },\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 70,\n      \"amount\": 5000,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 0.3\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"019860b2-feb8-7edf-b5ba-0c48a7a8bd3f\",\n  \"name\": \"Assinatura Premium com Eventos\",\n  \"clientId\": \"e234eeb3-483d-4df2-87eb-1e2be5cdaccd\",\n  \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n  \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n  \"referenceKey\": \"SUB-PREMIUM-001\",\n  \"currency\": \"BRL\",\n  \"items\": [\n    {\n      \"amount\": 29900,\n      \"name\": \"Ingresso VIP Mensal\",\n      \"quantity\": 1,\n      \"description\": \"Acesso VIP premium a eventos mensais\",\n      \"sku\": \"VIP-EVENT-001\",\n      \"risk\": \"Low\",\n      \"categoryId\": \"entertainment\",\n      \"locality\": \"São Paulo\",\n      \"date\": \"2025-12-01\",\n      \"type\": 1,\n      \"genre\": \"Shows e Eventos\",\n      \"tickets\": {\n        \"quantityTicketSale\": 1,\n        \"quantityEventHouse\": 0,\n        \"convenienceFeeValue\": 15.5,\n        \"quantityFull\": 1,\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      },\n      \"location\": {\n        \"street\": \"Av. Paulista\",\n        \"number\": \"1000\",\n        \"complement\": \"Centro de Convenções\",\n        \"zipCode\": \"01310-100\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"country\": \"Brasil\",\n        \"district\": \"Bela Vista\",\n        \"reference\": \"Próximo ao MASP\",\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      }\n    },\n    {\n      \"amount\": 29900,\n      \"name\": \"Ingresso VIP Mensal\",\n      \"quantity\": 1,\n      \"description\": \"Acesso VIP premium a eventos mensais\",\n      \"sku\": \"VIP-EVENT-001\",\n      \"risk\": \"Low\",\n      \"categoryId\": \"entertainment\",\n      \"locality\": \"São Paulo\",\n      \"date\": \"2025-12-01\",\n      \"type\": 1,\n      \"genre\": \"Shows e Eventos\",\n      \"tickets\": {\n        \"quantityTicketSale\": 1,\n        \"quantityEventHouse\": 0,\n        \"convenienceFeeValue\": 15.5,\n        \"quantityFull\": 1,\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      },\n      \"location\": {\n        \"street\": \"Av. Paulista\",\n        \"number\": \"1000\",\n        \"complement\": \"Centro de Convenções\",\n        \"zipCode\": \"01310-100\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"country\": \"Brasil\",\n        \"district\": \"Bela Vista\",\n        \"reference\": \"Próximo ao MASP\",\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      }\n    }\n  ],\n  \"recurrence\": {\n    \"interval\": \"monthly\",\n    \"cycles\": 12,\n    \"startAt\": \"2025-08-10\",\n    \"endAt\": \"2026-08-10\",\n    \"nextDueDate\": \"2025-07-30\"\n  },\n  \"paymentMethod\": {\n    \"type\": \"credit\",\n    \"card\": {\n      \"cardId\": \"ebef4e7e-b5d3-49d8-ac8f-b973faaa3ac5\"\n    },\n    \"installments\": 1\n  },\n  \"trial\": {\n    \"endAt\": \"2025-08-15\"\n  },\n  \"splitRules\": [\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 70,\n      \"amount\": 5000,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 0.3\n      }\n    },\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 70,\n      \"amount\": 5000,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 0.3\n      }\n    }\n  ],\n  \"status\": \"created\",\n  \"amount\": 29900,\n  \"liveMode\": true,\n  \"lastCycle\": {\n    \"id\": \"01985cf8-9877-7c09-bbf6-2cceb3384a61\",\n    \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n    \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n    \"cycle\": 1,\n    \"status\": \"authorized\",\n    \"createdAt\": \"2025-07-30T20:14:12.599715Z\",\n    \"paymentHistory\": [\n      {\n        \"id\": \"84ec50c5-1fb4-4d6b-bbff-fedc47ba9fa3\",\n        \"createdAt\": \"2025-07-30T20:14:12.608115Z\",\n        \"chargeId\": \"6f2a0713-c4cd-4e2d-8603-69855902676d\",\n        \"status\": \"authorized\"\n      },\n      {\n        \"id\": \"84ec50c5-1fb4-4d6b-bbff-fedc47ba9fa3\",\n        \"createdAt\": \"2025-07-30T20:14:12.608115Z\",\n        \"chargeId\": \"6f2a0713-c4cd-4e2d-8603-69855902676d\",\n        \"status\": \"authorized\"\n      }\n    ]\n  },\n  \"createdAt\": \"2025-07-31T13:36:40.118822Z\",\n  \"updatedAt\": \"2025-07-31T13:36:40.118822Z\",\n  \"cancelAtPeriodEnd\": true,\n  \"scheduledCancellationAt\": \"2025-12-31\",\n  \"scheduledCancellationReason\": \"Cliente solicitou cancelamento\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "46d949aa-1e7c-4586-8fb2-1a00afe57e3e",
+          "name": "Listagem de assinaturas",
+          "request": {
+            "name": "Listagem de assinaturas",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "subscriptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<number>",
+                  "description": "Número da página ativa"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<number>",
+                  "description": "Quantidade de registros por página 1-100"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "519c3545-a5fe-4990-b3fb-5f84db44ba17",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<number>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"01985cf8-96df-7d37-b17c-a9985a1e78bb\",\n      \"name\": \"Test Without Request\",\n      \"clientId\": \"e234eeb3-483d-4df2-87eb-1e2be5cdaccd\",\n      \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n      \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n      \"referenceKey\": \"SUB-PREMIUM-001\",\n      \"currency\": \"BRL\",\n      \"trial\": {\n        \"endAt\": \"2025-08-15\"\n      },\n      \"status\": \"paused\",\n      \"amount\": 29900,\n      \"liveMode\": true,\n      \"interval\": \"monthly\",\n      \"createdAt\": \"2025-07-30T20:14:12.191866Z\",\n      \"updatedAt\": \"2025-07-31T16:57:23.751952Z\"\n    },\n    {\n      \"id\": \"01985cf8-96df-7d37-b17c-a9985a1e78bb\",\n      \"name\": \"Test Without Request\",\n      \"clientId\": \"e234eeb3-483d-4df2-87eb-1e2be5cdaccd\",\n      \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n      \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n      \"referenceKey\": \"SUB-PREMIUM-001\",\n      \"currency\": \"BRL\",\n      \"trial\": {\n        \"endAt\": \"2025-08-15\"\n      },\n      \"status\": \"paused\",\n      \"amount\": 29900,\n      \"liveMode\": true,\n      \"interval\": \"monthly\",\n      \"createdAt\": \"2025-07-30T20:14:12.191866Z\",\n      \"updatedAt\": \"2025-07-31T16:57:23.751952Z\"\n    }\n  ],\n  \"meta\": {\n    \"totalItems\": 2194,\n    \"totalPages\": 9179,\n    \"currentPage\": 139,\n    \"itemsPerPage\": 2880,\n    \"itemCount\": 6729\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "999ef5e2-ed9c-4ad2-8611-74d1234146da",
+          "name": "Recuperar detalhes de assinatura",
+          "request": {
+            "name": "Recuperar detalhes de assinatura",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "subscriptions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da assinatura que deseja recuperar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9790d4c6-7406-49e3-8b73-2906683a78b9",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da assinatura que deseja recuperar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"019860b2-feb8-7edf-b5ba-0c48a7a8bd3f\",\n  \"name\": \"Assinatura Premium com Eventos\",\n  \"clientId\": \"e234eeb3-483d-4df2-87eb-1e2be5cdaccd\",\n  \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n  \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n  \"referenceKey\": \"SUB-PREMIUM-001\",\n  \"currency\": \"BRL\",\n  \"items\": [\n    {\n      \"amount\": 29900,\n      \"name\": \"Ingresso VIP Mensal\",\n      \"quantity\": 1,\n      \"description\": \"Acesso VIP premium a eventos mensais\",\n      \"sku\": \"VIP-EVENT-001\",\n      \"risk\": \"Low\",\n      \"categoryId\": \"entertainment\",\n      \"locality\": \"São Paulo\",\n      \"date\": \"2025-12-01\",\n      \"type\": 1,\n      \"genre\": \"Shows e Eventos\",\n      \"tickets\": {\n        \"quantityTicketSale\": 1,\n        \"quantityEventHouse\": 0,\n        \"convenienceFeeValue\": 15.5,\n        \"quantityFull\": 1,\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      },\n      \"location\": {\n        \"street\": \"Av. Paulista\",\n        \"number\": \"1000\",\n        \"complement\": \"Centro de Convenções\",\n        \"zipCode\": \"01310-100\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"country\": \"Brasil\",\n        \"district\": \"Bela Vista\",\n        \"reference\": \"Próximo ao MASP\",\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      }\n    },\n    {\n      \"amount\": 29900,\n      \"name\": \"Ingresso VIP Mensal\",\n      \"quantity\": 1,\n      \"description\": \"Acesso VIP premium a eventos mensais\",\n      \"sku\": \"VIP-EVENT-001\",\n      \"risk\": \"Low\",\n      \"categoryId\": \"entertainment\",\n      \"locality\": \"São Paulo\",\n      \"date\": \"2025-12-01\",\n      \"type\": 1,\n      \"genre\": \"Shows e Eventos\",\n      \"tickets\": {\n        \"quantityTicketSale\": 1,\n        \"quantityEventHouse\": 0,\n        \"convenienceFeeValue\": 15.5,\n        \"quantityFull\": 1,\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      },\n      \"location\": {\n        \"street\": \"Av. Paulista\",\n        \"number\": \"1000\",\n        \"complement\": \"Centro de Convenções\",\n        \"zipCode\": \"01310-100\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"country\": \"Brasil\",\n        \"district\": \"Bela Vista\",\n        \"reference\": \"Próximo ao MASP\",\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      }\n    }\n  ],\n  \"recurrence\": {\n    \"interval\": \"monthly\",\n    \"cycles\": 12,\n    \"startAt\": \"2025-08-10\",\n    \"endAt\": \"2026-08-10\",\n    \"nextDueDate\": \"2025-07-30\"\n  },\n  \"paymentMethod\": {\n    \"type\": \"credit\",\n    \"card\": {\n      \"cardId\": \"ebef4e7e-b5d3-49d8-ac8f-b973faaa3ac5\"\n    },\n    \"installments\": 1\n  },\n  \"trial\": {\n    \"endAt\": \"2025-08-15\"\n  },\n  \"splitRules\": [\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 70,\n      \"amount\": 5000,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 0.3\n      }\n    },\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 70,\n      \"amount\": 5000,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 0.3\n      }\n    }\n  ],\n  \"status\": \"created\",\n  \"amount\": 29900,\n  \"liveMode\": true,\n  \"lastCycle\": {\n    \"id\": \"01985cf8-9877-7c09-bbf6-2cceb3384a61\",\n    \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n    \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n    \"cycle\": 1,\n    \"status\": \"authorized\",\n    \"createdAt\": \"2025-07-30T20:14:12.599715Z\",\n    \"paymentHistory\": [\n      {\n        \"id\": \"84ec50c5-1fb4-4d6b-bbff-fedc47ba9fa3\",\n        \"createdAt\": \"2025-07-30T20:14:12.608115Z\",\n        \"chargeId\": \"6f2a0713-c4cd-4e2d-8603-69855902676d\",\n        \"status\": \"authorized\"\n      },\n      {\n        \"id\": \"84ec50c5-1fb4-4d6b-bbff-fedc47ba9fa3\",\n        \"createdAt\": \"2025-07-30T20:14:12.608115Z\",\n        \"chargeId\": \"6f2a0713-c4cd-4e2d-8603-69855902676d\",\n        \"status\": \"authorized\"\n      }\n    ]\n  },\n  \"createdAt\": \"2025-07-31T13:36:40.118822Z\",\n  \"updatedAt\": \"2025-07-31T13:36:40.118822Z\",\n  \"cancelAtPeriodEnd\": true,\n  \"scheduledCancellationAt\": \"2025-12-31\",\n  \"scheduledCancellationReason\": \"Cliente solicitou cancelamento\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "95df9c26-474b-4d2f-9783-b7930e6f8662",
+          "name": "Atualizar assinatura",
+          "request": {
+            "name": "Atualizar assinatura",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "subscriptions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da assinatura que deseja atualizar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"merchantId\": \"<uuid>\",\n  \"referenceKey\": \"<string>\",\n  \"items\": [\n    {\n      \"name\": \"<string>\",\n      \"amount\": \"<integer>\",\n      \"quantity\": \"<integer>\",\n      \"description\": \"<string>\",\n      \"sku\": \"<string>\",\n      \"risk\": \"<string>\",\n      \"categoryId\": \"<string>\",\n      \"locality\": \"<string>\",\n      \"date\": \"<date>\",\n      \"type\": \"<integer>\",\n      \"genre\": \"<string>\",\n      \"tickets\": {\n        \"quantityTicketSale\": \"<integer>\",\n        \"quantityEventHouse\": \"<integer>\",\n        \"convenienceFeeValue\": \"<float>\",\n        \"quantityFull\": \"<integer>\",\n        \"quantityHalf\": \"<integer>\",\n        \"batch\": \"<integer>\"\n      },\n      \"location\": {\n        \"street\": \"<string>\",\n        \"number\": \"<string>\",\n        \"complement\": \"<string>\",\n        \"zipCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"country\": \"<string>\",\n        \"district\": \"<string>\",\n        \"reference\": \"<string>\"\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"amount\": \"<integer>\",\n      \"quantity\": \"<integer>\",\n      \"description\": \"<string>\",\n      \"sku\": \"<string>\",\n      \"risk\": \"<string>\",\n      \"categoryId\": \"<string>\",\n      \"locality\": \"<string>\",\n      \"date\": \"<date>\",\n      \"type\": \"<integer>\",\n      \"genre\": \"<string>\",\n      \"tickets\": {\n        \"quantityTicketSale\": \"<integer>\",\n        \"quantityEventHouse\": \"<integer>\",\n        \"convenienceFeeValue\": \"<float>\",\n        \"quantityFull\": \"<integer>\",\n        \"quantityHalf\": \"<integer>\",\n        \"batch\": \"<integer>\"\n      },\n      \"location\": {\n        \"street\": \"<string>\",\n        \"number\": \"<string>\",\n        \"complement\": \"<string>\",\n        \"zipCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"country\": \"<string>\",\n        \"district\": \"<string>\",\n        \"reference\": \"<string>\"\n      }\n    }\n  ],\n  \"recurrence\": {\n    \"interval\": \"<string>\",\n    \"cycles\": \"<integer>\",\n    \"startAt\": \"<string>\"\n  },\n  \"splitRules\": [\n    {\n      \"sellerId\": \"<uuid>\",\n      \"percentage\": \"<integer>\",\n      \"amount\": \"<integer>\",\n      \"processingFee\": \"<boolean>\",\n      \"chargeEntireFee\": \"<boolean>\",\n      \"chargeRemainderFee\": \"<boolean>\",\n      \"liable\": \"<boolean>\",\n      \"transactionOwner\": \"<boolean>\",\n      \"fares\": {\n        \"mdr\": \"<number>\",\n        \"fee\": \"<number>\"\n      }\n    },\n    {\n      \"sellerId\": \"<uuid>\",\n      \"percentage\": \"<integer>\",\n      \"amount\": \"<integer>\",\n      \"processingFee\": \"<boolean>\",\n      \"chargeEntireFee\": \"<boolean>\",\n      \"chargeRemainderFee\": \"<boolean>\",\n      \"liable\": \"<boolean>\",\n      \"transactionOwner\": \"<boolean>\",\n      \"fares\": {\n        \"mdr\": \"<number>\",\n        \"fee\": \"<number>\"\n      }\n    }\n  ],\n  \"paymentMethod\": {\n    \"type\": \"<string>\",\n    \"card\": {\n      \"cardId\": \"<uuid>\"\n    },\n    \"installments\": \"<integer>\"\n  },\n  \"cancelAtPeriodEnd\": \"<boolean>\",\n  \"scheduledCancellationAt\": \"<date>\",\n  \"scheduledCancellationReason\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "986857fb-8d28-4289-8be4-1ea12e55fa24",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da assinatura que deseja atualizar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"merchantId\": \"<uuid>\",\n  \"referenceKey\": \"<string>\",\n  \"items\": [\n    {\n      \"name\": \"<string>\",\n      \"amount\": \"<integer>\",\n      \"quantity\": \"<integer>\",\n      \"description\": \"<string>\",\n      \"sku\": \"<string>\",\n      \"risk\": \"<string>\",\n      \"categoryId\": \"<string>\",\n      \"locality\": \"<string>\",\n      \"date\": \"<date>\",\n      \"type\": \"<integer>\",\n      \"genre\": \"<string>\",\n      \"tickets\": {\n        \"quantityTicketSale\": \"<integer>\",\n        \"quantityEventHouse\": \"<integer>\",\n        \"convenienceFeeValue\": \"<float>\",\n        \"quantityFull\": \"<integer>\",\n        \"quantityHalf\": \"<integer>\",\n        \"batch\": \"<integer>\"\n      },\n      \"location\": {\n        \"street\": \"<string>\",\n        \"number\": \"<string>\",\n        \"complement\": \"<string>\",\n        \"zipCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"country\": \"<string>\",\n        \"district\": \"<string>\",\n        \"reference\": \"<string>\"\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"amount\": \"<integer>\",\n      \"quantity\": \"<integer>\",\n      \"description\": \"<string>\",\n      \"sku\": \"<string>\",\n      \"risk\": \"<string>\",\n      \"categoryId\": \"<string>\",\n      \"locality\": \"<string>\",\n      \"date\": \"<date>\",\n      \"type\": \"<integer>\",\n      \"genre\": \"<string>\",\n      \"tickets\": {\n        \"quantityTicketSale\": \"<integer>\",\n        \"quantityEventHouse\": \"<integer>\",\n        \"convenienceFeeValue\": \"<float>\",\n        \"quantityFull\": \"<integer>\",\n        \"quantityHalf\": \"<integer>\",\n        \"batch\": \"<integer>\"\n      },\n      \"location\": {\n        \"street\": \"<string>\",\n        \"number\": \"<string>\",\n        \"complement\": \"<string>\",\n        \"zipCode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"country\": \"<string>\",\n        \"district\": \"<string>\",\n        \"reference\": \"<string>\"\n      }\n    }\n  ],\n  \"recurrence\": {\n    \"interval\": \"<string>\",\n    \"cycles\": \"<integer>\",\n    \"startAt\": \"<string>\"\n  },\n  \"splitRules\": [\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 70,\n      \"amount\": 5000,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 0.3\n      }\n    },\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 70,\n      \"amount\": 5000,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 0.3\n      }\n    }\n  ],\n  \"paymentMethod\": {\n    \"type\": \"<string>\",\n    \"card\": {\n      \"cardId\": \"<uuid>\"\n    },\n    \"installments\": \"<integer>\"\n  },\n  \"cancelAtPeriodEnd\": true,\n  \"scheduledCancellationAt\": \"2025-12-31\",\n  \"scheduledCancellationReason\": \"Cliente solicitou cancelamento\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"019860b2-feb8-7edf-b5ba-0c48a7a8bd3f\",\n  \"name\": \"Assinatura Premium com Eventos\",\n  \"clientId\": \"e234eeb3-483d-4df2-87eb-1e2be5cdaccd\",\n  \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n  \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n  \"referenceKey\": \"SUB-PREMIUM-001\",\n  \"currency\": \"BRL\",\n  \"items\": [\n    {\n      \"amount\": 29900,\n      \"name\": \"Ingresso VIP Mensal\",\n      \"quantity\": 1,\n      \"description\": \"Acesso VIP premium a eventos mensais\",\n      \"sku\": \"VIP-EVENT-001\",\n      \"risk\": \"Low\",\n      \"categoryId\": \"entertainment\",\n      \"locality\": \"São Paulo\",\n      \"date\": \"2025-12-01\",\n      \"type\": 1,\n      \"genre\": \"Shows e Eventos\",\n      \"tickets\": {\n        \"quantityTicketSale\": 1,\n        \"quantityEventHouse\": 0,\n        \"convenienceFeeValue\": 15.5,\n        \"quantityFull\": 1,\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      },\n      \"location\": {\n        \"street\": \"Av. Paulista\",\n        \"number\": \"1000\",\n        \"complement\": \"Centro de Convenções\",\n        \"zipCode\": \"01310-100\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"country\": \"Brasil\",\n        \"district\": \"Bela Vista\",\n        \"reference\": \"Próximo ao MASP\",\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      }\n    },\n    {\n      \"amount\": 29900,\n      \"name\": \"Ingresso VIP Mensal\",\n      \"quantity\": 1,\n      \"description\": \"Acesso VIP premium a eventos mensais\",\n      \"sku\": \"VIP-EVENT-001\",\n      \"risk\": \"Low\",\n      \"categoryId\": \"entertainment\",\n      \"locality\": \"São Paulo\",\n      \"date\": \"2025-12-01\",\n      \"type\": 1,\n      \"genre\": \"Shows e Eventos\",\n      \"tickets\": {\n        \"quantityTicketSale\": 1,\n        \"quantityEventHouse\": 0,\n        \"convenienceFeeValue\": 15.5,\n        \"quantityFull\": 1,\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      },\n      \"location\": {\n        \"street\": \"Av. Paulista\",\n        \"number\": \"1000\",\n        \"complement\": \"Centro de Convenções\",\n        \"zipCode\": \"01310-100\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"country\": \"Brasil\",\n        \"district\": \"Bela Vista\",\n        \"reference\": \"Próximo ao MASP\",\n        \"quantityHalf\": 0,\n        \"batch\": 1\n      }\n    }\n  ],\n  \"recurrence\": {\n    \"interval\": \"monthly\",\n    \"cycles\": 12,\n    \"startAt\": \"2025-08-10\",\n    \"endAt\": \"2026-08-10\",\n    \"nextDueDate\": \"2025-07-30\"\n  },\n  \"paymentMethod\": {\n    \"type\": \"credit\",\n    \"card\": {\n      \"cardId\": \"ebef4e7e-b5d3-49d8-ac8f-b973faaa3ac5\"\n    },\n    \"installments\": 1\n  },\n  \"trial\": {\n    \"endAt\": \"2025-08-15\"\n  },\n  \"splitRules\": [\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 70,\n      \"amount\": 5000,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 0.3\n      }\n    },\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 70,\n      \"amount\": 5000,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 0.3\n      }\n    }\n  ],\n  \"status\": \"created\",\n  \"amount\": 29900,\n  \"liveMode\": true,\n  \"lastCycle\": {\n    \"id\": \"01985cf8-9877-7c09-bbf6-2cceb3384a61\",\n    \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n    \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n    \"cycle\": 1,\n    \"status\": \"authorized\",\n    \"createdAt\": \"2025-07-30T20:14:12.599715Z\",\n    \"paymentHistory\": [\n      {\n        \"id\": \"84ec50c5-1fb4-4d6b-bbff-fedc47ba9fa3\",\n        \"createdAt\": \"2025-07-30T20:14:12.608115Z\",\n        \"chargeId\": \"6f2a0713-c4cd-4e2d-8603-69855902676d\",\n        \"status\": \"authorized\"\n      },\n      {\n        \"id\": \"84ec50c5-1fb4-4d6b-bbff-fedc47ba9fa3\",\n        \"createdAt\": \"2025-07-30T20:14:12.608115Z\",\n        \"chargeId\": \"6f2a0713-c4cd-4e2d-8603-69855902676d\",\n        \"status\": \"authorized\"\n      }\n    ]\n  },\n  \"createdAt\": \"2025-07-31T13:36:40.118822Z\",\n  \"updatedAt\": \"2025-07-31T13:36:40.118822Z\",\n  \"cancelAtPeriodEnd\": true,\n  \"scheduledCancellationAt\": \"2025-12-31\",\n  \"scheduledCancellationReason\": \"Cliente solicitou cancelamento\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b39ddbb8-0897-4458-8476-5d9f1178304f",
+          "name": "Cancelar assinatura",
+          "request": {
+            "name": "Cancelar assinatura",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "subscriptions",
+                ":id",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da assinatura que deseja cancelar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "21a532f5-b521-4938-8d91-f6868e87b019",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da assinatura que deseja cancelar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"019860b2-feb8-7edf-b5ba-0c48a7a8bd3f\",\n  \"status\": \"canceled\",\n  \"message\": \"Assinatura cancelada com sucesso\",\n  \"updatedAt\": \"2025-07-31T14:00:00Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a75721b1-2ed4-4a51-a2c7-b620bef9578d",
+          "name": "Pausar assinatura",
+          "request": {
+            "name": "Pausar assinatura",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "subscriptions",
+                ":id",
+                "pause"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da assinatura que deseja pausar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cd5db4e3-0287-42bb-84da-658862b171cf",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions",
+                    ":id",
+                    "pause"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da assinatura que deseja pausar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"c7e9f0a3-b0b2-4c56-b918-79e31ed5a4f1\",\n  \"status\": \"paused\",\n  \"message\": \"Assinatura pausada com sucesso\",\n  \"updatedAt\": \"2025-07-31T15:00:00Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "952dd206-db3e-4f19-8bbe-d5d5c51fa168",
+          "name": "Reativar assinatura",
+          "request": {
+            "name": "Reativar assinatura",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "subscriptions",
+                ":id",
+                "resume"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da assinatura que deseja reativar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dad42d25-12b7-48dd-a19e-4dfd88ceb9b8",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions",
+                    ":id",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da assinatura que deseja reativar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"c7e9f0a3-b0b2-4c56-b918-79e31ed5a4f1\",\n  \"status\": \"active\",\n  \"message\": \"Assinatura retomada com sucesso\",\n  \"updatedAt\": \"2025-07-31T15:00:00Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d62233b4-bf93-4176-9301-d334abfc5be3",
+          "name": "Listar cycles de uma assinatura",
+          "request": {
+            "name": "Listar cycles de uma assinatura",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "subscriptions",
+                ":id",
+                "cycles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Número máximo de items por página"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Número da página"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da assinatura"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0211b623-1272-4d95-b310-5d1714c2203d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions",
+                    ":id",
+                    "cycles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da assinatura"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"01985cf8-9877-7c09-bbf6-2cceb3384a61\",\n      \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n      \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n      \"cycle\": 1,\n      \"status\": \"authorized\",\n      \"createdAt\": \"2025-07-30T20:14:12.599715Z\"\n    },\n    {\n      \"id\": \"01985cf8-9877-7c09-bbf6-2cceb3384a61\",\n      \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n      \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n      \"cycle\": 1,\n      \"status\": \"authorized\",\n      \"createdAt\": \"2025-07-30T20:14:12.599715Z\"\n    }\n  ],\n  \"meta\": {\n    \"totalItems\": 1,\n    \"itemCount\": 1,\n    \"itemsPerPage\": 10,\n    \"totalPages\": 1,\n    \"currentPage\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dadeb724-eef6-433c-8f77-0d6a92b5f009",
+          "name": "Recuperar detalhes de um cycle específico",
+          "request": {
+            "name": "Recuperar detalhes de um cycle específico",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "subscriptions",
+                ":id",
+                "cycles",
+                ":cycleId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da assinatura"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "cycleId",
+                  "description": "(Required) Id do cycle"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "db8752ff-af57-4ab8-a690-47781fc75721",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions",
+                    ":id",
+                    "cycles",
+                    ":cycleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da assinatura"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "cycleId",
+                      "description": "(Required) Id do cycle"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"01985cf8-9877-7c09-bbf6-2cceb3384a61\",\n  \"customerId\": \"2a8b64ce-904c-4256-b79a-49525808609c\",\n  \"merchantId\": \"225d39bc-1fbb-480a-90bd-f0caad05d2d0\",\n  \"cycle\": 1,\n  \"status\": \"authorized\",\n  \"createdAt\": \"2025-07-30T20:14:12.599715Z\",\n  \"paymentHistory\": [\n    {\n      \"id\": \"84ec50c5-1fb4-4d6b-bbff-fedc47ba9fa3\",\n      \"createdAt\": \"2025-07-30T20:14:12.608115Z\",\n      \"chargeId\": \"6f2a0713-c4cd-4e2d-8603-69855902676d\",\n      \"status\": \"authorized\"\n    },\n    {\n      \"id\": \"84ec50c5-1fb4-4d6b-bbff-fedc47ba9fa3\",\n      \"createdAt\": \"2025-07-30T20:14:12.608115Z\",\n      \"chargeId\": \"6f2a0713-c4cd-4e2d-8603-69855902676d\",\n      \"status\": \"authorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3f42bf8c-29e3-47c9-bfaa-08ff461102b7",
+          "name": "Obter configurações do cliente",
+          "request": {
+            "name": "Obter configurações do cliente",
+            "description": {
+              "content": "Recupera as configurações atuais do cliente para assinaturas (retry policy, statement descriptor, etc.)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "subscriptions",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "427e580a-cc78-43f6-a943-cad4ffb7a10c",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clientId\": \"e234eeb3-483d-4df2-87eb-1e2be5cdaccd\",\n  \"retryPolicy\": [\n    {\n      \"daysAfterLastAttempt\": 1\n    },\n    {\n      \"daysAfterLastAttempt\": 4\n    },\n    {\n      \"daysAfterLastAttempt\": 9\n    },\n    {\n      \"daysAfterLastAttempt\": 16\n    }\n  ],\n  \"cancelAfterAllRetries\": false,\n  \"createdAt\": \"2025-01-31T10:00:00Z\",\n  \"updatedAt\": \"2025-01-31T15:30:00Z\",\n  \"statementDescriptor\": \"MINHA EMPRESA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da73c2cb-8372-4a3a-b201-3853b515f5d1",
+              "name": "Configurações não encontradas",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 5948,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0f54dc49-a128-4ac6-b34b-63b4065bb919",
+          "name": "Atualizar configurações do cliente",
+          "request": {
+            "name": "Atualizar configurações do cliente",
+            "description": {
+              "content": "Atualiza as configurações do cliente para assinaturas (retry policy, statement descriptor, etc.)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "subscriptions",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"retryPolicy\": [\n    {\n      \"daysAfterLastAttempt\": \"<integer>\"\n    }\n  ],\n  \"statementDescriptor\": \"<string>\",\n  \"cancelAfterAllRetries\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3c62a6bb-98fb-4e12-aa10-132c174b7bdb",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"retryPolicy\": [\n    {\n      \"daysAfterLastAttempt\": 1\n    },\n    {\n      \"daysAfterLastAttempt\": 4\n    },\n    {\n      \"daysAfterLastAttempt\": 9\n    },\n    {\n      \"daysAfterLastAttempt\": 16\n    }\n  ],\n  \"statementDescriptor\": \"MINHA EMPRESA\",\n  \"cancelAfterAllRetries\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clientId\": \"e234eeb3-483d-4df2-87eb-1e2be5cdaccd\",\n  \"retryPolicy\": [\n    {\n      \"daysAfterLastAttempt\": 1\n    },\n    {\n      \"daysAfterLastAttempt\": 4\n    },\n    {\n      \"daysAfterLastAttempt\": 9\n    },\n    {\n      \"daysAfterLastAttempt\": 16\n    }\n  ],\n  \"cancelAfterAllRetries\": false,\n  \"createdAt\": \"2025-01-31T10:00:00Z\",\n  \"updatedAt\": \"2025-01-31T15:30:00Z\",\n  \"statementDescriptor\": \"MINHA EMPRESA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "87347aee-3797-44a6-9e67-aaef84b3178c",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subscriptions",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"retryPolicy\": [\n    {\n      \"daysAfterLastAttempt\": 1\n    },\n    {\n      \"daysAfterLastAttempt\": 4\n    },\n    {\n      \"daysAfterLastAttempt\": 9\n    },\n    {\n      \"daysAfterLastAttempt\": 16\n    }\n  ],\n  \"statementDescriptor\": \"MINHA EMPRESA\",\n  \"cancelAfterAllRetries\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 5948,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.malga.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1999ec81-f0ad-4056-bf2f-3a60b4418664",
+    "name": "Documentação Malga 3DS2 Malga Subscriptions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "item": [
+    {
+      "id": "4266d5c1-88c9-4a85-a4fd-5329d61e76cf",
+      "name": "Providers",
+      "description": {
+        "content": "\nAtravés das APIs de Providers você pode realizar a edição e atualização dos provedores vinculados a um merchant já cadastrado na Malga.\n\nEssas operações permitem que você mantenha seus dados sempre atualizados, garantindo a continuidade e a segurança das integrações com os provedores de pagamento.\n\n**Atenção:**\nAlterações nas credenciais ou configurações do provedor podem impactar o processamento das transações. Sempre revise e valide as informações antes de salvar.\n\n### Consulte a [tabela de provedores aceitos](#section/Provedores-e-meios-de-pagamentos-suportados) para cadastro de credenciais\n\n### Consulte a [tabela de código MCC](api-reference/type-tables/mcc-code.mdx) para cadastro de Merchants\n\n**Dados básicos do objeto do tipo providers**\n\n<SchemaDefinition schemaRef=\"#/components/schemas/UpdateMerchantProviderDto\" exampleRef=\"#/components/examples/UpdateMerchantProviderDto\" />\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "335fadfc-19a8-4f8b-82b2-02f2ff1aa310",
+          "name": "Atualizar configurações de provedores do merchant",
+          "request": {
+            "name": "Atualizar configurações de provedores do merchant",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "providers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id do provedor"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"credentials\": {\n    \"type\": \"<string>\",\n    \"apiKey\": \"<string>\"\n  },\n  \"acquirer\": {\n    \"merchantId\": \"<string>\",\n    \"bin\": [\n      {\n        \"brand\": \"<string>\",\n        \"value\": \"<string>\"\n      },\n      {\n        \"brand\": \"<string>\",\n        \"value\": \"<string>\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4f940e81-e830-4238-a918-0d2dda04c999",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "providers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id do provedor"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"SANDBOX\",\n  \"credentials\": {\n    \"type\": \"SANDBOX\",\n    \"apiKey\": \"1234567890\"\n  },\n  \"acquirer\": {\n    \"merchantId\": \"1234567890\",\n    \"bin\": [\n      {\n        \"brand\": \"Mastercard\",\n        \"value\": \"550259\"\n      },\n      {\n        \"brand\": \"Mastercard\",\n        \"value\": \"550259\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.malga.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1b52dfcf-249b-4e14-adb0-cad06e3a7d1b",
+    "name": "Documentação Malga 3DS2 Malga Providers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

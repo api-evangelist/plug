@@ -1,0 +1,1554 @@
+{
+  "item": [
+    {
+      "id": "c1acba5c-b494-48e3-b69c-e46c56264707",
+      "name": "Sessions",
+      "description": {
+        "content": "\nAtravés da API de sessões é possível criar um pedido, composto por itens, métodos de pagamento e outros atributos, que pode ser pago através de um endpoint ou integrado ao MalgaCheckout.\n\n# Fluxo de criação e de pagamento de uma sessão\n- Crie uma `sessão` informando os dados básicos necessários\n- Utilize a `publicKey` retornada na criação ou recuperada na rota de detalhes no `X-Api-Key` para autenticar o pagamento\n\n**Dados básicos de um objeto do tipo session**\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Session\" exampleRef=\"#/components/examples/Session\" />\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ed631ac8-c91c-4fea-9ddc-a3eb6529851a",
+          "name": "Listar sessões",
+          "request": {
+            "name": "Listar sessões",
+            "description": {
+              "content": "Lista as sessões do cliente autenticado, com paginação e filtros opcionais.\n\nSem o header `X-Client-Id`, a API responde `200` com `items` vazio e metadados de paginação padrão (não retorna erro).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Número da página a ser listada (mínimo 1)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Quantidade de registros por página (padrão 10; máximo 100)"
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "desc",
+                  "description": "Aceito como `asc` ou `desc` (padrão `desc`; valores inválidos caem para `desc`).\nA listagem atual ordena sempre por `createdAt` decrescente.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<uuid>",
+                  "description": "Filtra pelo identificador da sessão"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filtra por status da sessão. Aceita múltiplos valores separados por vírgula"
+                },
+                {
+                  "disabled": false,
+                  "key": "isActive",
+                  "value": "<string>",
+                  "description": "Filtra sessões ativadas ou desativadas. Aceita múltiplos valores separados por vírgula (`true` e/ou `false`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "merchantId",
+                  "value": "<uuid>",
+                  "description": "Filtra pelo identificador do merchant"
+                },
+                {
+                  "disabled": false,
+                  "key": "orderId",
+                  "value": "<string>",
+                  "description": "Filtra pelo identificador do pedido. Se informado, deve ter no mínimo 2 caracteres Unicode após o trim"
+                },
+                {
+                  "disabled": false,
+                  "key": "multiplePayments.status",
+                  "value": "<string>",
+                  "description": "Filtra pela disponibilidade agregada do link (`multiplePayments.status`). Aceita múltiplos valores separados por vírgula.\n`disabled` cobre links temporariamente indisponíveis, incluindo expiração por `dueDate`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "created.gt",
+                  "value": "<dateTime>",
+                  "description": "Filtra sessões com `createdAt` estritamente maior que o instante informado (RFC 3339 ou RFC 3339 com fração de segundos)"
+                },
+                {
+                  "disabled": false,
+                  "key": "created.lt",
+                  "value": "<dateTime>",
+                  "description": "Filtra sessões com `createdAt` estritamente menor que o instante informado (RFC 3339 ou RFC 3339 com fração de segundos)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6c6602b0-af47-472c-884a-c7bd73714019",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isActive",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchantId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "orderId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "multiplePayments.status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created.gt",
+                      "value": "2026-03-24T03:00:00.000Z"
+                    },
+                    {
+                      "key": "created.lt",
+                      "value": "2026-04-01T02:59:00.000Z"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"1b0c6960-702a-4074-95c2-eed2790c16a1\",\n      \"name\": \"Nome da sessão\",\n      \"status\": \"created\",\n      \"isActive\": true,\n      \"captchaEnabled\": false,\n      \"clientId\": \"1b0c6960-702a-4074-95c2-eed2790c16a1\",\n      \"orderId\": null,\n      \"amount\": 100,\n      \"currency\": \"BRL\",\n      \"capture\": true,\n      \"merchantId\": \"69aea152-ba70-49a3-a31c-044ac1651146\",\n      \"dueDate\": \"2022-10-25T09:28:45.000Z\",\n      \"description\": \"Promoção Black Friday\",\n      \"statementDescriptor\": \"LOJA JOAO\",\n      \"paymentMethods\": [\n        {\n          \"paymentType\": \"credit\",\n          \"installments\": 1\n        }\n      ],\n      \"items\": [\n        {\n          \"id\": \"78601913-a176-4d71-b7e8-abb6fc49a340\",\n          \"name\": \"Item 1\",\n          \"description\": \"Descrição do item\",\n          \"unitPrice\": 10000,\n          \"quantity\": 1,\n          \"tangible\": false\n        }\n      ],\n      \"createdAt\": \"2022-10-25T09:28:45.000Z\",\n      \"updatedAt\": \"2022-10-25T09:28:45.000Z\",\n      \"publicKey\": \"1b0c6960-702a-4074-95c2-eed2790c16a1\",\n      \"paymentLink\": \"https://checkout.malga.io/1b0c6960-702a-4074-95c2-eed2790c16a1\",\n      \"multiplePayments\": {\n        \"allow\": false,\n        \"maxPayments\": null,\n        \"paymentCount\": 0,\n        \"pendingCount\": 0,\n        \"status\": \"active\"\n      }\n    }\n  ],\n  \"meta\": {\n    \"totalItems\": 1,\n    \"itemCount\": 1,\n    \"itemsPerPage\": 10,\n    \"totalPages\": 1,\n    \"currentPage\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1fbefcfc-f17f-427e-93af-a6f88d0e192a",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isActive",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchantId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "orderId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "multiplePayments.status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created.gt",
+                      "value": "2026-03-24T03:00:00.000Z"
+                    },
+                    {
+                      "key": "created.lt",
+                      "value": "2026-04-01T02:59:00.000Z"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6684,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab02cc3a-a165-47fd-bcb4-43aac0ec5c6d",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isActive",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchantId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "orderId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "multiplePayments.status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created.gt",
+                      "value": "2026-03-24T03:00:00.000Z"
+                    },
+                    {
+                      "key": "created.lt",
+                      "value": "2026-04-01T02:59:00.000Z"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6684,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6b7ba21e-993a-46df-adbf-252ea77de96b",
+          "name": "Criar nova sessão",
+          "request": {
+            "name": "Criar nova sessão",
+            "description": {
+              "content": "Cria uma sessão de pagamento. Quando `maxPayments` é omitido, a sessão segue o fluxo 1:1 legado. Quando `maxPayments` é enviado, a sessão opera como link 1:N e a resposta completa retorna `multiplePayments` com a disponibilidade agregada para próximas cobranças.\n\n**Restrição pix/boleto em 1:N:** métodos `pix` e `boleto` não podem ser combinados com `maxPayments` finito maior que `1`. Nesse caso a API retorna `422` com `businessCode: \"pix_boleto_multiple_payments_not_allowed\"`. `maxPayments` omitido, `null`, `1` ou `-1` (ilimitado) continua permitido para pix/boleto. O bloqueio não se aplica a cartão de crédito.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"merchantId\": \"<uuid>\",\n  \"paymentMethods\": [\n    {\n      \"paymentType\": \"<string>\",\n      \"installments\": \"<integer>\",\n      \"recurrence\": \"<string>\",\n      \"threeDS\": {\n        \"enabled\": \"<boolean>\",\n        \"liabilityShiftRequired\": true\n      }\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"<string>\",\n      \"unitPrice\": \"<integer>\",\n      \"quantity\": \"<integer>\",\n      \"id\": \"<uuid>\",\n      \"description\": \"<string>\",\n      \"tangible\": \"<boolean>\",\n      \"categoryId\": \"<string>\"\n    }\n  ],\n  \"orderId\": \"<string>\",\n  \"amount\": \"<integer>\",\n  \"currency\": \"BRL\",\n  \"isActive\": \"<boolean>\",\n  \"capture\": \"<boolean>\",\n  \"dueDate\": \"<string>\",\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"statementDescriptor\": \"<string>\",\n  \"createLink\": \"<boolean>\",\n  \"captchaEnabled\": \"<boolean>\",\n  \"maxPayments\": \"<integer>\",\n  \"providerReferenceKey\": \"<string>\",\n  \"splitRules\": [\n    {\n      \"sellerId\": \"<uuid>\",\n      \"percentage\": \"<integer>\",\n      \"amount\": \"<integer>\",\n      \"processingFee\": \"<boolean>\",\n      \"chargeEntireFee\": \"<boolean>\",\n      \"chargeRemainderFee\": \"<boolean>\",\n      \"liable\": \"<boolean>\",\n      \"transactionOwner\": \"<boolean>\",\n      \"fares\": {\n        \"mdr\": \"<number>\",\n        \"fee\": \"<number>\"\n      }\n    },\n    {\n      \"sellerId\": \"<uuid>\",\n      \"percentage\": \"<integer>\",\n      \"amount\": \"<integer>\",\n      \"processingFee\": \"<boolean>\",\n      \"chargeEntireFee\": \"<boolean>\",\n      \"chargeRemainderFee\": \"<boolean>\",\n      \"liable\": \"<boolean>\",\n      \"transactionOwner\": \"<boolean>\",\n      \"fares\": {\n        \"mdr\": \"<number>\",\n        \"fee\": \"<number>\"\n      }\n    }\n  ],\n  \"vendor\": {\n    \"id\": \"<uuid>\",\n    \"paymentFacilitatorId\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1196177f-0429-40ea-8b9d-6180b64e89ac",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 100,\n  \"name\": \"Loja 1\",\n  \"merchantId\": \"1b0c6960-702a-4074-95c2-eed2790c16a1\",\n  \"dueDate\": \"2022-10-25T09:28:45.000Z\",\n  \"createLink\": true,\n  \"paymentMethods\": [\n    {\n      \"paymentType\": \"pix\",\n      \"expiresIn\": 30\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"Item 1\",\n      \"description\": \"Item do carrinho\",\n      \"unitPrice\": 1000,\n      \"quantity\": 1,\n      \"tangible\": false\n    }\n  ],\n  \"splitRules\": [\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 100,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 30\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1b0c6960-702a-4074-95c2-eed2790c16a1\",\n  \"name\": \"Nome da sessão\",\n  \"status\": \"created\",\n  \"isActive\": true,\n  \"captchaEnabled\": false,\n  \"clientId\": \"1b0c6960-702a-4074-95c2-eed2790c16a1\",\n  \"orderId\": null,\n  \"amount\": 100,\n  \"currency\": \"BRL\",\n  \"capture\": true,\n  \"merchantId\": \"69aea152-ba70-49a3-a31c-044ac1651146\",\n  \"dueDate\": \"2022-10-25T09:28:45.000Z\",\n  \"description\": \"Promoção Black Friday\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"paymentMethods\": [\n    {\n      \"paymentType\": \"credit\",\n      \"installments\": 1\n    }\n  ],\n  \"items\": [\n    {\n      \"id\": \"78601913-a176-4d71-b7e8-abb6fc49a340\",\n      \"name\": \"Item 1\",\n      \"description\": \"Descrição do item\",\n      \"unitPrice\": 10000,\n      \"quantity\": 1,\n      \"tangible\": false\n    }\n  ],\n  \"createdAt\": \"2022-10-25T09:28:45.000Z\",\n  \"updatedAt\": \"2022-10-25T09:28:45.000Z\",\n  \"publicKey\": \"1b0c6960-702a-4074-95c2-eed2790c16a1\",\n  \"multiplePayments\": {\n    \"allow\": false,\n    \"maxPayments\": null,\n    \"paymentCount\": 0,\n    \"pendingCount\": 0,\n    \"status\": \"active\"\n  },\n  \"splitRules\": [\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 100,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 30\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f01f6bf-89f4-4b38-9e09-5789584523bb",
+              "name": "Unprocessable Entity. Regras de negócio bloquearam a criação da sessão. O envelope segue o formato padrão de erro, com `businessCode` identificando a regra violada.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 100,\n  \"name\": \"Loja 1\",\n  \"merchantId\": \"1b0c6960-702a-4074-95c2-eed2790c16a1\",\n  \"dueDate\": \"2022-10-25T09:28:45.000Z\",\n  \"createLink\": true,\n  \"paymentMethods\": [\n    {\n      \"paymentType\": \"pix\",\n      \"expiresIn\": 30\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"Item 1\",\n      \"description\": \"Item do carrinho\",\n      \"unitPrice\": 1000,\n      \"quantity\": 1,\n      \"tangible\": false\n    }\n  ],\n  \"splitRules\": [\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 100,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 30\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 422,\n    \"message\": \"PIX and boleto payment methods do not support maxPayments greater than 1.\",\n    \"businessCode\": \"pix_boleto_multiple_payments_not_allowed\",\n    \"details\": []\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c5a55954-899a-4c83-ad37-5ec140f2df66",
+          "name": "Recuperar detalhes de uma sessão",
+          "request": {
+            "name": "Recuperar detalhes de uma sessão",
+            "description": {
+              "content": "Retorna a sessão completa. Use este endpoint como fonte do estado agregado de `multiplePayments` após criação, pagamento, atualização, cancelamento ou consulta de histórico.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificação da sessão a ser recuperada"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cf4b4729-efde-4c63-adc5-d7127cc7c34d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão a ser recuperada"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1b0c6960-702a-4074-95c2-eed2790c16a1\",\n  \"name\": \"Nome da sessão\",\n  \"status\": \"created\",\n  \"isActive\": true,\n  \"captchaEnabled\": false,\n  \"clientId\": \"1b0c6960-702a-4074-95c2-eed2790c16a1\",\n  \"orderId\": null,\n  \"amount\": 100,\n  \"currency\": \"BRL\",\n  \"capture\": true,\n  \"merchantId\": \"69aea152-ba70-49a3-a31c-044ac1651146\",\n  \"dueDate\": \"2022-10-25T09:28:45.000Z\",\n  \"description\": \"Promoção Black Friday\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"paymentMethods\": [\n    {\n      \"paymentType\": \"credit\",\n      \"installments\": 1\n    }\n  ],\n  \"items\": [\n    {\n      \"id\": \"78601913-a176-4d71-b7e8-abb6fc49a340\",\n      \"name\": \"Item 1\",\n      \"description\": \"Descrição do item\",\n      \"unitPrice\": 10000,\n      \"quantity\": 1,\n      \"tangible\": false\n    }\n  ],\n  \"createdAt\": \"2022-10-25T09:28:45.000Z\",\n  \"updatedAt\": \"2022-10-25T09:28:45.000Z\",\n  \"publicKey\": \"1b0c6960-702a-4074-95c2-eed2790c16a1\",\n  \"multiplePayments\": {\n    \"allow\": false,\n    \"maxPayments\": null,\n    \"paymentCount\": 0,\n    \"pendingCount\": 0,\n    \"status\": \"active\"\n  },\n  \"splitRules\": [\n    {\n      \"sellerId\": \"5323ece6-816d-11ed-a1eb-0242ac120002\",\n      \"percentage\": 100,\n      \"processingFee\": false,\n      \"chargeEntireFee\": false,\n      \"chargeRemainderFee\": false,\n      \"liable\": true,\n      \"transactionOwner\": true,\n      \"fares\": {\n        \"mdr\": 2.5,\n        \"fee\": 30\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "48f09031-4809-4a40-b6bf-d8b65b96c048",
+          "name": "Atualizar relevância de uma sessão",
+          "request": {
+            "name": "Atualizar relevância de uma sessão",
+            "description": {
+              "content": "Atualiza campos de relevância da sessão: `isActive` (obrigatório), `dueDate` e `maxPayments` (sessões 1:N). A resposta é parcial e devolve apenas `id` e `isActive`; após a atualização, consulte `GET /v1/sessions/{id}` para obter o estado completo (`status`, `dueDate`, `maxPayments`, `multiplePayments`, etc.).\n\n**Restrição de reativação pix/boleto 1:1 consumida:** `isActive: true` em uma sessão pix ou boleto 1:1 já paga (`maxPayments = 1` com `paymentCount = 1`, ou sessão legada sem `maxPayments` já `paid` com `paymentCount = 1`) retorna `422` com `businessCode: \"pix_boleto_one_to_one_reactivation_blocked\"`. O bloqueio ignora `maxPayments` enviado no PATCH.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificação da sessão a ser alterada"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": \"<boolean>\",\n  \"dueDate\": \"<string>\",\n  \"maxPayments\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "de9ed8d8-015c-422d-a4ca-be977783ca0d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão a ser alterada"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isActive\": true,\n  \"dueDate\": \"2026-12-31T23:59:59Z\",\n  \"maxPayments\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"c1db83fa-723c-4e1f-9722-bc19d1be6791\",\n  \"isActive\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5f2009a8-5837-4706-b00c-12341ef4bf67",
+              "name": "Unprocessable Entity. Regras de negócio bloquearam a atualização da sessão. O envelope segue o formato padrão de erro, com `businessCode` identificando a regra violada.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão a ser alterada"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isActive\": true,\n  \"dueDate\": \"2026-12-31T23:59:59Z\",\n  \"maxPayments\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 422,\n    \"message\": \"Consumed one-to-one PIX or boleto sessions cannot be reactivated.\",\n    \"businessCode\": \"pix_boleto_one_to_one_reactivation_blocked\",\n    \"details\": []\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "74362f50-f0a8-46c7-86d0-ce273095aae1",
+          "name": "Pagar uma sessão",
+          "request": {
+            "name": "Pagar uma sessão",
+            "description": {
+              "content": "Inicia uma cobrança para a sessão. Em sessões 1:N, cada chamada aceita representa uma tentativa individual dentro da capacidade configurada em `maxPayments`. A resposta é a cobrança criada e não retorna `multiplePayments`; consulte `GET /v1/sessions/{id}` para acompanhar o estado agregado atualizado.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions",
+                ":id",
+                "charge"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificação da sessão a ser paga"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentMethod\": {\n    \"paymentType\": \"<string>\",\n    \"installments\": \"<number>\",\n    \"recurrence\": \"<string>\"\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"<string>\",\n    \"cardId\": \"<uuid>\",\n    \"cardCvv\": \"<string>\"\n  },\n  \"customerId\": \"<uuid>\",\n  \"fraudAnalysis\": {\n    \"sla\": \"<number>\",\n    \"customer\": {\n      \"name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"identityType\": \"<string>\",\n      \"identity\": \"<string>\",\n      \"maritalStatus\": \"<string>\",\n      \"education\": \"<string>\",\n      \"registrationDate\": \"<string>\",\n      \"deliveryAddress\": {\n        \"country\": \"<string>\",\n        \"state\": \"<string>\",\n        \"city\": \"<string>\",\n        \"district\": \"<string>\",\n        \"zipCode\": \"<string>\",\n        \"street\": \"<string>\",\n        \"number\": \"<string>\",\n        \"complement\": \"<string>\"\n      },\n      \"billingAddress\": {\n        \"country\": \"<string>\",\n        \"state\": \"<string>\",\n        \"city\": \"<string>\",\n        \"district\": \"<string>\",\n        \"zipCode\": \"<string>\",\n        \"street\": \"<string>\",\n        \"number\": \"<string>\",\n        \"complement\": \"<string>\"\n      },\n      \"browser\": {\n        \"browserFingerprint\": \"<string>\",\n        \"cookiesAccepted\": \"<boolean>\",\n        \"email\": \"<string>\",\n        \"hostName\": \"<string>\",\n        \"ipAddress\": \"<string>\",\n        \"type\": \"<string>\"\n      }\n    },\n    \"mfa\": {\n      \"smsOtpUsed\": \"<boolean>\",\n      \"emailOtpUsed\": \"<boolean>\"\n    },\n    \"cart\": {\n      \"items\": [\n        {\n          \"name\": \"<string>\",\n          \"quantity\": \"<integer>\",\n          \"sku\": \"<string>\",\n          \"unitPrice\": \"<integer>\",\n          \"risk\": \"<string>\",\n          \"description\": \"<string>\",\n          \"categoryId\": \"<string>\",\n          \"locality\": \"<string>\",\n          \"date\": \"<string>\",\n          \"type\": \"<number>\",\n          \"genre\": \"<string>\",\n          \"tickets\": {\n            \"quantityTicketSale\": \"<number>\",\n            \"quantityEventHouse\": \"<number>\",\n            \"convenienceFeeValue\": \"<number>\",\n            \"quantityFull\": \"<number>\",\n            \"quantityHalf\": \"<number>\",\n            \"batch\": \"<number>\"\n          },\n          \"location\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"state\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"city\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"district\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"zipCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"street\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"number\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"complement\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"name\": \"<string>\",\n          \"quantity\": \"<integer>\",\n          \"sku\": \"<string>\",\n          \"unitPrice\": \"<integer>\",\n          \"risk\": \"<string>\",\n          \"description\": \"<string>\",\n          \"categoryId\": \"<string>\",\n          \"locality\": \"<string>\",\n          \"date\": \"<string>\",\n          \"type\": \"<number>\",\n          \"genre\": \"<string>\",\n          \"tickets\": {\n            \"quantityTicketSale\": \"<number>\",\n            \"quantityEventHouse\": \"<number>\",\n            \"convenienceFeeValue\": \"<number>\",\n            \"quantityFull\": \"<number>\",\n            \"quantityHalf\": \"<number>\",\n            \"batch\": \"<number>\"\n          },\n          \"location\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"state\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"city\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"district\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"zipCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"street\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"number\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"complement\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    \"device\": {\n      \"id\": \"<string>\",\n      \"sessionId\": \"<string>\",\n      \"os\": {\n        \"type\": \"<string>\",\n        \"version\": \"<string>\"\n      },\n      \"model\": \"<string>\",\n      \"ramCapacity\": \"<integer>\",\n      \"diskCapacity\": \"<integer>\",\n      \"freeDiskSpace\": \"<integer>\",\n      \"resolution\": \"<integer>\",\n      \"vendors\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"vendorAttributes\": {\n        \"flash\": \"<boolean>\",\n        \"phoneCalls\": \"<boolean>\",\n        \"sendSms\": \"<boolean>\",\n        \"videoCamera\": \"<boolean>\",\n        \"cpuCount\": \"<integer>\",\n        \"simulator\": \"<boolean>\",\n        \"language\": \"<string>\",\n        \"idiom\": \"<string>\",\n        \"platform\": \"<string>\",\n        \"name\": \"<string>\",\n        \"family\": \"<string>\",\n        \"retinaDisplay\": \"<boolean>\",\n        \"camera\": \"<boolean>\",\n        \"model\": \"<string>\",\n        \"frontCamera\": \"<boolean>\"\n      }\n    },\n    \"airline\": {\n      \"passengers\": [\n        {\n          \"name\": \"<string>\",\n          \"companyMileCard\": \"<string>\",\n          \"mileCard\": \"<string>\",\n          \"identityType\": \"<string>\",\n          \"identityNumber\": \"<string>\",\n          \"gender\": \"<string>\",\n          \"birthdate\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"companyMileCard\": \"<string>\",\n          \"mileCard\": \"<string>\",\n          \"identityType\": \"<string>\",\n          \"identityNumber\": \"<string>\",\n          \"gender\": \"<string>\",\n          \"birthdate\": \"<string>\"\n        }\n      ],\n      \"connections\": [\n        {\n          \"company\": \"<string>\",\n          \"identificationNumber\": \"<integer>\",\n          \"date\": \"<string>\",\n          \"seatClass\": \"<string>\",\n          \"origin\": \"<string>\",\n          \"destination\": \"<string>\",\n          \"boarding\": \"<string>\",\n          \"arriving\": \"<string>\",\n          \"fareClass\": \"<string>\"\n        },\n        {\n          \"company\": \"<string>\",\n          \"identificationNumber\": \"<integer>\",\n          \"date\": \"<string>\",\n          \"seatClass\": \"<string>\",\n          \"origin\": \"<string>\",\n          \"destination\": \"<string>\",\n          \"boarding\": \"<string>\",\n          \"arriving\": \"<string>\",\n          \"fareClass\": \"<string>\"\n        }\n      ],\n      \"reservation\": \"<string>\"\n    },\n    \"orderOrigin\": \"<string>\",\n    \"operationalSystem\": \"<string>\",\n    \"marketplaceType\": \"<string>\",\n    \"purchaseInformation\": {\n      \"lastDateInsertedMail\": \"<string>\",\n      \"lastDateChangePassword\": \"<string>\",\n      \"lastDateChangePhone\": \"<string>\",\n      \"lastDateChangeMobilePhone\": \"<string>\",\n      \"lastDateInsertedAddress\": \"<string>\",\n      \"purchaseLogged\": \"<boolean>\",\n      \"email\": \"<string>\",\n      \"login\": \"<string>\"\n    },\n    \"socialNetwork\": {\n      \"optInCompreConfie\": \"<boolean>\",\n      \"socialNetworkType\": \"<string>\",\n      \"authenticationToken\": \"<string>\"\n    },\n    \"giftList\": {\n      \"type\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    \"hotels\": [\n      {\n        \"name\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"country\": \"<string>\",\n        \"reservationDate\": \"<string>\",\n        \"reserveExpirationDate\": \"<string>\",\n        \"checkInDate\": \"<string>\",\n        \"checkOutDate\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"country\": \"<string>\",\n        \"reservationDate\": \"<string>\",\n        \"reserveExpirationDate\": \"<string>\",\n        \"checkInDate\": \"<string>\",\n        \"checkOutDate\": \"<string>\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d196a21b-a4f4-465e-b15e-246f17c5dbde",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "charge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão a ser paga"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"card\": {\n      \"cardNumber\": \"5261424250184574\",\n      \"cardCvv\": \"321\",\n      \"cardExpirationDate\": \"06/2028\",\n      \"cardHolderName\": \"JOAO DA SILVA\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\",\n  \"clientId\": \"cc0b1e41-2936-45c5-947f-93995ffcdc00\",\n  \"merchantId\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\",\n  \"description\": \"Descrição longa da cobrança\",\n  \"orderId\": \"32c68ff7-902c-408b-b464-cf487c7cda97\",\n  \"createdAt\": \"2012-06-30 23:59:59 +0000\",\n  \"amount\": 150,\n  \"originalAmount\": 150,\n  \"currency\": \"BRL\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"status\": \"pending\",\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"cardId\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\"\n  },\n  \"transactionRequests\": [\n    {\n      \"id\": \"78601913-a176-4d71-b7e8-abb6fc49a340\",\n      \"idempotencyKey\": \"fafe857b176e45d6b12e32fcaf228996\",\n      \"providerId\": \"2c3b57d8-ee43-4b19-bc8a-949a88c51df1\",\n      \"providerType\": \"STRIPE\",\n      \"transactionId\": \"ch_3JYE7MHjGFBGEeiP0lfTD3Ob\",\n      \"amount\": 1500,\n      \"authorizationNsu\": \"1cc8391c-f0d5-4b7a-9fcf-653cea26be13\",\n      \"requestStatus\": \"success\",\n      \"requestType\": \"authorization\",\n      \"responseTs\": \"2633ms\",\n      \"createdAt\": \"2021-08-12T16:08:39.536Z\",\n      \"updatedAt\": \"2021-08-12T16:08:42.212Z\",\n      \"providerAuthorization\": {\n        \"networkAuthorizationCode\": \"00\",\n        \"networkResponseCode\": \"\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1ade33d-4aee-4378-820d-b5c2826c4254",
+              "name": "Sessão não encontrada ou não pertencente ao cliente informado em `X-Client-Id`.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "charge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão a ser paga"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"card\": {\n      \"cardNumber\": \"5261424250184574\",\n      \"cardCvv\": \"321\",\n      \"cardExpirationDate\": \"06/2028\",\n      \"cardHolderName\": \"JOAO DA SILVA\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6684,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "010e9483-f572-4538-b47b-46896b4a8d5a",
+              "name": "Unprocessable Entity. A cobrança não pode ser processada: sellers de split inválidos, ou sessão 1:N indisponível (link desativado ou limite de pagamentos atingido). Nos casos de indisponibilidade 1:N, o `businessCode` é `session_disabled` ou `multiple_payments_limit_reached`. O envelope segue o formato padrão de erro.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "charge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão a ser paga"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"card\": {\n      \"cardNumber\": \"5261424250184574\",\n      \"cardCvv\": \"321\",\n      \"cardExpirationDate\": \"06/2028\",\n      \"cardHolderName\": \"JOAO DA SILVA\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 422,\n    \"message\": \"session cannot be charged: sellers not found [9f8b2c1a-4d3e-4a2b-8c7d-1e2f3a4b5c6d]\",\n    \"details\": []\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5f37d5a8-2924-4c4e-9046-2ec6d3e3ba29",
+          "name": "Cancelar uma sessão",
+          "request": {
+            "name": "Cancelar uma sessão",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "sessions",
+                ":id",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificação da sessão a ser cancelada"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "09cfac37-cd15-4ddb-90a2-ee3865748ce0",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão a ser cancelada"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"c1db83fa-723c-4e1f-9722-bc19d1be6791\",\n  \"status\": \"canceled\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "60f663f9-3be9-4f08-8d3d-c541f285d344",
+          "name": "Recuperar o histórico da sessão",
+          "request": {
+            "name": "Recuperar o histórico da sessão",
+            "description": {
+              "content": "Retorna a trilha de auditoria da sessão em ordem decrescente de criação, com os registros mais recentes primeiro: alterações de campos, tentativas de pagamento, confirmações assíncronas e expirações.\n\nCada item representa um **registro de histórico** (`id` do evento), não o identificador da sessão. Use `action` (ação principal derivada) e `actions` (lista completa) junto com `diff` para entender o que ocorreu.\n\nO campo `status` em cada item segue a **semântica de produto** na leitura: expirações automáticas por `dueDate` ou limite 1:N podem aparecer como `disabled`, mesmo quando o status persistido no registro era `created`.\n\nPara o estado atual da sessão e de `multiplePayments`, consulte `GET /v1/sessions/{id}`. O histórico não substitui essa consulta.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions",
+                ":id",
+                "history"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificação da sessão"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "00220818-97e3-4225-9acd-1a941794b835",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440003\",\n    \"status\": \"disabled\",\n    \"createdAt\": \"2026-05-20T00:00:01.000Z\",\n    \"updatedAt\": \"2026-05-20T00:00:01.000Z\",\n    \"clientId\": \"39d2d314-5412-431a-b34b-74f9f0fbe7e1\",\n    \"merchantId\": \"660e8400-e29b-41d4-a716-446655440002\",\n    \"action\": \"sessionExpiredByDueDate\",\n    \"actions\": [\n      \"sessionExpiredByDueDate\"\n    ],\n    \"diff\": {\n      \"reason\": \"expired by due date\",\n      \"expiredAt\": \"2026-05-19T23:59:59.000Z\",\n      \"changes\": {\n        \"isActive\": {\n          \"from\": true,\n          \"to\": false,\n          \"reason\": \"sessionExpiredByDueDate\"\n        }\n      }\n    }\n  },\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440002\",\n    \"status\": \"created\",\n    \"createdAt\": \"2026-05-19T14:30:00.000Z\",\n    \"updatedAt\": \"2026-05-19T14:30:00.000Z\",\n    \"clientId\": \"39d2d314-5412-431a-b34b-74f9f0fbe7e1\",\n    \"merchantId\": \"660e8400-e29b-41d4-a716-446655440002\",\n    \"action\": \"paymentSucceeded\",\n    \"actions\": [\n      \"paymentSucceeded\"\n    ],\n    \"diff\": {\n      \"changes\": {\n        \"response\": {\n          \"from\": null,\n          \"to\": {\n            \"chargeId\": \"880e8400-e29b-41d4-a716-446655440099\",\n            \"status\": \"pending\",\n            \"amount\": 5000\n          }\n        }\n      },\n      \"updatedAt\": \"2026-05-19T14:30:00.000Z\"\n    }\n  },\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440001\",\n    \"status\": \"created\",\n    \"createdAt\": \"2026-05-19T12:00:00.000Z\",\n    \"updatedAt\": \"2026-05-19T12:00:00.000Z\",\n    \"clientId\": \"39d2d314-5412-431a-b34b-74f9f0fbe7e1\",\n    \"merchantId\": \"660e8400-e29b-41d4-a716-446655440002\",\n    \"action\": \"statusChanged\",\n    \"actions\": [\n      \"statusChanged\"\n    ],\n    \"diff\": {\n      \"changes\": {\n        \"status\": {\n          \"from\": null,\n          \"to\": \"created\"\n        }\n      },\n      \"createdAt\": \"2026-05-19T12:00:00.000Z\"\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0c3ec468-3273-4b81-aba2-817dd9f17ecb",
+              "name": "Header `X-Client-Id` ausente ou identificador da sessão ausente no path",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6684,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9fde23ed-d00c-44b2-8c7a-327923220a06",
+              "name": "Sessão não encontrada para o par `id` + `X-Client-Id`",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6684,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c64188dc-dc75-48d3-8f11-5646177dd1be",
+              "name": "Erro interno inesperado ao recuperar o histórico da sessão",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"card_declined\",\n    \"code\": 6684,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "73b6d321-a408-4fb6-925c-28293608aba1",
+          "name": "Recupera sessão com os dados das configurações da empresa",
+          "request": {
+            "name": "Recupera sessão com os dados das configurações da empresa",
+            "description": {
+              "content": "Retorna a sessão completa junto das configurações da empresa usadas no Link de Pagamento. Também inclui `multiplePayments` para indicar a disponibilidade agregada do link em sessões 1:1 e 1:N.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions",
+                ":id",
+                "link"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificação da sessão a ser recuperada"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0b983566-ff4d-47d0-a313-e0dde2667869",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "link"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificação da sessão a ser recuperada"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"status\": \"created\",\n  \"isActive\": true,\n  \"clientId\": \"string\",\n  \"orderId\": \"string\",\n  \"amount\": 4159.879085555316,\n  \"currency\": \"string\",\n  \"capture\": false,\n  \"merchantId\": \"string\",\n  \"dueDate\": \"string\",\n  \"description\": \"string\",\n  \"statementDescriptor\": \"string\",\n  \"items\": [\n    {\n      \"name\": \"string\",\n      \"unitPrice\": 9448,\n      \"quantity\": 4391,\n      \"id\": \"d5b2f654-f203-22a3-99bd-d774f231f487\",\n      \"description\": \"string\",\n      \"tangible\": true,\n      \"categoryId\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"unitPrice\": 6592,\n      \"quantity\": 5143,\n      \"id\": \"6b7f78dc-8543-7657-0f36-b18f5b572725\",\n      \"description\": \"string\",\n      \"tangible\": true,\n      \"categoryId\": \"string\"\n    }\n  ],\n  \"paymentLink\": \"string\",\n  \"paymentMethods\": [\n    {\n      \"paymentType\": \"credit\",\n      \"installments\": 6532.769508501,\n      \"recurrence\": \"subsequent\",\n      \"threeDS\": {\n        \"enabled\": true,\n        \"liabilityShiftRequired\": true\n      }\n    },\n    {\n      \"paymentType\": \"debit\",\n      \"installments\": 9482.137879983153,\n      \"recurrence\": \"initial\",\n      \"threeDS\": {\n        \"enabled\": false,\n        \"liabilityShiftRequired\": true\n      }\n    }\n  ],\n  \"createdAt\": \"string\",\n  \"updatedAt\": \"string\",\n  \"publicKey\": \"string\",\n  \"multiplePayments\": {\n    \"allow\": true,\n    \"maxPayments\": 1169,\n    \"paymentCount\": 513,\n    \"pendingCount\": 4799,\n    \"status\": \"disabled\"\n  },\n  \"settings\": {\n    \"id\": \"de487678-d767-816d-3540-aa6af964dcc1\",\n    \"logo\": \"http://fUMVPkOOCPaMTEOy.awdnlxCsz8L,ESahLzbDbAIHRUUTBNNawpJ+I7HtG\",\n    \"mainColor\": \"string\",\n    \"secondaryColor\": \"string\",\n    \"attentionColor\": \"string\",\n    \"errorColor\": \"string\",\n    \"successColor\": \"string\",\n    \"backgroundColor\": \"string\",\n    \"clientId\": \"string\",\n    \"companyUrl\": \"string\",\n    \"mastercardClickToPayDpaid\": \"string\",\n    \"merchantId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.malga.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1c39334f-e8cf-424e-b9d2-0b0dfcfbdd66",
+    "name": "Documentação Malga 3DS2 Malga Sessions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

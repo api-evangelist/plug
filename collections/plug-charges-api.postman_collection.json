@@ -1,0 +1,1819 @@
+{
+  "item": [
+    {
+      "id": "65899bf1-ece6-4e8d-b5b9-a914cfd2b880",
+      "name": "Charges",
+      "description": {
+        "content": "\nPara realizar uma cobrança deve criar um objeto `charge`. É possível recuperar detalhes de transações individuais ou listar todas as cobranças realizadas em um determinado `merchant`. Os `charges` são identificados a partir de um id 'único'.\n\n**Dados básicos de um objeto do tipo charge**\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Charge\" exampleRef=\"#/components/examples/ChargeCard\" />\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c215622f-2261-4585-bee3-2ea951820cc6",
+          "name": "Realizar nova cobrança",
+          "request": {
+            "name": "Realizar nova cobrança",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "charges"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<number>\",\n  \"merchantId\": \"<uuid>\",\n  \"paymentMethod\": {\n    \"paymentType\": \"<string>\",\n    \"installments\": \"<number>\",\n    \"recurrence\": \"<string>\"\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"<string>\",\n    \"cardId\": \"<uuid>\",\n    \"cardCvv\": \"<string>\"\n  },\n  \"currency\": \"BRL\",\n  \"statementDescriptor\": \"<string>\",\n  \"capture\": false,\n  \"orderId\": \"<string>\",\n  \"description\": \"<string>\",\n  \"customerId\": \"<uuid>\",\n  \"fraudAnalysis\": {\n    \"sla\": \"<number>\",\n    \"customer\": {\n      \"name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"identityType\": \"<string>\",\n      \"identity\": \"<string>\",\n      \"maritalStatus\": \"<string>\",\n      \"education\": \"<string>\",\n      \"registrationDate\": \"<string>\",\n      \"deliveryAddress\": {\n        \"country\": \"<string>\",\n        \"state\": \"<string>\",\n        \"city\": \"<string>\",\n        \"district\": \"<string>\",\n        \"zipCode\": \"<string>\",\n        \"street\": \"<string>\",\n        \"number\": \"<string>\",\n        \"complement\": \"<string>\"\n      },\n      \"billingAddress\": {\n        \"country\": \"<string>\",\n        \"state\": \"<string>\",\n        \"city\": \"<string>\",\n        \"district\": \"<string>\",\n        \"zipCode\": \"<string>\",\n        \"street\": \"<string>\",\n        \"number\": \"<string>\",\n        \"complement\": \"<string>\"\n      },\n      \"browser\": {\n        \"browserFingerprint\": \"<string>\",\n        \"cookiesAccepted\": \"<boolean>\",\n        \"email\": \"<string>\",\n        \"hostName\": \"<string>\",\n        \"ipAddress\": \"<string>\",\n        \"type\": \"<string>\"\n      }\n    },\n    \"mfa\": {\n      \"smsOtpUsed\": \"<boolean>\",\n      \"emailOtpUsed\": \"<boolean>\"\n    },\n    \"cart\": {\n      \"items\": [\n        {\n          \"name\": \"<string>\",\n          \"quantity\": \"<integer>\",\n          \"sku\": \"<string>\",\n          \"unitPrice\": \"<integer>\",\n          \"risk\": \"<string>\",\n          \"description\": \"<string>\",\n          \"categoryId\": \"<string>\",\n          \"locality\": \"<string>\",\n          \"date\": \"<string>\",\n          \"type\": \"<number>\",\n          \"genre\": \"<string>\",\n          \"tickets\": {\n            \"quantityTicketSale\": \"<number>\",\n            \"quantityEventHouse\": \"<number>\",\n            \"convenienceFeeValue\": \"<number>\",\n            \"quantityFull\": \"<number>\",\n            \"quantityHalf\": \"<number>\",\n            \"batch\": \"<number>\"\n          },\n          \"location\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"state\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"city\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"district\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"zipCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"street\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"number\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"complement\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"name\": \"<string>\",\n          \"quantity\": \"<integer>\",\n          \"sku\": \"<string>\",\n          \"unitPrice\": \"<integer>\",\n          \"risk\": \"<string>\",\n          \"description\": \"<string>\",\n          \"categoryId\": \"<string>\",\n          \"locality\": \"<string>\",\n          \"date\": \"<string>\",\n          \"type\": \"<number>\",\n          \"genre\": \"<string>\",\n          \"tickets\": {\n            \"quantityTicketSale\": \"<number>\",\n            \"quantityEventHouse\": \"<number>\",\n            \"convenienceFeeValue\": \"<number>\",\n            \"quantityFull\": \"<number>\",\n            \"quantityHalf\": \"<number>\",\n            \"batch\": \"<number>\"\n          },\n          \"location\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"state\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"city\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"district\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"zipCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"street\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"number\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"complement\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    \"device\": {\n      \"id\": \"<string>\",\n      \"sessionId\": \"<string>\",\n      \"os\": {\n        \"type\": \"<string>\",\n        \"version\": \"<string>\"\n      },\n      \"model\": \"<string>\",\n      \"ramCapacity\": \"<integer>\",\n      \"diskCapacity\": \"<integer>\",\n      \"freeDiskSpace\": \"<integer>\",\n      \"resolution\": \"<integer>\",\n      \"vendors\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"vendorAttributes\": {\n        \"flash\": \"<boolean>\",\n        \"phoneCalls\": \"<boolean>\",\n        \"sendSms\": \"<boolean>\",\n        \"videoCamera\": \"<boolean>\",\n        \"cpuCount\": \"<integer>\",\n        \"simulator\": \"<boolean>\",\n        \"language\": \"<string>\",\n        \"idiom\": \"<string>\",\n        \"platform\": \"<string>\",\n        \"name\": \"<string>\",\n        \"family\": \"<string>\",\n        \"retinaDisplay\": \"<boolean>\",\n        \"camera\": \"<boolean>\",\n        \"model\": \"<string>\",\n        \"frontCamera\": \"<boolean>\"\n      }\n    },\n    \"airline\": {\n      \"passengers\": [\n        {\n          \"name\": \"<string>\",\n          \"companyMileCard\": \"<string>\",\n          \"mileCard\": \"<string>\",\n          \"identityType\": \"<string>\",\n          \"identityNumber\": \"<string>\",\n          \"gender\": \"<string>\",\n          \"birthdate\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"companyMileCard\": \"<string>\",\n          \"mileCard\": \"<string>\",\n          \"identityType\": \"<string>\",\n          \"identityNumber\": \"<string>\",\n          \"gender\": \"<string>\",\n          \"birthdate\": \"<string>\"\n        }\n      ],\n      \"connections\": [\n        {\n          \"company\": \"<string>\",\n          \"identificationNumber\": \"<integer>\",\n          \"date\": \"<string>\",\n          \"seatClass\": \"<string>\",\n          \"origin\": \"<string>\",\n          \"destination\": \"<string>\",\n          \"boarding\": \"<string>\",\n          \"arriving\": \"<string>\",\n          \"fareClass\": \"<string>\"\n        },\n        {\n          \"company\": \"<string>\",\n          \"identificationNumber\": \"<integer>\",\n          \"date\": \"<string>\",\n          \"seatClass\": \"<string>\",\n          \"origin\": \"<string>\",\n          \"destination\": \"<string>\",\n          \"boarding\": \"<string>\",\n          \"arriving\": \"<string>\",\n          \"fareClass\": \"<string>\"\n        }\n      ],\n      \"reservation\": \"<string>\"\n    },\n    \"orderOrigin\": \"<string>\",\n    \"operationalSystem\": \"<string>\",\n    \"marketplaceType\": \"<string>\",\n    \"purchaseInformation\": {\n      \"lastDateInsertedMail\": \"<string>\",\n      \"lastDateChangePassword\": \"<string>\",\n      \"lastDateChangePhone\": \"<string>\",\n      \"lastDateChangeMobilePhone\": \"<string>\",\n      \"lastDateInsertedAddress\": \"<string>\",\n      \"purchaseLogged\": \"<boolean>\",\n      \"email\": \"<string>\",\n      \"login\": \"<string>\"\n    },\n    \"socialNetwork\": {\n      \"optInCompreConfie\": \"<boolean>\",\n      \"socialNetworkType\": \"<string>\",\n      \"authenticationToken\": \"<string>\"\n    },\n    \"giftList\": {\n      \"type\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    \"hotels\": [\n      {\n        \"name\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"country\": \"<string>\",\n        \"reservationDate\": \"<string>\",\n        \"reserveExpirationDate\": \"<string>\",\n        \"checkInDate\": \"<string>\",\n        \"checkOutDate\": \"<string>\"\n      },\n      {\n        \"name\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"country\": \"<string>\",\n        \"reservationDate\": \"<string>\",\n        \"reserveExpirationDate\": \"<string>\",\n        \"checkInDate\": \"<string>\",\n        \"checkOutDate\": \"<string>\"\n      }\n    ]\n  },\n  \"splitRules\": [\n    {\n      \"sellerId\": \"<uuid>\",\n      \"percentage\": \"<integer>\",\n      \"amount\": \"<integer>\",\n      \"processingFee\": \"<boolean>\",\n      \"chargeEntireFee\": \"<boolean>\",\n      \"chargeRemainderFee\": \"<boolean>\",\n      \"liable\": \"<boolean>\",\n      \"transactionOwner\": \"<boolean>\",\n      \"fares\": {\n        \"mdr\": \"<number>\",\n        \"fee\": \"<number>\"\n      }\n    },\n    {\n      \"sellerId\": \"<uuid>\",\n      \"percentage\": \"<integer>\",\n      \"amount\": \"<integer>\",\n      \"processingFee\": \"<boolean>\",\n      \"chargeEntireFee\": \"<boolean>\",\n      \"chargeRemainderFee\": \"<boolean>\",\n      \"liable\": \"<boolean>\",\n      \"transactionOwner\": \"<boolean>\",\n      \"fares\": {\n        \"mdr\": \"<number>\",\n        \"fee\": \"<number>\"\n      }\n    }\n  ],\n  \"vendor\": {\n    \"id\": \"<uuid>\",\n    \"paymentFacilitatorId\": \"<string>\"\n  },\n  \"paymentFlow\": {\n    \"metadata\": \"<object>\"\n  },\n  \"threeDSecure2\": \"<object>\",\n  \"appInfo\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b4a396a8-c0a8-4bd3-b357-b3b1e8a4f6f1",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appInfo\": {\n    \"platform\": {\n      \"integrator\": \"malga\",\n      \"name\": \"pluging-vtex-ppp\",\n      \"version\": \"1.12\"\n    },\n    \"device\": {\n      \"name\": \"iOS\",\n      \"version\": \"10.12\"\n    },\n    \"system\": {\n      \"name\": \"VTEX\",\n      \"version\": \"13.12\"\n    }\n  },\n  \"merchantId\": \"7f8870a2-71c9-4ef0-a531-82000e00b7e1\",\n  \"amount\": 150,\n  \"currency\": \"BRL\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"description\": \"Descrição longa da cobrança\",\n  \"capture\": false,\n  \"orderId\": \"32c68ff7-902c-408b-b464-cf487c7cda97\",\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"card\": {\n      \"cardNumber\": \"5261424250184574\",\n      \"cardCvv\": \"321\",\n      \"cardExpirationDate\": \"06/2028\",\n      \"cardHolderName\": \"JOAO DA SILVA\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\",\n  \"clientId\": \"cc0b1e41-2936-45c5-947f-93995ffcdc00\",\n  \"createdAt\": \"2012-06-30 23:59:59 +0000\",\n  \"amount\": 150,\n  \"currency\": \"BRL\",\n  \"orderId\": \"32c68ff7-902c-408b-b464-cf487c7cda97\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"description\": \"Descrição longa da cobrança\",\n  \"capture\": false,\n  \"isDispute\": false,\n  \"status\": \"pre_authorized\",\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"cardId\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\"\n  },\n  \"transactionRequests\": [\n    {\n      \"id\": \"78601913-a176-4d71-b7e8-abb6fc49a340\",\n      \"idempotencyKey\": \"fafe857b176e45d6b12e32fcaf228996\",\n      \"providerId\": \"2c3b57d8-ee43-4b19-bc8a-949a88c51df1\",\n      \"providerType\": \"STRIPE\",\n      \"transactionId\": \"ch_3JYE7MHjGFBGEeiP0lfTD3Ob\",\n      \"amount\": 1500,\n      \"authorizationNsu\": \"1cc8391c-f0d5-4b7a-9fcf-653cea26be13\",\n      \"requestStatus\": \"success\",\n      \"requestType\": \"authorization\",\n      \"responseTs\": \"2633ms\",\n      \"createdAt\": \"2021-08-12T16:08:39.536Z\",\n      \"updatedAt\": \"2021-08-12T16:08:42.212Z\",\n      \"providerAuthorization\": {\n        \"networkAuthorizationCode\": \"00\",\n        \"networkResponseCode\": \"\"\n      }\n    }\n  ],\n  \"appInfo\": {\n    \"platform\": {\n      \"integrator\": \"malga\",\n      \"name\": \"pluging-vtex-ppp\",\n      \"version\": \"1.12\"\n    },\n    \"device\": {\n      \"name\": \"iOS\",\n      \"version\": \"10.12\"\n    },\n    \"system\": {\n      \"name\": \"VTEX\",\n      \"version\": \"13.12\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff07eceb-4bb6-4593-b423-53e21c9d6fc2",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appInfo\": {\n    \"platform\": {\n      \"integrator\": \"malga\",\n      \"name\": \"pluging-vtex-ppp\",\n      \"version\": \"1.12\"\n    },\n    \"device\": {\n      \"name\": \"iOS\",\n      \"version\": \"10.12\"\n    },\n    \"system\": {\n      \"name\": \"VTEX\",\n      \"version\": \"13.12\"\n    }\n  },\n  \"merchantId\": \"7f8870a2-71c9-4ef0-a531-82000e00b7e1\",\n  \"amount\": 150,\n  \"currency\": \"BRL\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"description\": \"Descrição longa da cobrança\",\n  \"capture\": false,\n  \"orderId\": \"32c68ff7-902c-408b-b464-cf487c7cda97\",\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"card\": {\n      \"cardNumber\": \"5261424250184574\",\n      \"cardCvv\": \"321\",\n      \"cardExpirationDate\": \"06/2028\",\n      \"cardHolderName\": \"JOAO DA SILVA\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31286671-f928-4634-a8e8-df5f3ea7b9c2",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appInfo\": {\n    \"platform\": {\n      \"integrator\": \"malga\",\n      \"name\": \"pluging-vtex-ppp\",\n      \"version\": \"1.12\"\n    },\n    \"device\": {\n      \"name\": \"iOS\",\n      \"version\": \"10.12\"\n    },\n    \"system\": {\n      \"name\": \"VTEX\",\n      \"version\": \"13.12\"\n    }\n  },\n  \"merchantId\": \"7f8870a2-71c9-4ef0-a531-82000e00b7e1\",\n  \"amount\": 150,\n  \"currency\": \"BRL\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"description\": \"Descrição longa da cobrança\",\n  \"capture\": false,\n  \"orderId\": \"32c68ff7-902c-408b-b464-cf487c7cda97\",\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"card\": {\n      \"cardNumber\": \"5261424250184574\",\n      \"cardCvv\": \"321\",\n      \"cardExpirationDate\": \"06/2028\",\n      \"cardHolderName\": \"JOAO DA SILVA\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0464ac88-104e-4d46-a399-e80274e845e6",
+          "name": "Listar cobranças",
+          "request": {
+            "name": "Listar cobranças",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "charges"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<number>",
+                  "description": "Número da página ativa"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<number>",
+                  "description": "Quantidade de registros por página 1-100"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Tipo de ordenação decrescente ou crescente"
+                },
+                {
+                  "disabled": false,
+                  "key": "merchantId",
+                  "value": "<uuid>",
+                  "description": "Id do merchant processado na cobrança"
+                },
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<uuid>",
+                  "description": "Id da cobrança"
+                },
+                {
+                  "disabled": false,
+                  "key": "sessionId",
+                  "value": "<uuid>",
+                  "description": "Id da sessão vinculada à cobrança"
+                },
+                {
+                  "disabled": false,
+                  "key": "originalAmount",
+                  "value": "<number>",
+                  "description": "Valor em centavos da cobrança"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Status da cobrança"
+                },
+                {
+                  "disabled": false,
+                  "key": "paymentType",
+                  "value": "<string>",
+                  "description": "Tipo de pagamento"
+                },
+                {
+                  "disabled": false,
+                  "key": "orderId",
+                  "value": "<string>",
+                  "description": "Id da cobrança gerado pelo cliente"
+                },
+                {
+                  "disabled": false,
+                  "key": "created",
+                  "value": "<string>",
+                  "description": "Registros criados em uma data específica"
+                },
+                {
+                  "disabled": false,
+                  "key": "created.gt",
+                  "value": "<string>",
+                  "description": "Registros com data maior que"
+                },
+                {
+                  "disabled": false,
+                  "key": "created.lt",
+                  "value": "<string>",
+                  "description": "Registros com data menor que"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5a04a225-b21d-4a96-a317-fb3b75e32cb9",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchantId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sessionId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "originalAmount",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "paymentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created",
+                      "value": "2022-03-12T12:43:53"
+                    },
+                    {
+                      "key": "created.gt",
+                      "value": "2022-03-12T12:43:53"
+                    },
+                    {
+                      "key": "created.lt",
+                      "value": "2022-03-12T12:43:53"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"itemCount\": 10,\n    \"totalItems\": 20,\n    \"itemsPerPage\": 10,\n    \"totalPages\": 5,\n    \"currentPage\": 2\n  },\n  \"items\": [\n    {\n      \"id\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\",\n      \"customerId\": \"82aba896-9e37-45b6-aa90-d510c9050596\",\n      \"clientId\": \"cc0b1e41-2936-45c5-947f-93995ffcdc00\",\n      \"createdAt\": \"2012-06-30 23:59:59 +0000\",\n      \"amount\": 150,\n      \"currency\": \"BRL\",\n      \"statementDescriptor\": \"LOJA JOAO\",\n      \"description\": \"Descrição longa da cobrança\",\n      \"capture\": false,\n      \"isDispute\": false,\n      \"orderId\": \"32c68ff7-902c-408b-b464-cf487c7cda97\",\n      \"paymentMethod\": {\n        \"paymentType\": \"credit\",\n        \"installments\": 1\n      },\n      \"paymentSource\": {\n        \"sourceType\": \"card\",\n        \"cardId\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\"\n      },\n      \"transactionRequests\": [\n        {\n          \"id\": \"78601913-a176-4d71-b7e8-abb6fc49a340\",\n          \"idempotencyKey\": \"fafe857b176e45d6b12e32fcaf228996\",\n          \"providerId\": \"2c3b57d8-ee43-4b19-bc8a-949a88c51df1\",\n          \"providerType\": \"STRIPE\",\n          \"transactionId\": \"ch_3JYE7MHjGFBGEeiP0lfTD3Ob\",\n          \"amount\": 1500,\n          \"authorizationNsu\": \"1cc8391c-f0d5-4b7a-9fcf-653cea26be13\",\n          \"requestStatus\": \"success\",\n          \"requestType\": \"authorization\",\n          \"responseTs\": \"2633ms\",\n          \"createdAt\": \"2021-08-12T16:08:39.536Z\",\n          \"updatedAt\": \"2021-08-12T16:08:42.212Z\",\n          \"providerAuthorization\": {\n            \"networkAuthorizationCode\": \"00\",\n            \"networkResponseCode\": \"\"\n          }\n        }\n      ],\n      \"appInfo\": {\n        \"platform\": {\n          \"integrator\": \"malga\",\n          \"name\": \"pluging-vtex-ppp\",\n          \"version\": \"1.12\"\n        },\n        \"device\": {\n          \"name\": \"iOS\",\n          \"version\": \"10.12\"\n        },\n        \"system\": {\n          \"name\": \"VTEX\",\n          \"version\": \"13.12\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7f1698b8-b9b4-4cf0-b103-3f27fa77b266",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchantId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sessionId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "originalAmount",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "paymentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created",
+                      "value": "2022-03-12T12:43:53"
+                    },
+                    {
+                      "key": "created.gt",
+                      "value": "2022-03-12T12:43:53"
+                    },
+                    {
+                      "key": "created.lt",
+                      "value": "2022-03-12T12:43:53"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b7fa8e12-ee55-4be0-b279-c25aae7c6c6c",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchantId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sessionId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "originalAmount",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "paymentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created",
+                      "value": "2022-03-12T12:43:53"
+                    },
+                    {
+                      "key": "created.gt",
+                      "value": "2022-03-12T12:43:53"
+                    },
+                    {
+                      "key": "created.lt",
+                      "value": "2022-03-12T12:43:53"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b32cba71-a233-4e03-a191-f683072a4f98",
+          "name": "Recuperar detalhes de cobrança",
+          "request": {
+            "name": "Recuperar detalhes de cobrança",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "charges",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da cobrança que deseja recuperar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0b3be250-8e4c-42c9-883d-3bac8f0e4b93",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja recuperar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\",\n  \"clientId\": \"cc0b1e41-2936-45c5-947f-93995ffcdc00\",\n  \"createdAt\": \"2012-06-30 23:59:59 +0000\",\n  \"amount\": 150,\n  \"currency\": \"BRL\",\n  \"orderId\": \"32c68ff7-902c-408b-b464-cf487c7cda97\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"description\": \"Descrição longa da cobrança\",\n  \"capture\": false,\n  \"isDispute\": false,\n  \"status\": \"pre_authorized\",\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"cardId\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\"\n  },\n  \"transactionRequests\": [\n    {\n      \"id\": \"78601913-a176-4d71-b7e8-abb6fc49a340\",\n      \"idempotencyKey\": \"fafe857b176e45d6b12e32fcaf228996\",\n      \"providerId\": \"2c3b57d8-ee43-4b19-bc8a-949a88c51df1\",\n      \"providerType\": \"STRIPE\",\n      \"transactionId\": \"ch_3JYE7MHjGFBGEeiP0lfTD3Ob\",\n      \"amount\": 1500,\n      \"authorizationNsu\": \"1cc8391c-f0d5-4b7a-9fcf-653cea26be13\",\n      \"requestStatus\": \"success\",\n      \"requestType\": \"authorization\",\n      \"responseTs\": \"2633ms\",\n      \"createdAt\": \"2021-08-12T16:08:39.536Z\",\n      \"updatedAt\": \"2021-08-12T16:08:42.212Z\",\n      \"providerAuthorization\": {\n        \"networkAuthorizationCode\": \"00\",\n        \"networkResponseCode\": \"\"\n      }\n    }\n  ],\n  \"appInfo\": {\n    \"platform\": {\n      \"integrator\": \"malga\",\n      \"name\": \"pluging-vtex-ppp\",\n      \"version\": \"1.12\"\n    },\n    \"device\": {\n      \"name\": \"iOS\",\n      \"version\": \"10.12\"\n    },\n    \"system\": {\n      \"name\": \"VTEX\",\n      \"version\": \"13.12\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39565fcd-b662-47ab-8de1-7600a134192a",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja recuperar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "76937356-43f0-4e49-b7a7-a250f21e3e90",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja recuperar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2579ef4e-bcf8-4f82-b3f1-6165e744969b",
+          "name": "Alterar o status de uma cobrança no ambiente de sandbox",
+          "request": {
+            "name": "Alterar o status de uma cobrança no ambiente de sandbox",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "charges",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da cobrança que deseja alterar no sandbox"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1dce4ebb-eba3-4d24-85d5-13c489546ece",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja alterar no sandbox"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"charged_back\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\",\n  \"clientId\": \"cc0b1e41-2936-45c5-947f-93995ffcdc00\",\n  \"createdAt\": \"2012-06-30 23:59:59 +0000\",\n  \"amount\": 150,\n  \"currency\": \"BRL\",\n  \"orderId\": \"32c68ff7-902c-408b-b464-cf487c7cda97\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"description\": \"Descrição longa da cobrança\",\n  \"capture\": false,\n  \"isDispute\": false,\n  \"status\": \"pre_authorized\",\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"cardId\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\"\n  },\n  \"transactionRequests\": [\n    {\n      \"id\": \"78601913-a176-4d71-b7e8-abb6fc49a340\",\n      \"idempotencyKey\": \"fafe857b176e45d6b12e32fcaf228996\",\n      \"providerId\": \"2c3b57d8-ee43-4b19-bc8a-949a88c51df1\",\n      \"providerType\": \"STRIPE\",\n      \"transactionId\": \"ch_3JYE7MHjGFBGEeiP0lfTD3Ob\",\n      \"amount\": 1500,\n      \"authorizationNsu\": \"1cc8391c-f0d5-4b7a-9fcf-653cea26be13\",\n      \"requestStatus\": \"success\",\n      \"requestType\": \"authorization\",\n      \"responseTs\": \"2633ms\",\n      \"createdAt\": \"2021-08-12T16:08:39.536Z\",\n      \"updatedAt\": \"2021-08-12T16:08:42.212Z\",\n      \"providerAuthorization\": {\n        \"networkAuthorizationCode\": \"00\",\n        \"networkResponseCode\": \"\"\n      }\n    }\n  ],\n  \"appInfo\": {\n    \"platform\": {\n      \"integrator\": \"malga\",\n      \"name\": \"pluging-vtex-ppp\",\n      \"version\": \"1.12\"\n    },\n    \"device\": {\n      \"name\": \"iOS\",\n      \"version\": \"10.12\"\n    },\n    \"system\": {\n      \"name\": \"VTEX\",\n      \"version\": \"13.12\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40926840-94f8-4b04-b690-0a20f372b4e4",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja alterar no sandbox"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"charged_back\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "81830b13-ce9b-435e-833f-1caa244d4a02",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja alterar no sandbox"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"charged_back\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "69dad61b-7b79-4626-befb-33d3bb0c6b1e",
+          "name": "Alterar o status do antifraude no ambiente de sandbox",
+          "request": {
+            "name": "Alterar o status do antifraude no ambiente de sandbox",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "charges",
+                ":id",
+                "antifraud"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da cobrança que deseja alterar no sandbox"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "00431672-63d1-480a-a95c-38c2ec4f9a87",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id",
+                    "antifraud"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja alterar no sandbox"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"approved\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\",\n  \"clientId\": \"cc0b1e41-2936-45c5-947f-93995ffcdc00\",\n  \"createdAt\": \"2012-06-30 23:59:59 +0000\",\n  \"amount\": 150,\n  \"currency\": \"BRL\",\n  \"orderId\": \"32c68ff7-902c-408b-b464-cf487c7cda97\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"description\": \"Descrição longa da cobrança\",\n  \"capture\": false,\n  \"isDispute\": false,\n  \"status\": \"pre_authorized\",\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"cardId\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\"\n  },\n  \"transactionRequests\": [\n    {\n      \"id\": \"78601913-a176-4d71-b7e8-abb6fc49a340\",\n      \"idempotencyKey\": \"fafe857b176e45d6b12e32fcaf228996\",\n      \"providerId\": \"2c3b57d8-ee43-4b19-bc8a-949a88c51df1\",\n      \"providerType\": \"STRIPE\",\n      \"transactionId\": \"ch_3JYE7MHjGFBGEeiP0lfTD3Ob\",\n      \"amount\": 1500,\n      \"authorizationNsu\": \"1cc8391c-f0d5-4b7a-9fcf-653cea26be13\",\n      \"requestStatus\": \"success\",\n      \"requestType\": \"authorization\",\n      \"responseTs\": \"2633ms\",\n      \"createdAt\": \"2021-08-12T16:08:39.536Z\",\n      \"updatedAt\": \"2021-08-12T16:08:42.212Z\",\n      \"providerAuthorization\": {\n        \"networkAuthorizationCode\": \"00\",\n        \"networkResponseCode\": \"\"\n      }\n    }\n  ],\n  \"appInfo\": {\n    \"platform\": {\n      \"integrator\": \"malga\",\n      \"name\": \"pluging-vtex-ppp\",\n      \"version\": \"1.12\"\n    },\n    \"device\": {\n      \"name\": \"iOS\",\n      \"version\": \"10.12\"\n    },\n    \"system\": {\n      \"name\": \"VTEX\",\n      \"version\": \"13.12\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7800e9fb-b569-4a83-a534-497c1d4cd2e9",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id",
+                    "antifraud"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja alterar no sandbox"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"approved\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "840379ab-6c7d-4657-b14e-9ca51793e2d8",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id",
+                    "antifraud"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja alterar no sandbox"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"approved\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "614d975c-f456-49a0-8f13-a953790ebf99",
+          "name": "Capturar cobrança pre-autorizada",
+          "request": {
+            "name": "Capturar cobrança pre-autorizada",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "charges",
+                ":id",
+                "capture"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da cobrança que deseja capturar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<number>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f72fcf05-842e-4a46-8de3-f2554f8cd430",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id",
+                    "capture"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja capturar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 150\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\",\n  \"clientId\": \"cc0b1e41-2936-45c5-947f-93995ffcdc00\",\n  \"createdAt\": \"2012-06-30 23:59:59 +0000\",\n  \"amount\": 150,\n  \"currency\": \"BRL\",\n  \"orderId\": \"32c68ff7-902c-408b-b464-cf487c7cda97\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"description\": \"Descrição longa da cobrança\",\n  \"capture\": false,\n  \"isDispute\": false,\n  \"status\": \"pre_authorized\",\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"cardId\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\"\n  },\n  \"transactionRequests\": [\n    {\n      \"id\": \"78601913-a176-4d71-b7e8-abb6fc49a340\",\n      \"idempotencyKey\": \"fafe857b176e45d6b12e32fcaf228996\",\n      \"providerId\": \"2c3b57d8-ee43-4b19-bc8a-949a88c51df1\",\n      \"providerType\": \"STRIPE\",\n      \"transactionId\": \"ch_3JYE7MHjGFBGEeiP0lfTD3Ob\",\n      \"amount\": 1500,\n      \"authorizationNsu\": \"1cc8391c-f0d5-4b7a-9fcf-653cea26be13\",\n      \"requestStatus\": \"success\",\n      \"requestType\": \"authorization\",\n      \"responseTs\": \"2633ms\",\n      \"createdAt\": \"2021-08-12T16:08:39.536Z\",\n      \"updatedAt\": \"2021-08-12T16:08:42.212Z\",\n      \"providerAuthorization\": {\n        \"networkAuthorizationCode\": \"00\",\n        \"networkResponseCode\": \"\"\n      }\n    }\n  ],\n  \"appInfo\": {\n    \"platform\": {\n      \"integrator\": \"malga\",\n      \"name\": \"pluging-vtex-ppp\",\n      \"version\": \"1.12\"\n    },\n    \"device\": {\n      \"name\": \"iOS\",\n      \"version\": \"10.12\"\n    },\n    \"system\": {\n      \"name\": \"VTEX\",\n      \"version\": \"13.12\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5bb1c3ae-4ac0-42f4-a02f-0bde5221a7ca",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id",
+                    "capture"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja capturar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 150\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f41ecc01-6b0a-4c64-96e9-c094df8e0957",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id",
+                    "capture"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja capturar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 150\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cb92758e-01b3-42be-b8b2-4a3009373bb4",
+          "name": "Estornar cobrança aprovada",
+          "request": {
+            "name": "Estornar cobrança aprovada",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "charges",
+                ":id",
+                "void"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id da cobrança que deseja estornar"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<number>\",\n  \"delayToCompose\": \"<number>\",\n  \"splitRules\": [\n    {\n      \"sellerId\": \"<uuid>\",\n      \"amount\": \"<number>\"\n    },\n    {\n      \"sellerId\": \"<uuid>\",\n      \"amount\": \"<number>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "208d38e9-2977-4c16-9dc2-61b26e075053",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id",
+                    "void"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja estornar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 150\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\",\n  \"clientId\": \"cc0b1e41-2936-45c5-947f-93995ffcdc00\",\n  \"createdAt\": \"2012-06-30 23:59:59 +0000\",\n  \"amount\": 150,\n  \"currency\": \"BRL\",\n  \"orderId\": \"32c68ff7-902c-408b-b464-cf487c7cda97\",\n  \"statementDescriptor\": \"LOJA JOAO\",\n  \"description\": \"Descrição longa da cobrança\",\n  \"capture\": false,\n  \"isDispute\": false,\n  \"status\": \"pre_authorized\",\n  \"paymentMethod\": {\n    \"paymentType\": \"credit\",\n    \"installments\": 1\n  },\n  \"paymentSource\": {\n    \"sourceType\": \"card\",\n    \"cardId\": \"148d5db0-f1c3-439f-902d-f1f268086e1d\"\n  },\n  \"transactionRequests\": [\n    {\n      \"id\": \"78601913-a176-4d71-b7e8-abb6fc49a340\",\n      \"idempotencyKey\": \"fafe857b176e45d6b12e32fcaf228996\",\n      \"providerId\": \"2c3b57d8-ee43-4b19-bc8a-949a88c51df1\",\n      \"providerType\": \"STRIPE\",\n      \"transactionId\": \"ch_3JYE7MHjGFBGEeiP0lfTD3Ob\",\n      \"amount\": 1500,\n      \"authorizationNsu\": \"1cc8391c-f0d5-4b7a-9fcf-653cea26be13\",\n      \"requestStatus\": \"success\",\n      \"requestType\": \"authorization\",\n      \"responseTs\": \"2633ms\",\n      \"createdAt\": \"2021-08-12T16:08:39.536Z\",\n      \"updatedAt\": \"2021-08-12T16:08:42.212Z\",\n      \"providerAuthorization\": {\n        \"networkAuthorizationCode\": \"00\",\n        \"networkResponseCode\": \"\"\n      }\n    }\n  ],\n  \"appInfo\": {\n    \"platform\": {\n      \"integrator\": \"malga\",\n      \"name\": \"pluging-vtex-ppp\",\n      \"version\": \"1.12\"\n    },\n    \"device\": {\n      \"name\": \"iOS\",\n      \"version\": \"10.12\"\n    },\n    \"system\": {\n      \"name\": \"VTEX\",\n      \"version\": \"13.12\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6832690e-6816-4fa2-ad50-aa94a9bef64d",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id",
+                    "void"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja estornar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 150\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6b492e38-a400-4224-8c53-fdfe229221d7",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "charges",
+                    ":id",
+                    "void"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id da cobrança que deseja estornar"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 150\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": 8224,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.malga.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "eb07ab12-bf95-489f-b186-f7d4cb366a15",
+    "name": "Documentação Malga 3DS2 Malga Charges API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

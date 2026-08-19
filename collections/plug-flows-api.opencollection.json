@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Flows API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Flows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Recuperar todos os fluxos paginado",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/flows",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Número da página"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Quantidade de itens por página"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "query",
+                "description": "Usado para filtrar os fluxos por merchantId"
+              },
+              {
+                "name": "paymentMethod",
+                "value": "",
+                "type": "query",
+                "description": "Usado para filtrar os fluxos por método de pagamento"
+              }
+            ]
+          },
+          "docs": "Recuperar todos os fluxos paginado"
+        },
+        {
+          "info": {
+            "name": "Consultar um fluxo pelo id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/flows/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Flow id"
+              }
+            ]
+          },
+          "docs": "Consultar um fluxo pelo id"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

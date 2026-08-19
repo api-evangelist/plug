@@ -1,0 +1,1305 @@
+{
+  "item": [
+    {
+      "id": "c7aa71f6-3764-46e4-896c-fd3dfeac3fdf",
+      "name": "Prepayment",
+      "description": {
+        "content": "\n> **🚧 Beta** — esta API está em fase Beta. Já está disponível para clientes habilitados, mas detalhes do contrato e do fluxo podem evoluir nas próximas versões.\n\n**Antecipação avulsa de recebíveis.** Permite que clientes habilitados recebam antes da data prevista os recebíveis das suas vendas, mediante desconto proporcional ao tempo antecipado.\n\n### Pré-requisitos\n\n- Transacionar pelo **provedor de pagamento Malga** (a antecipação não está disponível para transações feitas por outros provedores conectados à plataforma).\n- Sua conta precisa estar **habilitada** para antecipar recebíveis. Para solicitar a habilitação, entre em contato com o suporte. A solicitação passa por uma análise antes de ser aprovada.\n\n### Fluxo\n\n1. Consulte os recebíveis disponíveis para antecipação.\n2. Simule a antecipação informando uma ou mais datas de recebimento — a Malga agrupa todos os recebíveis previstos para cada data informada.\n3. Confirme a simulação para efetivar a antecipação. Para receber em D+1, o aceite precisa acontecer **até as 15h (horário de Brasília)** do dia da simulação.\n\nDetalhes do guia conceitual em [Antecipação avulsa](/documentations/more/prepayment).\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3e12c6cd-b59e-4729-9d44-1f3db7368301",
+          "name": "Consultar recebíveis disponíveis para antecipação",
+          "request": {
+            "name": "Consultar recebíveis disponíveis para antecipação",
+            "description": {
+              "content": "> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.\n\nLista os recebíveis disponíveis para antecipação avulsa e retorna um resumo com o valor total disponível e a quantidade de recebíveis.\n\nQuando `sellerId` é informado, a consulta é feita sobre os recebíveis do recebedor correspondente. Sem `sellerId`, opera sobre a conta principal.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "subacquirer",
+                "prepayment",
+                "receivables"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sellerId",
+                  "value": "<string>",
+                  "description": "ID do recebedor para consultar os recebíveis dele."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "37d8a3bc-d540-4928-9086-a0503b53ccd4",
+              "name": "Recebíveis disponíveis retornados com sucesso",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    "receivables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"summary\": {\n    \"availableAmount\": 25000,\n    \"receivableCount\": 3\n  },\n  \"receivables\": [\n    {\n      \"id\": \"019d6afe-c505-70a9-8df0-d052b578b35a\",\n      \"settlementDate\": \"2026-06-15\",\n      \"paymentArrangement\": \"vcc\",\n      \"amount\": 12000\n    },\n    {\n      \"id\": \"019d6afe-c505-70a9-8df0-d052b578b35b\",\n      \"settlementDate\": \"2026-06-15\",\n      \"paymentArrangement\": \"vcc\",\n      \"amount\": 8000\n    },\n    {\n      \"id\": \"019d6afe-c505-70a9-8df0-d052b578b35c\",\n      \"settlementDate\": \"2026-06-20\",\n      \"paymentArrangement\": \"mcc\",\n      \"amount\": 5000\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88d631a6-4d26-496b-85a7-a2aef29fb8a7",
+              "name": "Header `X-Client-Id` ausente",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    "receivables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 2009,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6bbd22fe-417a-4385-9473-70ac30554deb",
+              "name": "Conta ainda não habilitada para antecipação. Entre em contato com o suporte.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    "receivables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"I-403\",\n  \"networkDeniedMessage\": \"Client is not eligible for prepayment\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "274c86b0-62eb-4fdb-ac02-1386302af75e",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    "receivables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sellerId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 2009,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "874b6c21-6497-445e-bdae-b84cb17295fe",
+          "name": "Simular antecipação",
+          "request": {
+            "name": "Simular antecipação",
+            "description": {
+              "content": "> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.\n\nCria uma simulação de antecipação para o **período que termina em `endDate`**. A Malga inclui **todos os recebíveis elegíveis com data prevista de recebimento até `endDate` (inclusive)** e calcula o valor líquido a ser recebido pelo cliente, junto com o desconto aplicado.\n\nA simulação fica válida até as **15h (horário de Brasília)** do dia em que foi criada (campo `expiresAt`). Para receber em D+1, o aceite precisa acontecer dentro desse prazo.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "subacquirer",
+                "prepayment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"endDate\": \"<date>\",\n  \"sellerId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d3893c3c-0a1c-4c72-a223-603be811e54b",
+              "name": "Simulação criada com sucesso",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"endDate\": \"2026-06-20\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"01964c5a-0001-7000-8000-000000000001\",\n  \"status\": \"pending\",\n  \"grossAmount\": 20000,\n  \"netAmount\": 19323,\n  \"markupAmount\": 387,\n  \"feeAmount\": 290,\n  \"effectiveRate\": 0.03385,\n  \"monthlyRate\": 0.015,\n  \"markup\": 0.02,\n  \"expiresAt\": \"2026-05-27T18:00:00Z\",\n  \"endDate\": \"2026-06-20\",\n  \"paymentDate\": \"2026-05-28\",\n  \"items\": [\n    {\n      \"receivableUnitExternalId\": \"ru-ext-ok-1\",\n      \"grossAmount\": 12000,\n      \"netAmount\": 11594,\n      \"markupAmount\": 232,\n      \"feeAmount\": 174,\n      \"daysToAnticipate\": 30,\n      \"settlementDate\": \"2026-06-15\",\n      \"paymentArrangement\": \"vcc\"\n    },\n    {\n      \"receivableUnitExternalId\": \"ru-ext-ok-2\",\n      \"grossAmount\": 8000,\n      \"netAmount\": 7729,\n      \"markupAmount\": 155,\n      \"feeAmount\": 116,\n      \"daysToAnticipate\": 30,\n      \"settlementDate\": \"2026-06-15\",\n      \"paymentArrangement\": \"vcc\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "07529456-824b-4bcc-a6ca-7bb38886cdc3",
+              "name": "Body inválido ou header obrigatório ausente",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"endDate\": \"2026-06-20\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 2009,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "32f87d3d-f054-45fa-bc20-05ed6d6b8e90",
+              "name": "Conta ainda não habilitada para antecipação. Entre em contato com o suporte.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"endDate\": \"2026-06-20\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"I-403\",\n  \"networkDeniedMessage\": \"Client is not eligible for prepayment\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b80c42ac-c1c3-45d7-9aa7-10210c26bd56",
+              "name": "Conta sem recebíveis associados ao provedor Malga",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"endDate\": \"2026-06-20\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"I-403\",\n  \"networkDeniedMessage\": \"Client is not eligible for prepayment\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f8863d8-8958-422d-a562-8caa7edab244",
+              "name": "Nenhum recebível disponível para o período informado (até `endDate`)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"endDate\": \"2026-06-20\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"I-403\",\n  \"networkDeniedMessage\": \"Client is not eligible for prepayment\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d5612f0-6385-4039-80e8-3c3d30e462af",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"endDate\": \"2026-06-20\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 2009,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9a64e51e-3dcb-4757-9b51-9079849c0dbf",
+          "name": "Recuperar detalhes de uma antecipação",
+          "request": {
+            "name": "Recuperar detalhes de uma antecipação",
+            "description": {
+              "content": "> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.\n\nRetorna os detalhes de uma simulação ou antecipação pelo seu identificador.\n\nSe a simulação ainda está com status `pending` mas o horário atual já passou do `expiresAt` (15h, horário de Brasília), o `status` retornado vem como `expired` automaticamente. Nesse caso, basta criar uma nova simulação.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "subacquirer",
+                "prepayment",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificador da antecipação."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fe52f270-cc89-4907-bc2f-ddfddf1fcd8f",
+              "name": "Detalhes da antecipação",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da antecipação."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"01964c5a-0001-7000-8000-000000000001\",\n  \"status\": \"pending\",\n  \"grossAmount\": 20000,\n  \"netAmount\": 19323,\n  \"markupAmount\": 387,\n  \"feeAmount\": 290,\n  \"effectiveRate\": 0.03385,\n  \"monthlyRate\": 0.015,\n  \"markup\": 0.02,\n  \"expiresAt\": \"2026-05-27T18:00:00Z\",\n  \"endDate\": \"2026-06-20\",\n  \"paymentDate\": \"2026-05-28\",\n  \"items\": [\n    {\n      \"receivableUnitExternalId\": \"ru-ext-ok-1\",\n      \"grossAmount\": 12000,\n      \"netAmount\": 11594,\n      \"markupAmount\": 232,\n      \"feeAmount\": 174,\n      \"daysToAnticipate\": 30,\n      \"settlementDate\": \"2026-06-15\",\n      \"paymentArrangement\": \"vcc\"\n    },\n    {\n      \"receivableUnitExternalId\": \"ru-ext-ok-2\",\n      \"grossAmount\": 8000,\n      \"netAmount\": 7729,\n      \"markupAmount\": 155,\n      \"feeAmount\": 116,\n      \"daysToAnticipate\": 30,\n      \"settlementDate\": \"2026-06-15\",\n      \"paymentArrangement\": \"vcc\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d57fcf1a-1502-499d-956f-b8402aa5199f",
+              "name": "Header obrigatório ausente",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da antecipação."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 2009,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b3f3e0c6-a5d3-491f-a4ef-8973b340722e",
+              "name": "Antecipação não encontrada",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da antecipação."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"I-403\",\n  \"networkDeniedMessage\": \"Client is not eligible for prepayment\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f39d48fb-a7cf-4bb2-8c70-ae4fbf432fdc",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da antecipação."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 2009,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "20816d32-b342-4c97-bf07-b661c56db9da",
+          "name": "Confirmar antecipação (aceite)",
+          "request": {
+            "name": "Confirmar antecipação (aceite)",
+            "description": {
+              "content": "> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.\n\nConfirma o aceite de uma simulação, efetivando a antecipação.\n\nPara receber em D+1, o aceite precisa acontecer até as **15h (horário de Brasília)** do dia em que a simulação foi criada. Após esse horário, a simulação fica expirada e é preciso simular novamente.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "subacquirer",
+                "prepayment",
+                ":id",
+                "commit"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identificador da antecipação a ser aceita."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ae353cec-f82d-4fbc-891a-9bcfeeb85958",
+              "name": "Antecipação confirmada com sucesso",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    ":id",
+                    "commit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da antecipação a ser aceita."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"01964c5a-0001-7000-8000-000000000001\",\n  \"status\": \"committed\",\n  \"grossAmount\": 20000,\n  \"netAmount\": 19323,\n  \"markupAmount\": 387,\n  \"feeAmount\": 290,\n  \"effectiveRate\": 0.03385,\n  \"monthlyRate\": 0.015,\n  \"markup\": 0.02,\n  \"expiresAt\": \"2026-05-27T18:00:00Z\",\n  \"endDate\": \"2026-06-20\",\n  \"paymentDate\": \"2026-05-28\",\n  \"items\": [\n    {\n      \"receivableUnitExternalId\": \"ru-ext-ok-1\",\n      \"grossAmount\": 12000,\n      \"netAmount\": 11594,\n      \"markupAmount\": 232,\n      \"feeAmount\": 174,\n      \"daysToAnticipate\": 30,\n      \"settlementDate\": \"2026-06-15\",\n      \"paymentArrangement\": \"vcc\"\n    },\n    {\n      \"receivableUnitExternalId\": \"ru-ext-ok-2\",\n      \"grossAmount\": 8000,\n      \"netAmount\": 7729,\n      \"markupAmount\": 155,\n      \"feeAmount\": 116,\n      \"daysToAnticipate\": 30,\n      \"settlementDate\": \"2026-06-15\",\n      \"paymentArrangement\": \"vcc\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "798093dc-a374-4a00-b9e7-38cb89ee1643",
+              "name": "Header obrigatório ausente",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    ":id",
+                    "commit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da antecipação a ser aceita."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 2009,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14d597e1-1324-4e7d-a543-ec2021b8a745",
+              "name": "Antecipação não encontrada",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    ":id",
+                    "commit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da antecipação a ser aceita."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"I-403\",\n  \"networkDeniedMessage\": \"Client is not eligible for prepayment\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "44eaff7e-1661-4f4e-9a3d-1e06fc555a63",
+              "name": "Antecipação não está mais pendente ou simulação expirou (passou de 15h do dia da criação)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    ":id",
+                    "commit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da antecipação a ser aceita."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"I-403\",\n  \"networkDeniedMessage\": \"Client is not eligible for prepayment\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "673001d5-760b-4643-8c34-c8b5e54b87b6",
+              "name": "Os recebíveis mudaram desde a simulação. Faça uma nova simulação.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    ":id",
+                    "commit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da antecipação a ser aceita."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"I-403\",\n  \"networkDeniedMessage\": \"Client is not eligible for prepayment\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e192403d-8347-4a2e-9f37-e5175d498302",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "subacquirer",
+                    "prepayment",
+                    ":id",
+                    "commit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identificador da antecipação a ser aceita."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"bad_request\",\n    \"code\": 2009,\n    \"declinedCode\": \"string\",\n    \"key\": \"string\",\n    \"businessCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.malga.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "0287571b-c341-40bd-b699-92c3badf3954",
+    "name": "Documentação Malga 3DS2 Malga Prepayment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

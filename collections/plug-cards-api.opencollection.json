@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Cards API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Listar cartões",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/cards",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Número da página"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Quantidade de itens por página"
+              }
+            ]
+          },
+          "docs": "Listar cartões"
+        },
+        {
+          "info": {
+            "name": "Criar novo cartão a partir de token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/cards",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Criar novo cartão a partir de token"
+        },
+        {
+          "info": {
+            "name": "Recuperar detalhes de cartão",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/cards/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID do cartão"
+              }
+            ]
+          },
+          "docs": "Recuperar detalhes de cartão"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

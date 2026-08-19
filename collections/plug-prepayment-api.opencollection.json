@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Prepayment API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Prepayment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Consultar recebíveis disponíveis para antecipação",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/subacquirer/prepayment/receivables",
+            "params": [
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "query",
+                "description": "ID do recebedor para consultar os recebíveis dele."
+              }
+            ]
+          },
+          "docs": "> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.\n\nLista os recebíveis disponíveis para antecipação avulsa e retorna um resumo com o valor total disponível e a quantidade de recebíveis.\n\nQuando `sellerId` é informado, a consulta é feita sobre os recebíveis do recebedor correspondente. Sem `sellerId`, opera sobre a conta principal.\n"
+        },
+        {
+          "info": {
+            "name": "Simular antecipação",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/subacquirer/prepayment",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.\n\nCria uma simulação de antecipação para o **período que termina em `endDate`**. A Malga inclui **todos os recebíveis elegíveis com data prevista de recebimento até `endDate` (inclusive)** e calcula o valor líquido a ser recebido pelo cliente, junto com o desconto aplicado.\n\nA simulação fica válida até as **15h (horário de Brasília)** do dia em que foi criada (campo `expiresAt`). Para receber em "
+        },
+        {
+          "info": {
+            "name": "Recuperar detalhes de uma antecipação",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/subacquirer/prepayment/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificador da antecipação."
+              }
+            ]
+          },
+          "docs": "> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.\n\nRetorna os detalhes de uma simulação ou antecipação pelo seu identificador.\n\nSe a simulação ainda está com status `pending` mas o horário atual já passou do `expiresAt` (15h, horário de Brasília), o `status` retornado vem como `expired` automaticamente. Nesse caso, basta criar uma nova simulação.\n"
+        },
+        {
+          "info": {
+            "name": "Confirmar antecipação (aceite)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/subacquirer/prepayment/:id/commit",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificador da antecipação a ser aceita."
+              }
+            ]
+          },
+          "docs": "> **🚧 Beta** — esta API está em fase Beta e detalhes do contrato podem evoluir nas próximas versões.\n\nConfirma o aceite de uma simulação, efetivando a antecipação.\n\nPara receber em D+1, o aceite precisa acontecer até as **15h (horário de Brasília)** do dia em que a simulação foi criada. Após esse horário, a simulação fica expirada e é preciso simular novamente.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

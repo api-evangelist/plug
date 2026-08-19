@@ -1,0 +1,193 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Customers API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Customers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Listagem de customers cadastrados",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/customers",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Número da página"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Quantidade de itens por página"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Ordenação dos itens"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "Identificador de um customer"
+              },
+              {
+                "name": "document.type",
+                "value": "",
+                "type": "query",
+                "description": "Tipo de documento"
+              },
+              {
+                "name": "document.number",
+                "value": "",
+                "type": "query",
+                "description": "Número do documento"
+              }
+            ]
+          },
+          "docs": "Listagem de customers cadastrados"
+        },
+        {
+          "info": {
+            "name": "Criação de novo customer para cobrança",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/customers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Criação de novo customer para cobrança"
+        },
+        {
+          "info": {
+            "name": "Recuperar detalhes de customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/customers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id do customers que deseja recuperar"
+              }
+            ]
+          },
+          "docs": "Recuperar detalhes de customer"
+        },
+        {
+          "info": {
+            "name": "Atualizar customer pelo id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/customers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id do customers que deseja alterar"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atualizar customer pelo id"
+        },
+        {
+          "info": {
+            "name": "Deletar customer pelo id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.malga.io/v1/customers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id do customers que deseja deletar"
+              }
+            ]
+          },
+          "docs": "Deletar customer pelo id"
+        },
+        {
+          "info": {
+            "name": "Listagem dos cartões do customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/customers/:customer_id/cards",
+            "params": [
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "path",
+                "description": "Id do customers que deseja alterar"
+              }
+            ]
+          },
+          "docs": "Listagem dos cartões do customer"
+        },
+        {
+          "info": {
+            "name": "Adicionar cartão de crédito ao customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/customers/:customer_id/cards",
+            "params": [
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "path",
+                "description": "Id do customers que deseja alterar"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adicionar cartão de crédito ao customer"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Seller Documents API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Seller Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Listar documentos",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/sellers/documents",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filtrar por status do documento"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filtrar por tipo do documento"
+              },
+              {
+                "name": "createdAt",
+                "value": "",
+                "type": "query",
+                "description": "Filtrar documentos criados a partir desta data (ISO 8601)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Itens por página (máximo 50)"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Número da página"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Ordenação por data de criação"
+              }
+            ]
+          },
+          "docs": "Lista os documentos do cliente autenticado. Documentos expirados não são retornados.\n"
+        },
+        {
+          "info": {
+            "name": "Upload de documento",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/sellers/documents",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "type",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Faz upload de um documento (imagem ou PDF) para posterior associação a um seller.\nO arquivo fica armazenado temporariamente por 7 dias. Após esse prazo, o documento expira e não pode mais ser utilizado.\n\n**Tipos aceitos:** SELFIE, CNH_FULL, CNH_FRONT, CNH_BACK, RG_FRONT, RG_BACK\n\n**Formatos aceitos:**\n- SELFIE e CNH_FULL: PNG, JPEG, BMP, WebP, HEIC, HEIF, PDF\n- CNH_FRONT, CNH_BACK, RG_FRONT, RG_BACK: PNG, JPEG, BMP, WebP, HEIC, HEIF (sem PDF)\n\n**Tamanho máximo:** 3MB\n"
+        },
+        {
+          "info": {
+            "name": "Consultar documento",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/sellers/documents/:documentId",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "ID do documento"
+              }
+            ]
+          },
+          "docs": "Retorna os detalhes de um documento. Documentos expirados retornam 404."
+        },
+        {
+          "info": {
+            "name": "Deletar documento",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.malga.io/v1/sellers/documents/:documentId",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "ID do documento"
+              }
+            ]
+          },
+          "docs": "Remove um documento. Apenas documentos com status `uploaded` podem ser deletados.\nDocumentos já associados a um seller (status `attached` ou `sent`) não podem ser removidos.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,243 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Charges API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Charges",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Listar cobranças",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/charges",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Número da página ativa"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Quantidade de registros por página 1-100"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Tipo de ordenação decrescente ou crescente"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "query",
+                "description": "Id do merchant processado na cobrança"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "Id da cobrança"
+              },
+              {
+                "name": "sessionId",
+                "value": "",
+                "type": "query",
+                "description": "Id da sessão vinculada à cobrança"
+              },
+              {
+                "name": "originalAmount",
+                "value": "",
+                "type": "query",
+                "description": "Valor em centavos da cobrança"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Status da cobrança"
+              },
+              {
+                "name": "paymentType",
+                "value": "",
+                "type": "query",
+                "description": "Tipo de pagamento"
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "query",
+                "description": "Id da cobrança gerado pelo cliente"
+              },
+              {
+                "name": "created",
+                "value": "2022-03-12T12:43:53",
+                "type": "query",
+                "description": "Registros criados em uma data específica"
+              },
+              {
+                "name": "created.gt",
+                "value": "2022-03-12T12:43:53",
+                "type": "query",
+                "description": "Registros com data maior que"
+              },
+              {
+                "name": "created.lt",
+                "value": "2022-03-12T12:43:53",
+                "type": "query",
+                "description": "Registros com data menor que"
+              }
+            ]
+          },
+          "docs": "Listar cobranças"
+        },
+        {
+          "info": {
+            "name": "Realizar nova cobrança",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/charges",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Realizar nova cobrança"
+        },
+        {
+          "info": {
+            "name": "Recuperar detalhes de cobrança",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/charges/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da cobrança que deseja recuperar"
+              }
+            ]
+          },
+          "docs": "Recuperar detalhes de cobrança"
+        },
+        {
+          "info": {
+            "name": "Alterar o status de uma cobrança no ambiente de sandbox",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/charges/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da cobrança que deseja alterar no sandbox"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Alterar o status de uma cobrança no ambiente de sandbox"
+        },
+        {
+          "info": {
+            "name": "Alterar o status do antifraude no ambiente de sandbox",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/charges/:id/antifraud",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da cobrança que deseja alterar no sandbox"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Alterar o status do antifraude no ambiente de sandbox"
+        },
+        {
+          "info": {
+            "name": "Capturar cobrança pre-autorizada",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/charges/:id/capture",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da cobrança que deseja capturar"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Capturar cobrança pre-autorizada"
+        },
+        {
+          "info": {
+            "name": "Estornar cobrança aprovada",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/charges/:id/void",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da cobrança que deseja estornar"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Estornar cobrança aprovada"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,242 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Sessions API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sessions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Listar sessões",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/sessions",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Número da página a ser listada (mínimo 1)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Quantidade de registros por página (padrão 10; máximo 100)"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Aceito como `asc` ou `desc` (padrão `desc`; valores inválidos caem para `desc`).\nA listagem atual ordena sempre por `createdAt` decrescente.\n"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "Filtra pelo identificador da sessão"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filtra por status da sessão. Aceita múltiplos valores separados por vírgula"
+              },
+              {
+                "name": "isActive",
+                "value": "",
+                "type": "query",
+                "description": "Filtra sessões ativadas ou desativadas. Aceita múltiplos valores separados por vírgula (`true` e/ou `false`)"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "query",
+                "description": "Filtra pelo identificador do merchant"
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "query",
+                "description": "Filtra pelo identificador do pedido. Se informado, deve ter no mínimo 2 caracteres Unicode após o trim"
+              },
+              {
+                "name": "multiplePayments.status",
+                "value": "",
+                "type": "query",
+                "description": "Filtra pela disponibilidade agregada do link (`multiplePayments.status`). Aceita múltiplos valores separados por vírgula.\n`disabled` cobre links temporariamente indisponíveis, incluindo expiração por `dueDate`.\n"
+              },
+              {
+                "name": "created.gt",
+                "value": "2026-03-24T03:00:00.000Z",
+                "type": "query",
+                "description": "Filtra sessões com `createdAt` estritamente maior que o instante informado (RFC 3339 ou RFC 3339 com fração de segundos)"
+              },
+              {
+                "name": "created.lt",
+                "value": "2026-04-01T02:59:00.000Z",
+                "type": "query",
+                "description": "Filtra sessões com `createdAt` estritamente menor que o instante informado (RFC 3339 ou RFC 3339 com fração de segundos)"
+              }
+            ]
+          },
+          "docs": "Lista as sessões do cliente autenticado, com paginação e filtros opcionais.\n\nSem o header `X-Client-Id`, a API responde `200` com `items` vazio e metadados de paginação padrão (não retorna erro).\n"
+        },
+        {
+          "info": {
+            "name": "Criar nova sessão",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/sessions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Cria uma sessão de pagamento. Quando `maxPayments` é omitido, a sessão segue o fluxo 1:1 legado. Quando `maxPayments` é enviado, a sessão opera como link 1:N e a resposta completa retorna `multiplePayments` com a disponibilidade agregada para próximas cobranças.\n\n**Restrição pix/boleto em 1:N:** métodos `pix` e `boleto` não podem ser combinados com `maxPayments` finito maior que `1`. Nesse caso a API retorna `422` com `businessCode: \"pix_boleto_multiple_payments_not_allowed\"`. `maxPayments` omit"
+        },
+        {
+          "info": {
+            "name": "Recuperar detalhes de uma sessão",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/sessions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificação da sessão a ser recuperada"
+              }
+            ]
+          },
+          "docs": "Retorna a sessão completa. Use este endpoint como fonte do estado agregado de `multiplePayments` após criação, pagamento, atualização, cancelamento ou consulta de histórico.\n"
+        },
+        {
+          "info": {
+            "name": "Atualizar relevância de uma sessão",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/sessions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificação da sessão a ser alterada"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atualiza campos de relevância da sessão: `isActive` (obrigatório), `dueDate` e `maxPayments` (sessões 1:N). A resposta é parcial e devolve apenas `id` e `isActive`; após a atualização, consulte `GET /v1/sessions/{id}` para obter o estado completo (`status`, `dueDate`, `maxPayments`, `multiplePayments`, etc.).\n\n**Restrição de reativação pix/boleto 1:1 consumida:** `isActive: true` em uma sessão pix ou boleto 1:1 já paga (`maxPayments = 1` com `paymentCount = 1`, ou sessão legada sem `maxPayments`"
+        },
+        {
+          "info": {
+            "name": "Pagar uma sessão",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/sessions/:id/charge",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificação da sessão a ser paga"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Inicia uma cobrança para a sessão. Em sessões 1:N, cada chamada aceita representa uma tentativa individual dentro da capacidade configurada em `maxPayments`. A resposta é a cobrança criada e não retorna `multiplePayments`; consulte `GET /v1/sessions/{id}` para acompanhar o estado agregado atualizado.\n"
+        },
+        {
+          "info": {
+            "name": "Cancelar uma sessão",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/sessions/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificação da sessão a ser cancelada"
+              }
+            ]
+          },
+          "docs": "Cancelar uma sessão"
+        },
+        {
+          "info": {
+            "name": "Recuperar o histórico da sessão",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/sessions/:id/history",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificação da sessão"
+              }
+            ]
+          },
+          "docs": "Retorna a trilha de auditoria da sessão em ordem decrescente de criação, com os registros mais recentes primeiro: alterações de campos, tentativas de pagamento, confirmações assíncronas e expirações.\n\nCada item representa um **registro de histórico** (`id` do evento), não o identificador da sessão. Use `action` (ação principal derivada) e `actions` (lista completa) junto com `diff` para entender o que ocorreu.\n\nO campo `status` em cada item segue a **semântica de produto** na leitura: expirações"
+        },
+        {
+          "info": {
+            "name": "Recupera sessão com os dados das configurações da empresa",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/sessions/:id/link",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificação da sessão a ser recuperada"
+              }
+            ]
+          },
+          "docs": "Retorna a sessão completa junto das configurações da empresa usadas no Link de Pagamento. Também inclui `multiplePayments` para indicar a disponibilidade agregada do link em sessões 1:1 e 1:N.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

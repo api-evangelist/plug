@@ -1,0 +1,247 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Subscriptions API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Subscriptions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Listagem de assinaturas",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/subscriptions",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Número da página ativa"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Quantidade de registros por página 1-100"
+              }
+            ]
+          },
+          "docs": "Listagem de assinaturas"
+        },
+        {
+          "info": {
+            "name": "Criação de uma nova assinatura",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.malga.io/v1/subscriptions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Criação de uma nova assinatura"
+        },
+        {
+          "info": {
+            "name": "Recuperar detalhes de assinatura",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/subscriptions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da assinatura que deseja recuperar"
+              }
+            ]
+          },
+          "docs": "Recuperar detalhes de assinatura"
+        },
+        {
+          "info": {
+            "name": "Atualizar assinatura",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.malga.io/v1/subscriptions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da assinatura que deseja atualizar"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atualizar assinatura"
+        },
+        {
+          "info": {
+            "name": "Cancelar assinatura",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/subscriptions/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da assinatura que deseja cancelar"
+              }
+            ]
+          },
+          "docs": "Cancelar assinatura"
+        },
+        {
+          "info": {
+            "name": "Pausar assinatura",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/subscriptions/:id/pause",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da assinatura que deseja pausar"
+              }
+            ]
+          },
+          "docs": "Pausar assinatura"
+        },
+        {
+          "info": {
+            "name": "Reativar assinatura",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/subscriptions/:id/resume",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da assinatura que deseja reativar"
+              }
+            ]
+          },
+          "docs": "Reativar assinatura"
+        },
+        {
+          "info": {
+            "name": "Listar cycles de uma assinatura",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/subscriptions/:id/cycles",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da assinatura"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Número máximo de items por página"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Número da página"
+              }
+            ]
+          },
+          "docs": "Listar cycles de uma assinatura"
+        },
+        {
+          "info": {
+            "name": "Recuperar detalhes de um cycle específico",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/subscriptions/:id/cycles/:cycleId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id da assinatura"
+              },
+              {
+                "name": "cycleId",
+                "value": "",
+                "type": "path",
+                "description": "Id do cycle"
+              }
+            ]
+          },
+          "docs": "Recuperar detalhes de um cycle específico"
+        },
+        {
+          "info": {
+            "name": "Obter configurações do cliente",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/subscriptions/settings"
+          },
+          "docs": "Recupera as configurações atuais do cliente para assinaturas (retry policy, statement descriptor, etc.)"
+        },
+        {
+          "info": {
+            "name": "Atualizar configurações do cliente",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.malga.io/v1/subscriptions/settings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atualiza as configurações do cliente para assinaturas (retry policy, statement descriptor, etc.)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

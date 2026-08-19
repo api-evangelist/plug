@@ -1,0 +1,243 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documentação Malga 3DS2 Malga Payouts API",
+    "version": "0.5"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Client-Id",
+      "value": "{{X-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payouts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Consultar saldo",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/payouts/balance",
+            "params": [
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "query",
+                "description": "Filtra o saldo por seller específico"
+              }
+            ]
+          },
+          "docs": "Retorna o saldo disponível e a receber da nossa subadquirente\n"
+        },
+        {
+          "info": {
+            "name": "Listar repasses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/payouts/payment-batches",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Número da página"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Quantidade de itens por página (máx. 100)"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Ordenação por data de criação"
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "query",
+                "description": "Filtra por seller"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Status separados por vírgula (ex. `pending,paid`)"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Data inicial em RFC 3339 (ex. `2026-04-01T00:00:00Z`)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Data final em RFC 3339 (ex. `2026-04-30T23:59:59Z`)"
+              },
+              {
+                "name": "paymentDate",
+                "value": "",
+                "type": "query",
+                "description": "Data de pagamento no formato `YYYY-MM-DD`"
+              }
+            ]
+          },
+          "docs": "Listagem paginada dos repasses realizados na subadquirente\n"
+        },
+        {
+          "info": {
+            "name": "Consultar repasse pelo ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/payouts/payment-batches/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificador do repasse"
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "query",
+                "description": "Filtra o repasse por seller"
+              }
+            ]
+          },
+          "docs": "Consultar repasse pelo ID"
+        },
+        {
+          "info": {
+            "name": "Listar ordens de pagamento de um repasse",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/payouts/payment-batches/:id/orders",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificador do repasse"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Quantidade de itens por página (máx. 100)"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lista paginada das ordens de pagamento que compõem um repasse."
+        },
+        {
+          "info": {
+            "name": "Listar ordens de pagamento",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/payouts/orders",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Quantidade de itens por página (máx. 100)"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Data inicial em RFC 3339 (ex. `2026-04-01T00:00:00Z`)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Data final em RFC 3339 (ex. `2026-04-30T23:59:59Z`)"
+              },
+              {
+                "name": "chargeId",
+                "value": "",
+                "type": "query",
+                "description": "Filtra ordens de pagamento por cobrança específica"
+              }
+            ]
+          },
+          "docs": "Lista paginada das ordens de pagamento da nossa subadquirente.\n"
+        },
+        {
+          "info": {
+            "name": "Consultar ordem de pagamento pelo ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.malga.io/v1/payouts/orders/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identificador da ordem de pagamento"
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "query",
+                "description": "Filtra a ordem de pagamento por seller"
+              }
+            ]
+          },
+          "docs": "Consultar ordem de pagamento pelo ID"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
