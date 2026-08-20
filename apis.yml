@@ -45,6 +45,16 @@ tags:
 - Fintech
 - Pix
 - Tokenization
+- Subscription
+- Brazil
+tags_raw:
+- Company
+- Payments
+- Payment Orchestration
+- Payment Gateway
+- Fintech
+- Pix
+- Tokenization
 - Subscriptions
 - Brazil
 maintainers:
@@ -489,6 +499,8 @@ apis:
   humanURL: https://docs.malga.io/api-reference/about-apis
   baseURL: https://api.malga.io
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
@@ -551,6 +563,8 @@ apis:
   humanURL: https://docs.malga.io/api-reference/about-apis
   baseURL: https://api.malga.io
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
