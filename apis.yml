@@ -219,6 +219,8 @@ apis:
   humanURL: https://docs.malga.io/api-reference/about-apis
   baseURL: https://api.malga.io
   tags:
+  - Flow
+  tags_raw:
   - Flows
   properties:
   - type: OpenAPI
