@@ -1,24 +1,7 @@
 {
   "provider": "plug",
   "sources": [
-    "plug-3ds2-malga-api-openapi.yml",
-    "plug-cards-api-openapi.yml",
-    "plug-charges-api-openapi.yml",
-    "plug-client-token-api-openapi.yml",
-    "plug-customers-api-openapi.yml",
-    "plug-flows-api-openapi.yml",
-    "plug-merchants-api-openapi.yml",
-    "plug-payouts-api-openapi.yml",
-    "plug-prepayment-api-openapi.yml",
-    "plug-providers-api-openapi.yml",
-    "plug-seller-documents-api-openapi.yml",
-    "plug-sellers-api-openapi.yml",
-    "plug-sessions-api-openapi.yml",
-    "plug-settings-api-openapi.yml",
-    "plug-subscriptions-api-openapi.yml",
-    "plug-tokens-api-openapi.yml",
-    "plug-vendors-api-openapi.yml",
-    "plug-webhooks-api-openapi.yml"
+    "_original/plug-openapi-original.yml"
   ],
   "outputs": [
     "plug-3ds2-malga-api-openapi.yml",
@@ -43,6 +26,33 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "plug-openapi-original.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "plug-openapi-original.yml: tagged paths PUT /v1/subscriptions/{id} -> Subscriptions",
+    "plug-openapi-original.yml: declared missing tag: 3DS2 Malga",
+    "plug-openapi-original.yml: declared missing tag: Seller Documents",
+    "plug-openapi-original.yml: declared missing tag: Vendors",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "plug-3ds2-malga-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-cards-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-charges-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-client-token-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-customers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-flows-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-merchants-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-payouts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-prepayment-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-providers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-seller-documents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-sellers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-sessions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-settings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-subscriptions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-tokens-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-vendors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "plug-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

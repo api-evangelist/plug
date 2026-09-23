@@ -1,8 +1,11 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   version: '0.5'
-  title: Documentação Malga 3DS2 Malga Tokens API
-  description: "# Authentication\n\nOs serviços de API da Malga são protegidos através de chaves de acesso. Você pode gerenciar suas chaves de acesso através do seu dashboard.\n\nÉ importante armazenar suas chaves de maneira privada e segura uma vez que elas possuem privilégios de alteração na sua conta. Não compartilhe suas chaves, não deixe elas fixadas no seu código e nem armazene elas no seu servidor de controle de versão. Recomendamos utilizar variáveis de ambiente secretas para deixar a chave disponível para sua aplicação.\n\nA Autenticação para todos os chamadas da API é feita através de headers HTTP, sendo necessário informar seu identificador de cliente na Malga e a chave secreta de acesso.\n\n## X-Client-ID\n\nIdentificador única da sua conta na Malga. Deve ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Client-ID` |\n\n## X-Api-Key\n\nSua chave de acesso a API. Funciona em par com o client-id devendo ser enviado no header obrigatóriamente em todas as requisições feitas a API.\n\n| Security Scheme Type | API Key |\n|-----------------------|-----------|\n| Header parameter name | `X-Api-Key` |\n\n## Exemplo de requisicão autenticada\n\n```bash\n  curl --location --request GET 'https://api.malga.io/v1/' \\\n    --header 'X-Client-Id: <YOUR_CLIENT_ID>' \\\n    --header 'X-Api-Key: <YOUR_SECRET_KEY>'\n```\n"
+  title: Documentação Malga Tokens API
+  description: '# Authentication
+
+
+    Os serviços de API da Malga são protegidos através de chaves de acesso.'
 servers:
 - url: https://api.malga.io
   description: Production
@@ -11,12 +14,7 @@ security:
   X-Api-Key: []
 tags:
 - name: Tokens
-  description: '**Dados básicos de uma requisição de criação de card token**
-
-
-    <SchemaDefinition schemaRef="#/components/schemas/TokenRequest"   />
-
-    '
+  description: '**Dados básicos de uma requisição de criação de card token**'
 paths:
   /v1/tokens:
     post:
@@ -61,6 +59,56 @@ paths:
         source: "import requests\n\nclient_id = <YOUR CLIENT ID>\npublic_key = <YOUR CLIENT TOKEN>\n\nrequest = requests.post('https://api.malga.io/v1/tokens', headers={\n    \"X-Client-Id\": client_id,\n    \"X-Api-Key\": publick_key\n  }, json={\n  \"cardHolderName\": \"JOSE DAS NEVES\",\n  \"cardNumber\": \"4019598346009339\",\n  \"cardCvv\": \"123\",\n  \"cardExpirationDate\": \"12/2026\"\n})\nprint(request.json().get('tokenId'))\n"
 components:
   schemas:
+    TokenCard:
+      properties:
+        cardHolderName:
+          type: string
+          description: Nome do portador do cartão
+        cardNumber:
+          type: string
+          description: Número do cartão (Sem espaços)
+        cardCvv:
+          type: string
+          description: Código de verificação
+        cardExpirationDate:
+          type: string
+          description: Mês e ano de validade no formato MM/YYYY
+      required:
+      - cardHolderName
+      - cardNumber
+      - cardCvv
+      - cardExpirationDate
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    TokenCvv:
+      properties:
+        cvvUpdate:
+          type: string
+          description: Código de verificação
+      required:
+      - cvvUpdate
+    TokenRequest:
+      properties:
+        tokenização:
+          description: Pode ser tokenizado o cartão e/ou cvv de acordo com a passagem dos atributos
+          oneOf:
+          - $ref: '#/components/schemas/TokenCard'
+          - $ref: '#/components/schemas/TokenCvv'
+      example:
+        cardHolderName: JOSE DAS NEVES
+        cardNumber: '4019598346009339'
+        cardCvv: '123'
+        cardExpirationDate: 12/2026
+    TokenResponse:
+      properties:
+        tokenId:
+          type: string
+          format: uuid
+          description: Identificador do token gerado
     ErrorItem:
       properties:
         type:
@@ -90,57 +138,10 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
-    TokenCvv:
-      properties:
-        cvvUpdate:
-          type: string
-          description: Código de verificação
-      required:
-      - cvvUpdate
-    TokenResponse:
-      properties:
-        tokenId:
-          type: string
-          format: uuid
-          description: Identificador do token gerado
-    TokenRequest:
-      properties:
-        tokenização:
-          description: Pode ser tokenizado o cartão e/ou cvv de acordo com a passagem dos atributos
-          oneOf:
-          - $ref: '#/components/schemas/TokenCard'
-          - $ref: '#/components/schemas/TokenCvv'
-      example:
-        cardHolderName: JOSE DAS NEVES
-        cardNumber: '4019598346009339'
-        cardCvv: '123'
-        cardExpirationDate: 12/2026
-    TokenCard:
-      properties:
-        cardHolderName:
-          type: string
-          description: Nome do portador do cartão
-        cardNumber:
-          type: string
-          description: Número do cartão (Sem espaços)
-        cardCvv:
-          type: string
-          description: Código de verificação
-        cardExpirationDate:
-          type: string
-          description: Mês e ano de validade no formato MM/YYYY
-      required:
-      - cardHolderName
-      - cardNumber
-      - cardCvv
-      - cardExpirationDate
   examples:
+    TokenResponse:
+      value:
+        tokenId: cc0b1e41-2936-45c5-947f-93995ffcdc00
     TokenRequestCard:
       summary: Exemplo de tokenização de cartão
       value:
@@ -148,9 +149,6 @@ components:
         cardNumber: '4019598346009339'
         cardCvv: '123'
         cardExpirationDate: 12/2026
-    TokenResponse:
-      value:
-        tokenId: cc0b1e41-2936-45c5-947f-93995ffcdc00
   securitySchemes:
     X-Client-ID:
       type: apiKey
