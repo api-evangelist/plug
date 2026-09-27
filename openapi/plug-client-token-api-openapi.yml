@@ -100,27 +100,6 @@ components:
           type: object
           allOf:
           - $ref: '#/components/schemas/ErrorItem'
-    AuthRequest:
-      properties:
-        scope:
-          type: string
-          description: Determina o escopo de endpoints que a chave terá acesso
-          enum:
-          - customers
-          - cards
-          - tokens
-          - charges
-          - webhooks
-          - sessions
-          - auth
-          - flows
-          - sellers
-          - providers
-          - subscriptions
-        expires:
-          type: number
-          description: Prazo de validade da chave em segundos a partir da criação, zero para não expirar
-          default: 0
     ErrorItem:
       properties:
         type:
@@ -150,6 +129,27 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
+    AuthRequest:
+      properties:
+        scope:
+          type: string
+          description: Determina o escopo de endpoints que a chave terá acesso
+          enum:
+          - customers
+          - cards
+          - tokens
+          - charges
+          - webhooks
+          - sessions
+          - auth
+          - flows
+          - sellers
+          - providers
+          - subscriptions
+        expires:
+          type: number
+          description: Prazo de validade da chave em segundos a partir da criação, zero para não expirar
+          default: 0
   examples:
     AuthResponse:
       value:

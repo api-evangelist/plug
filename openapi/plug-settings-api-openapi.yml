@@ -166,7 +166,68 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
+  examples:
+    SettingsRequest:
+      summary: Exemplo de requisição de settings
+      value:
+        mainColor: '#000000'
+        SecondaryColor: '#FFFFFF'
+        attentionColor: '#FF0000'
+        errorColor: '#FF0000'
+        successColor: '#00FF00'
+        backgroundColor: '#FFFFFF'
+        logo: '@"/C:/Users/caminho/para/a/imagem/logo.jpg"'
+        companyUrl: https://www.company.com
+    UserSettings:
+      value:
+        id: id da setting
+        clientId: id da setting
+        mainColor: '#000000'
+        SecondaryColor: '#FFFFFF'
+        attentionColor: '#FF0000'
+        errorColor: '#FF0000'
+        successColor: '#00FF00'
+        backgroundColor: '#FFFFFF'
+        logo: https://url.com/logo.jpg
+        companyUrl: https://www.company.com
+        mastercardClickToPayDpaid: 223efa95-a0bc-43d6-aea9-715281b6b062
+        merchantId: df601922-e024-6394-8f12-af21ec4218b1
+    SettingsPatchCompanyUrl:
+      summary: Atualizar apenas companyUrl via JSON
+      value:
+        companyUrl: https://www.company.com
   schemas:
+    UserSettingsWithImage:
+      description: Configurações da empresa com imagem. Esse body deve ser enviado com form-data. Todos os campos são string (Text) com excessão do campo logo que é do tipo File.
+      properties:
+        logo:
+          type: string
+          format: binary
+          description: Arquivo de imagem do logo da empresa. Esse campo é do tipo "File" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg
+        mainColor:
+          type: string
+          description: Cor primária
+        secondaryColor:
+          type: string
+          description: Cor secundária
+        attentionColor:
+          type: string
+          description: Cor utilizada para alertas
+        errorColor:
+          type: string
+          description: Cor utilizada para as mensagens de erro
+        successColor:
+          type: string
+          description: Cor utilizada nas mensagens de sucesso
+        backgroundColor:
+          type: string
+          description: Cor de fundo
+        companyUrl:
+          type: string
+          description: 'Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com'
+        mastercardClickToPayDpaid:
+          type: string
+          description: Digital Payment Application ID (dpaId) para habilitar Mastercard Click to Pay no Link de Pagamento. Campo opcional.
     UserSettingsPatch:
       description: 'Body JSON para PATCH /v1/settings (sem upload de logo). Todos os campos são opcionais;
 
@@ -245,37 +306,6 @@ components:
           type: object
           allOf:
           - $ref: '#/components/schemas/ErrorItem'
-    UserSettingsWithImage:
-      description: Configurações da empresa com imagem. Esse body deve ser enviado com form-data. Todos os campos são string (Text) com excessão do campo logo que é do tipo File.
-      properties:
-        logo:
-          type: string
-          format: binary
-          description: Arquivo de imagem do logo da empresa. Esse campo é do tipo "File" e deve ser configurado assim no form-data que for enviado. Mande imagens de até 1000px de largura e altura e apenas em formato .png ou .jpg
-        mainColor:
-          type: string
-          description: Cor primária
-        secondaryColor:
-          type: string
-          description: Cor secundária
-        attentionColor:
-          type: string
-          description: Cor utilizada para alertas
-        errorColor:
-          type: string
-          description: Cor utilizada para as mensagens de erro
-        successColor:
-          type: string
-          description: Cor utilizada nas mensagens de sucesso
-        backgroundColor:
-          type: string
-          description: Cor de fundo
-        companyUrl:
-          type: string
-          description: 'Url que deve ser utilizada no link de pagamento. Ex: https://www.company.com'
-        mastercardClickToPayDpaid:
-          type: string
-          description: Digital Payment Application ID (dpaId) para habilitar Mastercard Click to Pay no Link de Pagamento. Campo opcional.
     ErrorItem:
       properties:
         type:
@@ -305,36 +335,6 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
-  examples:
-    SettingsRequest:
-      summary: Exemplo de requisição de settings
-      value:
-        mainColor: '#000000'
-        SecondaryColor: '#FFFFFF'
-        attentionColor: '#FF0000'
-        errorColor: '#FF0000'
-        successColor: '#00FF00'
-        backgroundColor: '#FFFFFF'
-        logo: '@"/C:/Users/caminho/para/a/imagem/logo.jpg"'
-        companyUrl: https://www.company.com
-    UserSettings:
-      value:
-        id: id da setting
-        clientId: id da setting
-        mainColor: '#000000'
-        SecondaryColor: '#FFFFFF'
-        attentionColor: '#FF0000'
-        errorColor: '#FF0000'
-        successColor: '#00FF00'
-        backgroundColor: '#FFFFFF'
-        logo: https://url.com/logo.jpg
-        companyUrl: https://www.company.com
-        mastercardClickToPayDpaid: 223efa95-a0bc-43d6-aea9-715281b6b062
-        merchantId: df601922-e024-6394-8f12-af21ec4218b1
-    SettingsPatchCompanyUrl:
-      summary: Atualizar apenas companyUrl via JSON
-      value:
-        companyUrl: https://www.company.com
   securitySchemes:
     X-Client-ID:
       type: apiKey

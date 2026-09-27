@@ -169,6 +169,12 @@ paths:
       - Webhooks
 components:
   examples:
+    CreateWebhookRequest:
+      value:
+        event: transaction.authorized
+        endpoint: https://enuqkxq2lu8be0y.m.pipedream.net
+        version: 1.1
+        status: true
     Webhook:
       value:
         id: 31c142ad-4c30-4964-ba24-2df0f2bbb745
@@ -186,12 +192,6 @@ components:
         clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
         createdAt: '2021-07-06T21:03:36.590Z'
         updatedAt: '2021-07-06T21:03:36.590Z'
-    CreateWebhookRequest:
-      value:
-        event: transaction.authorized
-        endpoint: https://enuqkxq2lu8be0y.m.pipedream.net
-        version: 1.1
-        status: true
   schemas:
     CreateWebhookRequest:
       type: object
@@ -218,21 +218,6 @@ components:
       - endpoint
       - version
       - status
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
-    WebhookError:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          description: Código do erro
-        message:
-          type: string
-          description: Descrição do erro
     Webhook:
       type: object
       properties:
@@ -263,6 +248,21 @@ components:
           type: boolean
           description: Identifica se o webhooks está ativo ou não para receber notificações de evento da Malga
           default: true
+    WebhookError:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          description: Código do erro
+        message:
+          type: string
+          description: Descrição do erro
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
     ErrorItem:
       properties:
         type:

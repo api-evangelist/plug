@@ -58,50 +58,18 @@ paths:
         source: "import requests\n\nclient_id = <YOUR CLIENT ID>\npublic_key = <YOUR CLIENT TOKEN>\n\nrequest = requests.post('https://api.malga.io/v1/charges/3ds/setup', headers={\n    \"X-Client-Id\": client_id,\n    \"X-Api-Key\": publick_key\n  }, json={\n  \"sourceType\": \"card\",\n  \"cardId\": \"4918cfd2-b14a-4db2-ade4-d1b8a6bd40e2\",\n})\nprint(request.json().get('id'))\n"
 components:
   examples:
+    SetupRequest:
+      summary: Exemplo de criação de sessão do 3DS2 Malga
+      value:
+        sourceType: card
+        cardId: cc0b1e41-2936-45c5-947f-93995ffcdc00
     SetupResponse:
       value:
         id: 1b04367a-2386-4161-8c90-eac82267ee89
         token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0MzljZGU0NC05M2RkLTQ2ZWEtYWU0OC0zNTMwMzg3NGFjMmQiLCJpYXQiOjE3Mjc3MTU5NDksImlzcyI6IjVkZDgzYmYwMGU0MjNkMTQ5OGRjYmFjYSIsImV4cCI6MTcyNzcxOTU0OSwiT3JnVW5pdElkIjoiNjU0NDUzNzkzZDJmNTM1NWE3YjljN2IxIiwiUmVmZXJlbmNlSWQiOiJhNjNhZTI0NS0zNzJkLTQ1ODktODVlYS1iMDBmM2VmNjA0NGYifQ.o4IKYrNnFbr3xn-qSm_9qL-Sn-WvCpKOUMxZna7SiYE
         collectUrl: https://centinelapistag.cardinalcommerce.com/V1/Cruise/Collect
         providerType: CYBERSOURCE
-    SetupRequest:
-      summary: Exemplo de criação de sessão do 3DS2 Malga
-      value:
-        sourceType: card
-        cardId: cc0b1e41-2936-45c5-947f-93995ffcdc00
   schemas:
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
-    SetupRequest:
-      type: object
-      description: Dados para criar um setup
-      oneOf:
-      - $ref: '#/components/schemas/SourceTypeCardObject'
-      - $ref: '#/components/schemas/SourceTypeTokenObject'
-      example:
-        sourceType: card
-        cardId: 148d5db0-f1c3-439f-902d-f1f268086e1d
-    SourceTypeTokenObject:
-      title: Cartão tokenizado
-      type: object
-      description: Dados para cobrança única de token de cartão
-      properties:
-        sourceType:
-          type: string
-          description: Tipo da origem da cobrança, usar `token` para cobrança no token gerado
-          enum:
-          - token
-        tokenId:
-          type: string
-          format: uuid
-          description: Identificador do token quando source tipo token (opcional)
-      required:
-      - sourceType
-      - tokenId
     SetupResponse:
       properties:
         id:
@@ -136,6 +104,55 @@ components:
             details:
               type: array
               description: Lista contendo objetos que detalham o erro de validação
+    SourceTypeCardObject:
+      title: Cartão de crédito
+      type: object
+      description: Dados para cobrança por cartão de crédito salve
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança
+          enum:
+          - card
+        cardId:
+          type: string
+          format: uuid
+          description: Identificador do cartão quando source tipo card
+      required:
+      - sourceType
+      - cardId
+    SetupRequest:
+      type: object
+      description: Dados para criar um setup
+      oneOf:
+      - $ref: '#/components/schemas/SourceTypeCardObject'
+      - $ref: '#/components/schemas/SourceTypeTokenObject'
+      example:
+        sourceType: card
+        cardId: 148d5db0-f1c3-439f-902d-f1f268086e1d
+    SourceTypeTokenObject:
+      title: Cartão tokenizado
+      type: object
+      description: Dados para cobrança única de token de cartão
+      properties:
+        sourceType:
+          type: string
+          description: Tipo da origem da cobrança, usar `token` para cobrança no token gerado
+          enum:
+          - token
+        tokenId:
+          type: string
+          format: uuid
+          description: Identificador do token quando source tipo token (opcional)
+      required:
+      - sourceType
+      - tokenId
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
     ErrorItem:
       properties:
         type:
@@ -165,23 +182,6 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
-    SourceTypeCardObject:
-      title: Cartão de crédito
-      type: object
-      description: Dados para cobrança por cartão de crédito salve
-      properties:
-        sourceType:
-          type: string
-          description: Tipo da origem da cobrança
-          enum:
-          - card
-        cardId:
-          type: string
-          format: uuid
-          description: Identificador do cartão quando source tipo card
-      required:
-      - sourceType
-      - cardId
   securitySchemes:
     X-Client-ID:
       type: apiKey
