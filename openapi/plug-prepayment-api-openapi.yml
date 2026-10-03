@@ -238,86 +238,6 @@ paths:
       - Prepayment
 components:
   schemas:
-    PrepaymentReceivablesResponse:
-      type: object
-      properties:
-        summary:
-          $ref: '#/components/schemas/PrepaymentReceivablesSummary'
-        receivables:
-          type: array
-          description: Lista de recebíveis disponíveis, ordenada pela data prevista de recebimento.
-          items:
-            $ref: '#/components/schemas/PrepaymentReceivableListItem'
-      required:
-      - summary
-      - receivables
-    PrepaymentItemResponse:
-      type: object
-      description: 'Recebível individual incluído na antecipação.
-
-        '
-      properties:
-        receivableUnitExternalId:
-          type: string
-          description: Identificador do recebível antecipado.
-          example: ru-ext-ok-1
-        grossAmount:
-          type: integer
-          format: int64
-          description: Valor original do recebível, em centavos.
-          example: 12000
-        netAmount:
-          type: integer
-          format: int64
-          description: Valor líquido deste recebível após o desconto, em centavos.
-          example: 11594
-        markupAmount:
-          type: integer
-          format: int64
-          description: Parte do desconto correspondente ao markup do contrato, em centavos.
-          example: 232
-        feeAmount:
-          type: integer
-          format: int64
-          description: Parte do desconto correspondente à taxa base da Malga, em centavos.
-          example: 174
-        daysToAnticipate:
-          type: integer
-          description: Quantos dias estão sendo antecipados em relação à data original de recebimento.
-          example: 30
-        settlementDate:
-          type: string
-          format: date
-          description: Data prevista de recebimento original deste recebível (YYYY-MM-DD).
-          example: '2026-06-15'
-        paymentArrangement:
-          type: string
-          description: Arranjo de pagamento do recebível.
-          example: vcc
-      required:
-      - receivableUnitExternalId
-      - grossAmount
-      - netAmount
-      - markupAmount
-      - feeAmount
-      - daysToAnticipate
-      - settlementDate
-      - paymentArrangement
-    PrepaymentSimulateRequest:
-      type: object
-      properties:
-        sellerId:
-          type: string
-          description: ID do recebedor para antecipar recebíveis dele. Se omitido, opera sobre a conta principal.
-          nullable: true
-          example: '123'
-        endDate:
-          type: string
-          format: date
-          description: Data-limite (YYYY-MM-DD) do período a antecipar. A Malga inclui todos os recebíveis elegíveis com data prevista de recebimento **até essa data (inclusive)**.
-          example: '2026-06-20'
-      required:
-      - endDate
     PrepaymentResponse:
       type: object
       properties:
@@ -412,28 +332,73 @@ components:
       - markup
       - expiresAt
       - items
-    PrepaymentReceivablesSummary:
+    PrepaymentSimulateRequest:
       type: object
-      description: Resumo dos recebíveis disponíveis para antecipação.
       properties:
-        availableAmount:
+        sellerId:
+          type: string
+          description: ID do recebedor para antecipar recebíveis dele. Se omitido, opera sobre a conta principal.
+          nullable: true
+          example: '123'
+        endDate:
+          type: string
+          format: date
+          description: Data-limite (YYYY-MM-DD) do período a antecipar. A Malga inclui todos os recebíveis elegíveis com data prevista de recebimento **até essa data (inclusive)**.
+          example: '2026-06-20'
+      required:
+      - endDate
+    PrepaymentItemResponse:
+      type: object
+      description: 'Recebível individual incluído na antecipação.
+
+        '
+      properties:
+        receivableUnitExternalId:
+          type: string
+          description: Identificador do recebível antecipado.
+          example: ru-ext-ok-1
+        grossAmount:
           type: integer
           format: int64
-          description: Valor total disponível para antecipação, em centavos.
-          example: 25000
-        receivableCount:
+          description: Valor original do recebível, em centavos.
+          example: 12000
+        netAmount:
           type: integer
-          description: Quantidade de recebíveis disponíveis.
-          example: 3
+          format: int64
+          description: Valor líquido deste recebível após o desconto, em centavos.
+          example: 11594
+        markupAmount:
+          type: integer
+          format: int64
+          description: Parte do desconto correspondente ao markup do contrato, em centavos.
+          example: 232
+        feeAmount:
+          type: integer
+          format: int64
+          description: Parte do desconto correspondente à taxa base da Malga, em centavos.
+          example: 174
+        daysToAnticipate:
+          type: integer
+          description: Quantos dias estão sendo antecipados em relação à data original de recebimento.
+          example: 30
+        settlementDate:
+          type: string
+          format: date
+          description: Data prevista de recebimento original deste recebível (YYYY-MM-DD).
+          example: '2026-06-15'
+        paymentArrangement:
+          type: string
+          description: Arranjo de pagamento do recebível.
+          example: vcc
       required:
-      - availableAmount
-      - receivableCount
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
+      - receivableUnitExternalId
+      - grossAmount
+      - netAmount
+      - markupAmount
+      - feeAmount
+      - daysToAnticipate
+      - settlementDate
+      - paymentArrangement
     ErrorItem:
       properties:
         type:
@@ -463,6 +428,27 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
+    PrepaymentError:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Código interno do erro.
+          enum:
+          - I-400
+          - I-401
+          - I-403
+          - I-404
+          - I-409
+          - I-422
+          example: I-403
+        networkDeniedMessage:
+          type: string
+          description: Mensagem detalhando o erro.
+          example: Client is not eligible for prepayment
+      required:
+      - code
+      - networkDeniedMessage
     PrepaymentReceivableListItem:
       type: object
       description: Recebível individual disponível para antecipação.
@@ -491,64 +477,42 @@ components:
       - settlementDate
       - paymentArrangement
       - amount
-    PrepaymentError:
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    PrepaymentReceivablesResponse:
       type: object
       properties:
-        code:
-          type: string
-          description: Código interno do erro.
-          enum:
-          - I-400
-          - I-401
-          - I-403
-          - I-404
-          - I-409
-          - I-422
-          example: I-403
-        networkDeniedMessage:
-          type: string
-          description: Mensagem detalhando o erro.
-          example: Client is not eligible for prepayment
+        summary:
+          $ref: '#/components/schemas/PrepaymentReceivablesSummary'
+        receivables:
+          type: array
+          description: Lista de recebíveis disponíveis, ordenada pela data prevista de recebimento.
+          items:
+            $ref: '#/components/schemas/PrepaymentReceivableListItem'
       required:
-      - code
-      - networkDeniedMessage
+      - summary
+      - receivables
+    PrepaymentReceivablesSummary:
+      type: object
+      description: Resumo dos recebíveis disponíveis para antecipação.
+      properties:
+        availableAmount:
+          type: integer
+          format: int64
+          description: Valor total disponível para antecipação, em centavos.
+          example: 25000
+        receivableCount:
+          type: integer
+          description: Quantidade de recebíveis disponíveis.
+          example: 3
+      required:
+      - availableAmount
+      - receivableCount
   examples:
-    PrepaymentCommittedResponse:
-      summary: Exemplo de antecipação confirmada
-      value:
-        id: 01964c5a-0001-7000-8000-000000000001
-        status: committed
-        grossAmount: 20000
-        netAmount: 19323
-        markupAmount: 387
-        feeAmount: 290
-        effectiveRate: 0.03385
-        monthlyRate: 0.015
-        markup: 0.02
-        expiresAt: '2026-05-27T18:00:00Z'
-        endDate: '2026-06-20'
-        paymentDate: '2026-05-28'
-        items:
-        - receivableUnitExternalId: ru-ext-ok-1
-          grossAmount: 12000
-          netAmount: 11594
-          markupAmount: 232
-          feeAmount: 174
-          daysToAnticipate: 30
-          settlementDate: '2026-06-15'
-          paymentArrangement: vcc
-        - receivableUnitExternalId: ru-ext-ok-2
-          grossAmount: 8000
-          netAmount: 7729
-          markupAmount: 155
-          feeAmount: 116
-          daysToAnticipate: 30
-          settlementDate: '2026-06-15'
-          paymentArrangement: vcc
-    PrepaymentSimulateRequest:
-      summary: Simulação por período (até endDate, inclusive)
-      value:
-        endDate: '2026-06-20'
     PrepaymentResponse:
       summary: Exemplo de simulação criada
       value:
@@ -600,6 +564,42 @@ components:
           settlementDate: '2026-06-20'
           paymentArrangement: mcc
           amount: 5000
+    PrepaymentCommittedResponse:
+      summary: Exemplo de antecipação confirmada
+      value:
+        id: 01964c5a-0001-7000-8000-000000000001
+        status: committed
+        grossAmount: 20000
+        netAmount: 19323
+        markupAmount: 387
+        feeAmount: 290
+        effectiveRate: 0.03385
+        monthlyRate: 0.015
+        markup: 0.02
+        expiresAt: '2026-05-27T18:00:00Z'
+        endDate: '2026-06-20'
+        paymentDate: '2026-05-28'
+        items:
+        - receivableUnitExternalId: ru-ext-ok-1
+          grossAmount: 12000
+          netAmount: 11594
+          markupAmount: 232
+          feeAmount: 174
+          daysToAnticipate: 30
+          settlementDate: '2026-06-15'
+          paymentArrangement: vcc
+        - receivableUnitExternalId: ru-ext-ok-2
+          grossAmount: 8000
+          netAmount: 7729
+          markupAmount: 155
+          feeAmount: 116
+          daysToAnticipate: 30
+          settlementDate: '2026-06-15'
+          paymentArrangement: vcc
+    PrepaymentSimulateRequest:
+      summary: Simulação por período (até endDate, inclusive)
+      value:
+        endDate: '2026-06-20'
   securitySchemes:
     X-Client-ID:
       type: apiKey

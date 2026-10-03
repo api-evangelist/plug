@@ -277,171 +277,6 @@ paths:
       - Sellers
 components:
   schemas:
-    SellerCreadtedResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Identificador do seller
-        providers:
-          type: array
-          items:
-            $ref: '#/components/schemas/SellerProvidersCreated'
-        merchantId:
-          type: string
-          description: Identificador do merchant
-        clientId:
-          type: string
-          description: Identificador do cliente
-        metadata:
-          type: object
-          description: Campos adicionais da transação enviados na criação da mesma
-        owner:
-          allOf:
-          - $ref: '#/components/schemas/OwnerCreated'
-        business:
-          allOf:
-          - $ref: '#/components/schemas/BusinessCreated'
-        bankAccount:
-          allOf:
-          - $ref: '#/components/schemas/BankAccountCreated'
-        transferPolicy:
-          allOf:
-          - $ref: '#/components/schemas/TransferPolicyCreated'
-        mcc:
-          type: string
-          description: Código de segmento do lojista no adquirente
-        status:
-          type: string
-          enum:
-          - active
-          - partial
-          - inactive
-          - pending
-          - blocked
-          description: Status do seller
-    Seller:
-      type: object
-      properties:
-        merchantId:
-          type: string
-          description: Identificação do merchant id a ser utilizado
-        mcc:
-          type: number
-          description: Código de segmento do lojista no adquirente, solicite ao seu provedor caso não saiba qual o seu Merchant Category Code.
-        owner:
-          allOf:
-          - $ref: '#/components/schemas/Owner'
-        business:
-          allOf:
-          - $ref: '#/components/schemas/Business'
-        bankAccount:
-          allOf:
-          - $ref: '#/components/schemas/BankAccount'
-        transferPolicy:
-          allOf:
-          - $ref: '#/components/schemas/TransferPolicy'
-        rateAgreements:
-          allOf:
-          - $ref: '#/components/schemas/RateAgreements'
-        documentIds:
-          type: array
-          description: IDs dos documentos previamente enviados via POST /v1/sellers/documents. Os documentos serão associados ao seller e enviados ao provedor na criação.
-          items:
-            type: string
-            format: uuid
-          example:
-          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
-        salesPlanId:
-          type: string
-          description: Identificador do Plano de Venda na Zoop
-          example: '1234567'
-        metadata:
-          type: array
-          description: Metadados adicionais do recebedor
-          items:
-            $ref: '#/components/schemas/MetaData'
-        processingFee:
-          type: boolean
-          description: Indica se o recebedor paga a taxa de processamento no split
-        liable:
-          type: boolean
-          description: Indica se o recebedor é responsável por chargeback no split
-        fareMdr:
-          type: number
-          minimum: 0
-          maximum: 100
-          description: Percentual MDR para split (Braspag)
-        fareFee:
-          type: number
-          minimum: 0
-          description: Taxa fixa em centavos para split (Braspag)
-        minNegativeBalance:
-          type: number
-          description: Saldo negativo mínimo permitido
-        maxRefundDays:
-          type: number
-          description: Prazo máximo de reembolso em dias
-        createAsync:
-          type: boolean
-          description: Cria o recebedor de forma assíncrona no provedor
-      required:
-      - merchantId
-      - mcc
-      - bankAccount
-      - owner
-    SellerProviders:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Identificação do provedor
-        providerType:
-          type: string
-          enum:
-          - SANDBOX
-          description: Nome do provedor
-        status:
-          type: string
-          description: Status do recebedor
-        createdAt:
-          type: string
-          description: Data de criação
-        updatedAt:
-          type: string
-          description: Data de edição
-    TransferPolicy:
-      type: object
-      properties:
-        transferDay:
-          type: string
-          description: Dia em que o parceiro será pago. Depende do transfer_interval - se for daily, enviar 1. Se for weekly pode ser de 1 (segunda) a 5 (sexta). Se for monthly, pode ser de 1 a 31. Além disso, se for daily e o provedor for Pagar.me V5, o valor é 0.
-        transferEnabled:
-          type: boolean
-          description: Determina se as transferências estão autorizadas a acontecer ou não.
-        transferInterval:
-          type: string
-          enum:
-          - daily
-          - weekly
-          - monthly
-          description: Intervalo entre as transferências.
-        automaticAnticipationEnabled:
-          type: boolean
-          description: Indica se o recebedor receberá antecipações automaticamente
-        anticipatableVolumePercentage:
-          type: string
-          description: Indica a porcentagem do volume passível de ser antecipado para o recebedor
-        automaticAnticipationType:
-          type: string
-          description: Indica o tipo de antecipação automática que será configurado para a conta do recebedor
-        automaticAnticipationDays:
-          type: string
-          description: Indica a quantidade de dias de antecipação automática
-        automaticAnticipation1025Delay:
-          type: string
-          description: Indica a quantidade de dias que serão desconsiderados na contabilização do valor passível de ser antecipado. A contagem de dias é realizada a partir do dia da antecipação para trás
     SellerAddress:
       type: object
       properties:
@@ -562,19 +397,238 @@ components:
       - state
       - city
       - district
-    Document:
+    Owner:
       type: object
       properties:
-        type:
+        name:
           type: string
-          description: Tipo de documento, consultar tabela de tipos suportados
-        number:
+          description: Nome do recebedor
+        email:
           type: string
-          description: Número do documento formato conforme tipo selecionado
+          description: E-mail do recebedor
+        phoneNumber:
+          type: string
+          description: Telefone de contato do recebedor
+        birthdate:
+          type: string
+          description: Data de nascimento do recebedor em ISO-Date, ex 1996-01-31
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/SellerAddress'
+        monthlyIncome:
+          type: number
+          description: Receita mensal do recebedor
+        professionalOccupation:
+          type: string
+          description: Ocupação profissional do recebedor
+        isBusinessRepresentative:
+          type: boolean
+          description: Indica se recebedor é representante legal do negócio
+        annualRevenue:
+          type: number
+          description: Receita anual do negócio
+        businessCategory:
+          type: string
+          description: Categoria do negócio
+      required:
+      - name
+      - email
+      - phoneNumber
+      - birthdate
+      - document
+      - address
+    OwnerCreated:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador do recebedor
+        updatedAt:
+          type: string
+          description: Data de alteração do recebedor
+        createdAt:
+          type: string
+          description: Data de criação do recebedor
+        name:
+          type: string
+          description: Nome do recebedor
+        email:
+          type: string
+          description: E-mail do recebedor
+        phoneNumber:
+          type: string
+          description: Telefone de contato do recebedor
+        birthdate:
+          type: string
+          description: Data de nascimento do recebedor em ISO-Date, ex 1996-01-31
+        address:
+          allOf:
+          - $ref: '#/components/schemas/AddressCreated'
+        document:
+          allOf:
+          - $ref: '#/components/schemas/DocumentCreated'
+        annualRevenue:
+          type: number
+          description: Receita anual do negócio
+        businessCategory:
+          type: string
+          description: Categoria do negócio
+    BusinessCreated:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador do estabelecimento do recebedor
+        updatedAt:
+          type: string
+          description: Data de alteração do estabelecimento do recebedor
+        createdAt:
+          type: string
+          description: Data de criação do estabelecimento do recebedor
+        name:
+          type: string
+          description: Nome do estabelecimento do recebedor
+        phoneNumber:
+          type: string
+          description: Telefone de contato do estabelecimento do recebedor
+        email:
+          type: string
+          description: E-mail do estabelecimento do recebedor
+        website:
+          type: string
+          description: Site do estabelecimento do recebedor
+        description:
+          type: string
+          description: Descrição do estabelecimento do recebedor
+        facebook:
+          type: string
+          description: Facebook do estabelecimento do recebedor
+        twitter:
+          type: string
+          description: Twitter do estabelecimento do recebedor
+        openingDate:
+          type: string
+          description: Data de abertura do estabelecimento do recebedor em ISO-Date, ex 2017-01-31
+        address:
+          allOf:
+          - $ref: '#/components/schemas/AddressCreated'
+        document:
+          allOf:
+          - $ref: '#/components/schemas/DocumentCreated'
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    Business:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nome do estabelecimento do recebedor
+        corporateReason:
+          type: string
+          description: Razão social do estabelecimento do recebedor
+        phoneNumber:
+          type: string
+          description: Telefone de contato do estabelecimento do recebedor
+        email:
+          type: string
+          description: E-mail do estabelecimento do recebedor
+        website:
+          type: string
+          description: Site do estabelecimento do recebedor
+        description:
+          type: string
+          description: Descrição do estabelecimento do recebedor
+        facebook:
+          type: string
+          description: Facebook do estabelecimento do recebedor
+        twitter:
+          type: string
+          description: Twitter do estabelecimento do recebedor
+        openingDate:
+          type: string
+          description: Data de abertura do estabelecimento do recebedor em ISO-Date, ex 2017-01-31
+        address:
+          allOf:
+          - $ref: '#/components/schemas/SellerAddress'
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+        annualRevenue:
+          type: number
+          description: Receita anual do negócio
+      required:
+      - name
+      - phoneNumber
+      - email
+      - address
+      - document
+    SellerUpdatedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificação do seller
+        providers:
+          type: array
+          items:
+            $ref: '#/components/schemas/SellerProviders'
+        merchantId:
+          type: string
+          description: Identificação do merchant
+        clientId:
+          type: string
+          description: Identificação do cliente
+        metadata:
+          type: object
+          description: Campos adicionais da transação enviados na criação da mesma
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Owner'
+        business:
+          allOf:
+          - $ref: '#/components/schemas/Business'
+        bankAccount:
+          allOf:
+          - $ref: '#/components/schemas/BankAccount'
+        transferPolicy:
+          allOf:
+          - $ref: '#/components/schemas/TransferPolicy'
+        mcc:
+          type: string
+          description: Código de segmento do lojista no adquirente
+    SellerPaginatedListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SellerCreadtedResponse'
+        meta:
+          type: object
+          properties:
+            totalItems:
+              type: number
+            itemCount:
+              type: number
+            itemsPerPage:
+              type: number
+            totalPages:
+              type: number
+            currentPage:
+              type: number
+    DocumentCreated:
+      type: object
+      properties:
         country:
           type: string
-          description: Pais de emissão do documento, Padrão ISO 3166-1 alpha-2, consultar tabela de tipos suportados
-          default: BR
+          description: Pais de emissão do documento
           enum:
           - AL
           - AD
@@ -656,51 +710,35 @@ components:
           - VE
           - VN
           - ZA
-      required:
-      - type
-      - number
-    BusinessCreated:
+        id:
+          type: string
+          description: Identificador do documento
+        updatedAt:
+          type: string
+          description: Data de alteração do documento
+        createdAt:
+          type: string
+          description: Data de criação do documento
+        type:
+          type: string
+          description: Tipo de documento
+        number:
+          type: string
+          description: Número do documento
+    TransferPolicyCreated:
       type: object
       properties:
         id:
           type: string
-          description: Identificador do estabelecimento do recebedor
+          description: Identificação da transferência
         updatedAt:
           type: string
-          description: Data de alteração do estabelecimento do recebedor
+          description: Data de alteração da transferência
         createdAt:
           type: string
-          description: Data de criação do estabelecimento do recebedor
-        name:
-          type: string
-          description: Nome do estabelecimento do recebedor
-        phoneNumber:
-          type: string
-          description: Telefone de contato do estabelecimento do recebedor
-        email:
-          type: string
-          description: E-mail do estabelecimento do recebedor
-        website:
-          type: string
-          description: Site do estabelecimento do recebedor
-        description:
-          type: string
-          description: Descrição do estabelecimento do recebedor
-        facebook:
-          type: string
-          description: Facebook do estabelecimento do recebedor
-        twitter:
-          type: string
-          description: Twitter do estabelecimento do recebedor
-        openingDate:
-          type: string
-          description: Data de abertura do estabelecimento do recebedor em ISO-Date, ex 2017-01-31
-        address:
-          allOf:
-          - $ref: '#/components/schemas/AddressCreated'
-        document:
-          allOf:
-          - $ref: '#/components/schemas/DocumentCreated'
+          description: Data de criação da transferência
+        transferPolicy:
+          $ref: '#/components/schemas/TransferPolicy'
     BankAccountCreated:
       type: object
       properties:
@@ -747,122 +785,6 @@ components:
           - conta_corrente_conjunta
           - conta_poupanca_conjunta
           description: Tipo de conta
-    SellerUpdatedBody:
-      type: object
-      description: 'Corpo da atualização parcial. Todos os campos são opcionais — envie apenas o que deseja alterar.
-
-        Campos omitidos não são modificados.
-
-        '
-      properties:
-        merchantId:
-          type: string
-          description: Identificação do merchant
-        mcc:
-          type: number
-          description: Código de segmento do lojista no adquirente
-        metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/MetaData'
-        owner:
-          allOf:
-          - $ref: '#/components/schemas/Owner'
-        business:
-          allOf:
-          - $ref: '#/components/schemas/Business'
-        bankAccount:
-          allOf:
-          - $ref: '#/components/schemas/BankAccount'
-        transferPolicy:
-          allOf:
-          - $ref: '#/components/schemas/TransferPolicy'
-        rateAgreements:
-          allOf:
-          - $ref: '#/components/schemas/RateAgreements'
-        status:
-          type: string
-          enum:
-          - active
-          - partial
-          - inactive
-          - pending
-          - blocked
-          description: Status do recebedor
-        statusReason:
-          type: string
-          description: Motivo do status
-        reasonType:
-          type: string
-          enum:
-          - other
-          - funds
-          description: Tipo do motivo de status
-        documentIds:
-          type: array
-          description: IDs de documentos a associar ao recebedor
-          items:
-            type: string
-            format: uuid
-        processingFee:
-          type: boolean
-        liable:
-          type: boolean
-        fareMdr:
-          type: number
-          minimum: 0
-          maximum: 100
-        fareFee:
-          type: number
-          minimum: 0
-        salesPlanId:
-          type: string
-        minNegativeBalance:
-          type: number
-        maxRefundDays:
-          type: number
-        createAsync:
-          type: boolean
-    SellerPaginatedListResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SellerCreadtedResponse'
-        meta:
-          type: object
-          properties:
-            totalItems:
-              type: number
-            itemCount:
-              type: number
-            itemsPerPage:
-              type: number
-            totalPages:
-              type: number
-            currentPage:
-              type: number
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
-    TransferPolicyCreated:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Identificação da transferência
-        updatedAt:
-          type: string
-          description: Data de alteração da transferência
-        createdAt:
-          type: string
-          description: Data de criação da transferência
-        transferPolicy:
-          $ref: '#/components/schemas/TransferPolicy'
     AddressCreated:
       type: object
       properties:
@@ -980,91 +902,267 @@ components:
         district:
           type: string
           description: Bairro onde se localiza o endereço
-    OwnerCreated:
+    Seller:
+      type: object
+      properties:
+        merchantId:
+          type: string
+          description: Identificação do merchant id a ser utilizado
+        mcc:
+          type: number
+          description: Código de segmento do lojista no adquirente, solicite ao seu provedor caso não saiba qual o seu Merchant Category Code.
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Owner'
+        business:
+          allOf:
+          - $ref: '#/components/schemas/Business'
+        bankAccount:
+          allOf:
+          - $ref: '#/components/schemas/BankAccount'
+        transferPolicy:
+          allOf:
+          - $ref: '#/components/schemas/TransferPolicy'
+        rateAgreements:
+          allOf:
+          - $ref: '#/components/schemas/RateAgreements'
+        documentIds:
+          type: array
+          description: IDs dos documentos previamente enviados via POST /v1/sellers/documents. Os documentos serão associados ao seller e enviados ao provedor na criação.
+          items:
+            type: string
+            format: uuid
+          example:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        salesPlanId:
+          type: string
+          description: Identificador do Plano de Venda na Zoop
+          example: '1234567'
+        metadata:
+          type: array
+          description: Metadados adicionais do recebedor
+          items:
+            $ref: '#/components/schemas/MetaData'
+        processingFee:
+          type: boolean
+          description: Indica se o recebedor paga a taxa de processamento no split
+        liable:
+          type: boolean
+          description: Indica se o recebedor é responsável por chargeback no split
+        fareMdr:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Percentual MDR para split (Braspag)
+        fareFee:
+          type: number
+          minimum: 0
+          description: Taxa fixa em centavos para split (Braspag)
+        minNegativeBalance:
+          type: number
+          description: Saldo negativo mínimo permitido
+        maxRefundDays:
+          type: number
+          description: Prazo máximo de reembolso em dias
+        createAsync:
+          type: boolean
+          description: Cria o recebedor de forma assíncrona no provedor
+      required:
+      - merchantId
+      - mcc
+      - bankAccount
+      - owner
+    RateAgreements:
+      type: array
+      description: Acordo de taxas para cadastro de seller no provedor Braspag. O envio desse nó é opcional durante a criação do recebedor.
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            enum:
+            - GlobalRate
+            - FeePaymentMethod
+            description: Cenários de acordo de taxas
+          percent:
+            type: number
+            description: Porcentagem da taxa de desconto única (MDR único) para acordo do tipo GlobalRate. Valor com até duas casas decimais. Só deve ser enviado em caso de cadastro de seller com Taxa global.
+          fee:
+            type: number
+            description: Taxa fixa por transação. Valor em centavos. Ex => R$ 1,00 => Fee = 100
+          merchantDiscountRates:
+            type: array
+            items:
+              type: object
+              properties:
+                paymentArrangement:
+                  type: object
+                  properties:
+                    product:
+                      type: string
+                      enum:
+                      - CreditCard
+                      - DebitCard
+                      description: Produto do arranjo de pagamento da taxa de desconto do seller.
+                    brand:
+                      type: string
+                      enum:
+                      - Visa
+                      - Master
+                      - Amex
+                      - Elo
+                      - Diners
+                      - Hipercard
+                      description: Bandeira do arranjo de pagamento da taxa de desconto do seller. As bandeiras válidas são Visa, Master, Amex, Elo, Diners e Hipercard.
+                initialInstallmentNumber:
+                  type: number
+                  description: Número inicial do intervalo de parcelas da taxa de desconto do seller. O número de parcelas deverá ser maior do que 0 e menor ou igual a 12.
+                finalInstallmentNumber:
+                  type: number
+                  description: Número final do intervalo de parcelas da taxa de desconto do seller. O número de parcelas deverá ser maior do que 0 e menor ou igual a 12.
+                percent:
+                  type: number
+                  description: Porcentagem da taxa de desconto do seller. Valor com até duas casas decimais.
+        required:
+        - fee
+    MetaData:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Identificador da informação adicional
+        value:
+          type: string
+          description: Descritivo da informação adicional
+    TransferPolicy:
+      type: object
+      properties:
+        transferDay:
+          type: string
+          description: Dia em que o parceiro será pago. Depende do transfer_interval - se for daily, enviar 1. Se for weekly pode ser de 1 (segunda) a 5 (sexta). Se for monthly, pode ser de 1 a 31. Além disso, se for daily e o provedor for Pagar.me V5, o valor é 0.
+        transferEnabled:
+          type: boolean
+          description: Determina se as transferências estão autorizadas a acontecer ou não.
+        transferInterval:
+          type: string
+          enum:
+          - daily
+          - weekly
+          - monthly
+          description: Intervalo entre as transferências.
+        automaticAnticipationEnabled:
+          type: boolean
+          description: Indica se o recebedor receberá antecipações automaticamente
+        anticipatableVolumePercentage:
+          type: string
+          description: Indica a porcentagem do volume passível de ser antecipado para o recebedor
+        automaticAnticipationType:
+          type: string
+          description: Indica o tipo de antecipação automática que será configurado para a conta do recebedor
+        automaticAnticipationDays:
+          type: string
+          description: Indica a quantidade de dias de antecipação automática
+        automaticAnticipation1025Delay:
+          type: string
+          description: Indica a quantidade de dias que serão desconsiderados na contabilização do valor passível de ser antecipado. A contagem de dias é realizada a partir do dia da antecipação para trás
+    SellerProviders:
       type: object
       properties:
         id:
           type: string
-          description: Identificador do recebedor
-        updatedAt:
+          format: uuid
+          description: Identificação do provedor
+        providerType:
           type: string
-          description: Data de alteração do recebedor
+          enum:
+          - SANDBOX
+          description: Nome do provedor
+        status:
+          type: string
+          description: Status do recebedor
         createdAt:
           type: string
-          description: Data de criação do recebedor
-        name:
+          description: Data de criação
+        updatedAt:
           type: string
-          description: Nome do recebedor
-        email:
-          type: string
-          description: E-mail do recebedor
-        phoneNumber:
-          type: string
-          description: Telefone de contato do recebedor
-        birthdate:
-          type: string
-          description: Data de nascimento do recebedor em ISO-Date, ex 1996-01-31
-        address:
-          allOf:
-          - $ref: '#/components/schemas/AddressCreated'
-        document:
-          allOf:
-          - $ref: '#/components/schemas/DocumentCreated'
-        annualRevenue:
-          type: number
-          description: Receita anual do negócio
-        businessCategory:
-          type: string
-          description: Categoria do negócio
-    Owner:
+          description: Data de edição
+    BankAccount:
       type: object
       properties:
-        name:
+        holderName:
           type: string
-          description: Nome do recebedor
-        email:
+          description: Nome de identificador do portador da conta bancária
+        holdeType:
           type: string
-          description: E-mail do recebedor
-        phoneNumber:
+          enum:
+          - individual
+          - company
+          description: Identifica se é pessoa física ou jurídica. aceita os valores 'individual' ou 'company'
+        holderDocument:
           type: string
-          description: Telefone de contato do recebedor
-        birthdate:
+          description: Documento do portador da conta bancária
+        bank:
           type: string
-          description: Data de nascimento do recebedor em ISO-Date, ex 1996-01-31
-        document:
-          allOf:
-          - $ref: '#/components/schemas/Document'
-        address:
-          allOf:
-          - $ref: '#/components/schemas/SellerAddress'
-        monthlyIncome:
-          type: number
-          description: Receita mensal do recebedor
-        professionalOccupation:
+          nullable: true
+          description: Código COMPE do banco (3 dígitos). Opcional desde que `ispb` seja informado; quando ambos vêm, `ispb` tem precedência.
+        ispb:
           type: string
-          description: Ocupação profissional do recebedor
-        isBusinessRepresentative:
-          type: boolean
-          description: Indica se recebedor é representante legal do negócio
-        annualRevenue:
-          type: number
-          description: Receita anual do negócio
-        businessCategory:
+          nullable: true
+          pattern: ^[0-9]{8}$
+          minLength: 8
+          maxLength: 8
+          description: Identificador ISPB da instituição financeira (8 dígitos numéricos). Pelo menos um entre `bank` e `ispb` deve ser informado.
+        branchNumber:
           type: string
-          description: Categoria do negócio
+          description: Número da agência bancária
+        branchCheckDigit:
+          type: string
+          description: Código verificador da agência bancária
+        accountNumber:
+          type: string
+          description: Número da conta bancária
+        accountCheckDigit:
+          type: string
+          description: Número verificador da conta bancária
+        pixKey:
+          type: string
+          description: Chave pix associada a conta bancária
+        type:
+          type: string
+          enum:
+          - conta_corrente
+          - conta_poupanca
+          - conta_corrente_conjunta
+          - conta_poupanca_conjunta
+          description: Tipo de conta
       required:
-      - name
-      - email
-      - phoneNumber
-      - birthdate
-      - document
-      - address
-    DocumentCreated:
+      - holderName
+      - holderDocument
+      - branchNumber
+      - accountNumber
+      - type
+    DeleteSellerRequest:
+      properties:
+        merchantId:
+          type: string
+          description: Identificação do merchant
+      required:
+      - merchantId
+      example:
+        merchantId: 4dbe1e43-7605-4e71-8973-76cfe16ce496
+    Document:
       type: object
       properties:
+        type:
+          type: string
+          description: Tipo de documento, consultar tabela de tipos suportados
+        number:
+          type: string
+          description: Número do documento formato conforme tipo selecionado
         country:
           type: string
-          description: Pais de emissão do documento
+          description: Pais de emissão do documento, Padrão ISO 3166-1 alpha-2, consultar tabela de tipos suportados
+          default: BR
           enum:
           - AL
           - AD
@@ -1146,164 +1244,9 @@ components:
           - VE
           - VN
           - ZA
-        id:
-          type: string
-          description: Identificador do documento
-        updatedAt:
-          type: string
-          description: Data de alteração do documento
-        createdAt:
-          type: string
-          description: Data de criação do documento
-        type:
-          type: string
-          description: Tipo de documento
-        number:
-          type: string
-          description: Número do documento
-    Business:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Nome do estabelecimento do recebedor
-        corporateReason:
-          type: string
-          description: Razão social do estabelecimento do recebedor
-        phoneNumber:
-          type: string
-          description: Telefone de contato do estabelecimento do recebedor
-        email:
-          type: string
-          description: E-mail do estabelecimento do recebedor
-        website:
-          type: string
-          description: Site do estabelecimento do recebedor
-        description:
-          type: string
-          description: Descrição do estabelecimento do recebedor
-        facebook:
-          type: string
-          description: Facebook do estabelecimento do recebedor
-        twitter:
-          type: string
-          description: Twitter do estabelecimento do recebedor
-        openingDate:
-          type: string
-          description: Data de abertura do estabelecimento do recebedor em ISO-Date, ex 2017-01-31
-        address:
-          allOf:
-          - $ref: '#/components/schemas/SellerAddress'
-        document:
-          allOf:
-          - $ref: '#/components/schemas/Document'
-        annualRevenue:
-          type: number
-          description: Receita anual do negócio
       required:
-      - name
-      - phoneNumber
-      - email
-      - address
-      - document
-    DeleteSellerRequest:
-      properties:
-        merchantId:
-          type: string
-          description: Identificação do merchant
-      required:
-      - merchantId
-      example:
-        merchantId: 4dbe1e43-7605-4e71-8973-76cfe16ce496
-    SellerUpdatedResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Identificação do seller
-        providers:
-          type: array
-          items:
-            $ref: '#/components/schemas/SellerProviders'
-        merchantId:
-          type: string
-          description: Identificação do merchant
-        clientId:
-          type: string
-          description: Identificação do cliente
-        metadata:
-          type: object
-          description: Campos adicionais da transação enviados na criação da mesma
-        owner:
-          allOf:
-          - $ref: '#/components/schemas/Owner'
-        business:
-          allOf:
-          - $ref: '#/components/schemas/Business'
-        bankAccount:
-          allOf:
-          - $ref: '#/components/schemas/BankAccount'
-        transferPolicy:
-          allOf:
-          - $ref: '#/components/schemas/TransferPolicy'
-        mcc:
-          type: string
-          description: Código de segmento do lojista no adquirente
-    BankAccount:
-      type: object
-      properties:
-        holderName:
-          type: string
-          description: Nome de identificador do portador da conta bancária
-        holdeType:
-          type: string
-          enum:
-          - individual
-          - company
-          description: Identifica se é pessoa física ou jurídica. aceita os valores 'individual' ou 'company'
-        holderDocument:
-          type: string
-          description: Documento do portador da conta bancária
-        bank:
-          type: string
-          nullable: true
-          description: Código COMPE do banco (3 dígitos). Opcional desde que `ispb` seja informado; quando ambos vêm, `ispb` tem precedência.
-        ispb:
-          type: string
-          nullable: true
-          pattern: ^[0-9]{8}$
-          minLength: 8
-          maxLength: 8
-          description: Identificador ISPB da instituição financeira (8 dígitos numéricos). Pelo menos um entre `bank` e `ispb` deve ser informado.
-        branchNumber:
-          type: string
-          description: Número da agência bancária
-        branchCheckDigit:
-          type: string
-          description: Código verificador da agência bancária
-        accountNumber:
-          type: string
-          description: Número da conta bancária
-        accountCheckDigit:
-          type: string
-          description: Número verificador da conta bancária
-        pixKey:
-          type: string
-          description: Chave pix associada a conta bancária
-        type:
-          type: string
-          enum:
-          - conta_corrente
-          - conta_poupanca
-          - conta_corrente_conjunta
-          - conta_poupanca_conjunta
-          description: Tipo de conta
-      required:
-      - holderName
-      - holderDocument
-      - branchNumber
-      - accountNumber
       - type
+      - number
     ErrorItem:
       properties:
         type:
@@ -1333,6 +1276,82 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
+    SellerUpdatedBody:
+      type: object
+      description: 'Corpo da atualização parcial. Todos os campos são opcionais — envie apenas o que deseja alterar.
+
+        Campos omitidos não são modificados.
+
+        '
+      properties:
+        merchantId:
+          type: string
+          description: Identificação do merchant
+        mcc:
+          type: number
+          description: Código de segmento do lojista no adquirente
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetaData'
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Owner'
+        business:
+          allOf:
+          - $ref: '#/components/schemas/Business'
+        bankAccount:
+          allOf:
+          - $ref: '#/components/schemas/BankAccount'
+        transferPolicy:
+          allOf:
+          - $ref: '#/components/schemas/TransferPolicy'
+        rateAgreements:
+          allOf:
+          - $ref: '#/components/schemas/RateAgreements'
+        status:
+          type: string
+          enum:
+          - active
+          - partial
+          - inactive
+          - pending
+          - blocked
+          description: Status do recebedor
+        statusReason:
+          type: string
+          description: Motivo do status
+        reasonType:
+          type: string
+          enum:
+          - other
+          - funds
+          description: Tipo do motivo de status
+        documentIds:
+          type: array
+          description: IDs de documentos a associar ao recebedor
+          items:
+            type: string
+            format: uuid
+        processingFee:
+          type: boolean
+        liable:
+          type: boolean
+        fareMdr:
+          type: number
+          minimum: 0
+          maximum: 100
+        fareFee:
+          type: number
+          minimum: 0
+        salesPlanId:
+          type: string
+        minNegativeBalance:
+          type: number
+        maxRefundDays:
+          type: number
+        createAsync:
+          type: boolean
     SellerProvidersCreated:
       type: object
       properties:
@@ -1359,69 +1378,175 @@ components:
         updatedAt:
           type: string
           description: Data de alteração
-    MetaData:
+    SellerCreadtedResponse:
       type: object
       properties:
-        key:
+        id:
           type: string
-          description: Identificador da informação adicional
-        value:
+          description: Identificador do seller
+        providers:
+          type: array
+          items:
+            $ref: '#/components/schemas/SellerProvidersCreated'
+        merchantId:
           type: string
-          description: Descritivo da informação adicional
-    RateAgreements:
-      type: array
-      description: Acordo de taxas para cadastro de seller no provedor Braspag. O envio desse nó é opcional durante a criação do recebedor.
-      items:
-        type: object
-        properties:
-          type:
-            type: string
-            enum:
-            - GlobalRate
-            - FeePaymentMethod
-            description: Cenários de acordo de taxas
-          percent:
-            type: number
-            description: Porcentagem da taxa de desconto única (MDR único) para acordo do tipo GlobalRate. Valor com até duas casas decimais. Só deve ser enviado em caso de cadastro de seller com Taxa global.
-          fee:
-            type: number
-            description: Taxa fixa por transação. Valor em centavos. Ex => R$ 1,00 => Fee = 100
-          merchantDiscountRates:
-            type: array
-            items:
-              type: object
-              properties:
-                paymentArrangement:
-                  type: object
-                  properties:
-                    product:
-                      type: string
-                      enum:
-                      - CreditCard
-                      - DebitCard
-                      description: Produto do arranjo de pagamento da taxa de desconto do seller.
-                    brand:
-                      type: string
-                      enum:
-                      - Visa
-                      - Master
-                      - Amex
-                      - Elo
-                      - Diners
-                      - Hipercard
-                      description: Bandeira do arranjo de pagamento da taxa de desconto do seller. As bandeiras válidas são Visa, Master, Amex, Elo, Diners e Hipercard.
-                initialInstallmentNumber:
-                  type: number
-                  description: Número inicial do intervalo de parcelas da taxa de desconto do seller. O número de parcelas deverá ser maior do que 0 e menor ou igual a 12.
-                finalInstallmentNumber:
-                  type: number
-                  description: Número final do intervalo de parcelas da taxa de desconto do seller. O número de parcelas deverá ser maior do que 0 e menor ou igual a 12.
-                percent:
-                  type: number
-                  description: Porcentagem da taxa de desconto do seller. Valor com até duas casas decimais.
-        required:
-        - fee
+          description: Identificador do merchant
+        clientId:
+          type: string
+          description: Identificador do cliente
+        metadata:
+          type: object
+          description: Campos adicionais da transação enviados na criação da mesma
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/OwnerCreated'
+        business:
+          allOf:
+          - $ref: '#/components/schemas/BusinessCreated'
+        bankAccount:
+          allOf:
+          - $ref: '#/components/schemas/BankAccountCreated'
+        transferPolicy:
+          allOf:
+          - $ref: '#/components/schemas/TransferPolicyCreated'
+        mcc:
+          type: string
+          description: Código de segmento do lojista no adquirente
+        status:
+          type: string
+          enum:
+          - active
+          - partial
+          - inactive
+          - pending
+          - blocked
+          description: Status do seller
   examples:
+    SellerRequestIspbOnly:
+      summary: Exemplo de recebedor identificando o banco apenas por ISPB
+      value:
+        merchantId: 5616b19e-4d99-4bd3-b415-4990e5cab4f4
+        owner:
+          name: Seller test
+          email: seller@gmail.com
+          phoneNumber: 21 98889999099
+          birthdate: '1995-01-27'
+          document:
+            type: cpf
+            number: '36243319067'
+            country: BR
+          address:
+            street: Av Geraldo Cardoso
+            streetNumber: '205'
+            complement: Apto 203
+            zipCode: '25650011'
+            country: BR
+            state: Rio de Janeiro
+            city: Rio de Janeiro
+            district: Leblon
+          businessCategory: OTHER_SERVICES
+        mcc: 4040
+        bankAccount:
+          holderName: Seller Name
+          holderDocument: '36243319067'
+          ispb: '60746948'
+          branchNumber: '492'
+          branchCheckDigit: '1'
+          accountNumber: '4929'
+          accountCheckDigit: '11'
+          type: conta_corrente
+        transferPolicy:
+          transferDay: '5'
+          transferEnabled: true
+          transferInterval: monthly
+    SellerRequestOwner:
+      summary: Exemplo de recebedor pessoa física
+      value:
+        merchantId: 5616b19e-4d99-4bd3-b415-4990e5cab4f4
+        owner:
+          name: Seller test
+          email: seller@gmail.com
+          phoneNumber: 21 98889999099
+          birthdate: '1995-01-27'
+          document:
+            type: cpf
+            number: '36243319067'
+            country: BR
+          address:
+            street: Av Geraldo Cardoso
+            streetNumber: '205'
+            complement: Apto 203
+            zipCode: '25650011'
+            country: BR
+            state: Rio de Janeiro
+            city: Rio de Janeiro
+            district: Leblon
+            referencePoint: Proximo a praia
+          monthlyIncome: 20000
+          isBusinessRepresentative: true
+          professionalOccupation: Comerciante
+          annualRevenue: 240000
+          businessCategory: OTHER_SERVICES
+        mcc: 4040
+        bankAccount:
+          holderName: Seller Name
+          holderDocument: '36243319067'
+          bank: '077'
+          ispb: '60746948'
+          branchNumber: '492'
+          branchCheckDigit: '1'
+          accountNumber: '4929'
+          accountCheckDigit: '11'
+          type: poupanca
+          pixKey: '1234567890'
+        transferPolicy:
+          transferDay: '5'
+          transferEnabled: true
+          transferInterval: monthly
+          automaticAnticipationEnabled: false
+          anticipatableVolumePercentage: ''
+          automaticAnticipationType: ''
+          automaticAnticipationDays: ''
+          automaticAnticipation1025Delay: ''
+    SellerPaginatedResponse:
+      summary: Exemplo resposta paginada de seller
+      value:
+        items:
+        - id: ea115e44-7048-11ed-a1eb-0242ac120002
+          providers:
+          - providerType: PLUG_SANDBOX
+            externalStatus: active
+            externalStatusReason: ok
+            status: pending
+            createdAt: '2021-08-12T16:08:39.536Z'
+            updatedAt: '2021-08-12T16:08:39.536Z'
+          merchantId: 5616b19e-4d99-4bd3-b415-4990e5cab4f4
+          clientId: 5616b19e-4d99-4bd3-b415-4990e5cab4f4
+          business:
+            id: 72a574b8-e97e-409c-8402-04208f63e027
+            updatedAt: '2023-05-15T22:27:48.267Z'
+            createdAt: '2023-05-15T22:27:48.267Z'
+            name: Seller test
+            phoneNumber: 21 98889999099
+            email: seller@gmail.com
+            website: null
+            description: Description
+            facebooks: null
+            twitter: null
+            openingDate: '1995-01-27'
+          mcc: 4040
+        meta:
+          totalItems: 16
+          itemCount: 1
+          itemsPerPage: 1
+          totalPages: 2
+          currentPage: 1
+    SellerPatchBankIdentifierSwap:
+      summary: PATCH trocando COMPE por ISPB no mesmo seller
+      value:
+        bankAccount:
+          bank: null
+          ispb: '60746948'
     SellerResponseOwner:
       summary: Exemplo resposta seller pessoa física
       value:
@@ -1491,126 +1616,6 @@ components:
           automaticAnticipation1025Delay: null
         mcc: 4040
         status: pending
-    SellerPatchBankIdentifierSwap:
-      summary: PATCH trocando COMPE por ISPB no mesmo seller
-      value:
-        bankAccount:
-          bank: null
-          ispb: '60746948'
-    SellerRequestBusiness:
-      summary: Exemplo de recebedor pessoa jurídica
-      value:
-        merchantId: b1612460-0fef-447d-9590-97825cf60cf6
-        owner:
-          name: Seller test
-          email: seller@gmail.com
-          phoneNumber: 21 98889999099
-          birthdate: '1995-01-27'
-          document:
-            type: cpf
-            number: '36243319067'
-            country: BR
-          address:
-            street: Av Geraldo Cardoso
-            streetNumber: '205'
-            complement: Apto 203
-            zipCode: '25650011'
-            country: BR
-            state: Rio de Janeiro
-            city: Rio de Janeiro
-            district: Leblon
-            referencePoint: Proximo a praia
-          businessCategory: OTHER_SERVICES
-        business:
-          name: Seller business test
-          corporateReason: Seller company social reason
-          phoneNumber: 21 98889999099
-          email: seller@gmail.com
-          website: https://sellerbusiness.com.br
-          description: Seller business
-          facebook: facebook Seller business
-          twitter: twitter Seller business
-          openingDate: '1995-01-27'
-          annualRevenue: 2500000
-          address:
-            street: Rua Nova Lua
-            streetNumber: '30'
-            complement: sala 100
-            zipCode: 61000-320
-            country: BR
-            state: CE
-            city: Maracanaú
-            district: AB
-          document:
-            type: cnpj
-            number: '94938591000196'
-            country: BR
-        mcc: 4040
-        bankAccount:
-          holderName: Seller Name
-          holderDocument: '94938591000196'
-          bank: '077'
-          branchNumber: '492'
-          branchCheckDigit: '1'
-          accountNumber: '4929'
-          accountCheckDigit: '12'
-          type: conta_corrente
-          pixKey: '1234567890'
-        transferPolicy:
-          transferDay: '5'
-          transferEnabled: true
-          transferInterval: weekly
-          automaticAnticipationEnabled: false
-          anticipatableVolumePercentage: ''
-          automaticAnticipationType: ''
-          automaticAnticipationDays: ''
-          automaticAnticipation1025Delay: ''
-    BankIdentifierRequiredError:
-      summary: Erro 400 — sem identificador de banco após o merge
-      value:
-        error:
-          type: bad_request
-          code: 400
-          key: bank_identifier_required
-          details:
-          - bank account must keep at least one of bank (COMPE) or ispb after update
-    SellerRequestIspbOnly:
-      summary: Exemplo de recebedor identificando o banco apenas por ISPB
-      value:
-        merchantId: 5616b19e-4d99-4bd3-b415-4990e5cab4f4
-        owner:
-          name: Seller test
-          email: seller@gmail.com
-          phoneNumber: 21 98889999099
-          birthdate: '1995-01-27'
-          document:
-            type: cpf
-            number: '36243319067'
-            country: BR
-          address:
-            street: Av Geraldo Cardoso
-            streetNumber: '205'
-            complement: Apto 203
-            zipCode: '25650011'
-            country: BR
-            state: Rio de Janeiro
-            city: Rio de Janeiro
-            district: Leblon
-          businessCategory: OTHER_SERVICES
-        mcc: 4040
-        bankAccount:
-          holderName: Seller Name
-          holderDocument: '36243319067'
-          ispb: '60746948'
-          branchNumber: '492'
-          branchCheckDigit: '1'
-          accountNumber: '4929'
-          accountCheckDigit: '11'
-          type: conta_corrente
-        transferPolicy:
-          transferDay: '5'
-          transferEnabled: true
-          transferInterval: monthly
     SellerResponseBusiness:
       summary: Exemplo resposta seller pessoa jurídica
       value:
@@ -1712,43 +1717,10 @@ components:
           automaticAnticipation1025Delay: ''
         mcc: 4040
         status: active
-    SellerPaginatedResponse:
-      summary: Exemplo resposta paginada de seller
+    SellerRequestBusiness:
+      summary: Exemplo de recebedor pessoa jurídica
       value:
-        items:
-        - id: ea115e44-7048-11ed-a1eb-0242ac120002
-          providers:
-          - providerType: PLUG_SANDBOX
-            externalStatus: active
-            externalStatusReason: ok
-            status: pending
-            createdAt: '2021-08-12T16:08:39.536Z'
-            updatedAt: '2021-08-12T16:08:39.536Z'
-          merchantId: 5616b19e-4d99-4bd3-b415-4990e5cab4f4
-          clientId: 5616b19e-4d99-4bd3-b415-4990e5cab4f4
-          business:
-            id: 72a574b8-e97e-409c-8402-04208f63e027
-            updatedAt: '2023-05-15T22:27:48.267Z'
-            createdAt: '2023-05-15T22:27:48.267Z'
-            name: Seller test
-            phoneNumber: 21 98889999099
-            email: seller@gmail.com
-            website: null
-            description: Description
-            facebooks: null
-            twitter: null
-            openingDate: '1995-01-27'
-          mcc: 4040
-        meta:
-          totalItems: 16
-          itemCount: 1
-          itemsPerPage: 1
-          totalPages: 2
-          currentPage: 1
-    SellerRequestOwner:
-      summary: Exemplo de recebedor pessoa física
-      value:
-        merchantId: 5616b19e-4d99-4bd3-b415-4990e5cab4f4
+        merchantId: b1612460-0fef-447d-9590-97825cf60cf6
         owner:
           name: Seller test
           email: seller@gmail.com
@@ -1768,32 +1740,60 @@ components:
             city: Rio de Janeiro
             district: Leblon
             referencePoint: Proximo a praia
-          monthlyIncome: 20000
-          isBusinessRepresentative: true
-          professionalOccupation: Comerciante
-          annualRevenue: 240000
           businessCategory: OTHER_SERVICES
+        business:
+          name: Seller business test
+          corporateReason: Seller company social reason
+          phoneNumber: 21 98889999099
+          email: seller@gmail.com
+          website: https://sellerbusiness.com.br
+          description: Seller business
+          facebook: facebook Seller business
+          twitter: twitter Seller business
+          openingDate: '1995-01-27'
+          annualRevenue: 2500000
+          address:
+            street: Rua Nova Lua
+            streetNumber: '30'
+            complement: sala 100
+            zipCode: 61000-320
+            country: BR
+            state: CE
+            city: Maracanaú
+            district: AB
+          document:
+            type: cnpj
+            number: '94938591000196'
+            country: BR
         mcc: 4040
         bankAccount:
           holderName: Seller Name
-          holderDocument: '36243319067'
+          holderDocument: '94938591000196'
           bank: '077'
-          ispb: '60746948'
           branchNumber: '492'
           branchCheckDigit: '1'
           accountNumber: '4929'
-          accountCheckDigit: '11'
-          type: poupanca
+          accountCheckDigit: '12'
+          type: conta_corrente
           pixKey: '1234567890'
         transferPolicy:
           transferDay: '5'
           transferEnabled: true
-          transferInterval: monthly
+          transferInterval: weekly
           automaticAnticipationEnabled: false
           anticipatableVolumePercentage: ''
           automaticAnticipationType: ''
           automaticAnticipationDays: ''
           automaticAnticipation1025Delay: ''
+    BankIdentifierRequiredError:
+      summary: Erro 400 — sem identificador de banco após o merge
+      value:
+        error:
+          type: bad_request
+          code: 400
+          key: bank_identifier_required
+          details:
+          - bank account must keep at least one of bank (COMPE) or ispb after update
   securitySchemes:
     X-Client-ID:
       type: apiKey

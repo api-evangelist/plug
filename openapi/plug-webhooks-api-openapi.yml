@@ -168,31 +168,45 @@ paths:
       tags:
       - Webhooks
 components:
-  examples:
-    CreateWebhookRequest:
-      value:
-        event: transaction.authorized
-        endpoint: https://enuqkxq2lu8be0y.m.pipedream.net
-        version: 1.1
-        status: true
-    Webhook:
-      value:
-        id: 31c142ad-4c30-4964-ba24-2df0f2bbb745
-        event: transaction.authorized
-        endpoint: https://enuqkxq2lu8be0y.m.pipedream.net
-        version: 1.1
-        publicKey: '-----BEGIN PUBLIC KEY-----
-
-          MCowBQYDK2VwAyEAnFQSIT7Mwg5QLeJLAwhAJx9wS+XsQvnyph/Lz7AJyQA=
-
-          -----END PUBLIC KEY-----
-
-          '
-        status: true
-        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
-        createdAt: '2021-07-06T21:03:36.590Z'
-        updatedAt: '2021-07-06T21:03:36.590Z'
   schemas:
+    WebhookError:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          description: Código do erro
+        message:
+          type: string
+          description: Descrição do erro
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
     CreateWebhookRequest:
       type: object
       properties:
@@ -218,6 +232,12 @@ components:
       - endpoint
       - version
       - status
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
     Webhook:
       type: object
       properties:
@@ -248,50 +268,30 @@ components:
           type: boolean
           description: Identifica se o webhooks está ativo ou não para receber notificações de evento da Malga
           default: true
-    WebhookError:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          description: Código do erro
-        message:
-          type: string
-          description: Descrição do erro
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
-    ErrorItem:
-      properties:
-        type:
-          type: string
-          enum:
-          - api_error
-          - bad_request
-          - invalid_request_error
-          - card_declined
-        code:
-          type: integer
-          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
-        declinedCode:
-          type: string
-          description: Código de retorno da transação em caso de falha na autorização
-        key:
-          type: string
-          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
-        businessCode:
-          type: string
-          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+  examples:
+    Webhook:
+      value:
+        id: 31c142ad-4c30-4964-ba24-2df0f2bbb745
+        event: transaction.authorized
+        endpoint: https://enuqkxq2lu8be0y.m.pipedream.net
+        version: 1.1
+        publicKey: '-----BEGIN PUBLIC KEY-----
 
-            '
-        message:
-          type: string
-          description: Descrição breve do erro
-        details:
-          type: array
-          description: Lista contendo objetos que detalham o erro de validação
+          MCowBQYDK2VwAyEAnFQSIT7Mwg5QLeJLAwhAJx9wS+XsQvnyph/Lz7AJyQA=
+
+          -----END PUBLIC KEY-----
+
+          '
+        status: true
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        createdAt: '2021-07-06T21:03:36.590Z'
+        updatedAt: '2021-07-06T21:03:36.590Z'
+    CreateWebhookRequest:
+      value:
+        event: transaction.authorized
+        endpoint: https://enuqkxq2lu8be0y.m.pipedream.net
+        version: 1.1
+        status: true
   securitySchemes:
     X-Client-ID:
       type: apiKey

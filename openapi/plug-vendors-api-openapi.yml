@@ -206,9 +206,85 @@ paths:
       - Vendors
 components:
   schemas:
-    VendorUpdateRequest:
+    VendorRequest:
+      type: object
+      required:
+      - referenceId
+      - identityType
+      - identity
+      - mcc
+      - name
+      - address
+      properties:
+        referenceId:
+          type: string
+          description: Identificador do vendedor no seu sistema. (Número máximo de caracteres 15)
+          maxLength: 15
+        identityType:
+          type: string
+          description: Tipo de documento
+          enum:
+          - CPF
+          - CNPJ
+        identity:
+          type: string
+          description: Número do documento formato conforme tipo selecionado
+        mcc:
+          type: string
+          description: Código de segmento do lojista no adquirente, solicite ao seu provedor caso não saiba qual o seu Merchant Category Code.
+        name:
+          type: string
+          description: Nome Completo / Razão Social
+        email:
+          type: string
+          nullable: true
+          description: Email do vendedor
+        phoneNumber:
+          type: string
+          nullable: true
+          description: Telefone de contato do vendedor
+        website:
+          type: string
+          nullable: true
+          description: Identificação do merchant id a ser utilizado
+        address:
+          allOf:
+          - $ref: '#/components/schemas/VendorAddress'
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
+    VendorResponse:
       type: object
       properties:
+        id:
+          type: string
+          description: Identificador do vendedor na malga
         referenceId:
           type: string
           description: Identificador do vendedor no seu sistema
@@ -239,6 +315,12 @@ components:
         address:
           allOf:
           - $ref: '#/components/schemas/VendorAddress'
+        updatedAt:
+          type: string
+          description: Data de alteração do vendedor
+        createdAt:
+          type: string
+          description: Data de criação do vendedor
     VendorAddress:
       type: object
       required:
@@ -361,41 +443,9 @@ components:
           type: object
           allOf:
           - $ref: '#/components/schemas/ErrorItem'
-    ErrorItem:
-      properties:
-        type:
-          type: string
-          enum:
-          - api_error
-          - bad_request
-          - invalid_request_error
-          - card_declined
-        code:
-          type: integer
-          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
-        declinedCode:
-          type: string
-          description: Código de retorno da transação em caso de falha na autorização
-        key:
-          type: string
-          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
-        businessCode:
-          type: string
-          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
-
-            '
-        message:
-          type: string
-          description: Descrição breve do erro
-        details:
-          type: array
-          description: Lista contendo objetos que detalham o erro de validação
-    VendorResponse:
+    VendorUpdateRequest:
       type: object
       properties:
-        id:
-          type: string
-          description: Identificador do vendedor na malga
         referenceId:
           type: string
           description: Identificador do vendedor no seu sistema
@@ -426,56 +476,6 @@ components:
         address:
           allOf:
           - $ref: '#/components/schemas/VendorAddress'
-        updatedAt:
-          type: string
-          description: Data de alteração do vendedor
-        createdAt:
-          type: string
-          description: Data de criação do vendedor
-    VendorRequest:
-      type: object
-      required:
-      - referenceId
-      - identityType
-      - identity
-      - mcc
-      - name
-      - address
-      properties:
-        referenceId:
-          type: string
-          description: Identificador do vendedor no seu sistema. (Número máximo de caracteres 15)
-          maxLength: 15
-        identityType:
-          type: string
-          description: Tipo de documento
-          enum:
-          - CPF
-          - CNPJ
-        identity:
-          type: string
-          description: Número do documento formato conforme tipo selecionado
-        mcc:
-          type: string
-          description: Código de segmento do lojista no adquirente, solicite ao seu provedor caso não saiba qual o seu Merchant Category Code.
-        name:
-          type: string
-          description: Nome Completo / Razão Social
-        email:
-          type: string
-          nullable: true
-          description: Email do vendedor
-        phoneNumber:
-          type: string
-          nullable: true
-          description: Telefone de contato do vendedor
-        website:
-          type: string
-          nullable: true
-          description: Identificação do merchant id a ser utilizado
-        address:
-          allOf:
-          - $ref: '#/components/schemas/VendorAddress'
   examples:
     VendorResponse:
       summary: Exemplo resposta de vendor
@@ -500,6 +500,26 @@ components:
           complement: Apto 101
         updatedAt: '2024-06-26T12:34:56Z'
         createdAt: '2024-06-01T08:00:00Z'
+    VendorRequest:
+      summary: Exemplo de requisição de vendor
+      value:
+        referenceId: '12345'
+        identityType: CNPJ
+        identity: 12.345.678/0001-99
+        mcc: '1234'
+        name: Empresa Exemplo Ltda
+        email: contato@empresaexemplo.com
+        phoneNumber: '5511999999999'
+        website: https://www.empresaexemplo.com
+        address:
+          country: BR
+          state: SP
+          city: São Paulo
+          district: Centro
+          zipCode: 01001-000
+          street: Avenida Paulista
+          streetNumber: '1000'
+          complement: Apto 101
     VendorUpdateRequest:
       summary: Exemplo de atualização de vendor
       value:
@@ -535,26 +555,6 @@ components:
           itemsPerPage: 1
           totalPages: 2
           currentPage: 1
-    VendorRequest:
-      summary: Exemplo de requisição de vendor
-      value:
-        referenceId: '12345'
-        identityType: CNPJ
-        identity: 12.345.678/0001-99
-        mcc: '1234'
-        name: Empresa Exemplo Ltda
-        email: contato@empresaexemplo.com
-        phoneNumber: '5511999999999'
-        website: https://www.empresaexemplo.com
-        address:
-          country: BR
-          state: SP
-          city: São Paulo
-          district: Centro
-          zipCode: 01001-000
-          street: Avenida Paulista
-          streetNumber: '1000'
-          complement: Apto 101
   securitySchemes:
     X-Client-ID:
       type: apiKey

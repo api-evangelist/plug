@@ -65,6 +65,27 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    AuthRequest:
+      properties:
+        scope:
+          type: string
+          description: Determina o escopo de endpoints que a chave terá acesso
+          enum:
+          - customers
+          - cards
+          - tokens
+          - charges
+          - webhooks
+          - sessions
+          - auth
+          - flows
+          - sellers
+          - providers
+          - subscriptions
+        expires:
+          type: number
+          description: Prazo de validade da chave em segundos a partir da criação, zero para não expirar
+          default: 0
     AuthResponse:
       properties:
         scope:
@@ -94,12 +115,6 @@ components:
           type: string
           format: uuid
           description: Chave pública criada
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
     ErrorItem:
       properties:
         type:
@@ -129,27 +144,12 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
-    AuthRequest:
+    ErrorResponse:
       properties:
-        scope:
-          type: string
-          description: Determina o escopo de endpoints que a chave terá acesso
-          enum:
-          - customers
-          - cards
-          - tokens
-          - charges
-          - webhooks
-          - sessions
-          - auth
-          - flows
-          - sellers
-          - providers
-          - subscriptions
-        expires:
-          type: number
-          description: Prazo de validade da chave em segundos a partir da criação, zero para não expirar
-          default: 0
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
   examples:
     AuthResponse:
       value:

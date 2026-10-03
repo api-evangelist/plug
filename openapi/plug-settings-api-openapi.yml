@@ -167,16 +167,9 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   examples:
-    SettingsRequest:
-      summary: Exemplo de requisição de settings
+    SettingsPatchCompanyUrl:
+      summary: Atualizar apenas companyUrl via JSON
       value:
-        mainColor: '#000000'
-        SecondaryColor: '#FFFFFF'
-        attentionColor: '#FF0000'
-        errorColor: '#FF0000'
-        successColor: '#00FF00'
-        backgroundColor: '#FFFFFF'
-        logo: '@"/C:/Users/caminho/para/a/imagem/logo.jpg"'
         companyUrl: https://www.company.com
     UserSettings:
       value:
@@ -192,9 +185,16 @@ components:
         companyUrl: https://www.company.com
         mastercardClickToPayDpaid: 223efa95-a0bc-43d6-aea9-715281b6b062
         merchantId: df601922-e024-6394-8f12-af21ec4218b1
-    SettingsPatchCompanyUrl:
-      summary: Atualizar apenas companyUrl via JSON
+    SettingsRequest:
+      summary: Exemplo de requisição de settings
       value:
+        mainColor: '#000000'
+        SecondaryColor: '#FFFFFF'
+        attentionColor: '#FF0000'
+        errorColor: '#FF0000'
+        successColor: '#00FF00'
+        backgroundColor: '#FFFFFF'
+        logo: '@"/C:/Users/caminho/para/a/imagem/logo.jpg"'
         companyUrl: https://www.company.com
   schemas:
     UserSettingsWithImage:
@@ -228,6 +228,35 @@ components:
         mastercardClickToPayDpaid:
           type: string
           description: Digital Payment Application ID (dpaId) para habilitar Mastercard Click to Pay no Link de Pagamento. Campo opcional.
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
     UserSettingsPatch:
       description: 'Body JSON para PATCH /v1/settings (sem upload de logo). Todos os campos são opcionais;
 
@@ -306,35 +335,6 @@ components:
           type: object
           allOf:
           - $ref: '#/components/schemas/ErrorItem'
-    ErrorItem:
-      properties:
-        type:
-          type: string
-          enum:
-          - api_error
-          - bad_request
-          - invalid_request_error
-          - card_declined
-        code:
-          type: integer
-          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
-        declinedCode:
-          type: string
-          description: Código de retorno da transação em caso de falha na autorização
-        key:
-          type: string
-          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
-        businessCode:
-          type: string
-          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
-
-            '
-        message:
-          type: string
-          description: Descrição breve do erro
-        details:
-          type: array
-          description: Lista contendo objetos que detalham o erro de validação
   securitySchemes:
     X-Client-ID:
       type: apiKey

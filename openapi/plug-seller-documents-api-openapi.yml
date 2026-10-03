@@ -205,6 +205,32 @@ paths:
       - Seller Documents
 components:
   schemas:
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    UploadedDocumentListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/UploadedDocumentResponse'
+        meta:
+          type: object
+          properties:
+            totalItems:
+              type: number
+            itemCount:
+              type: number
+            itemsPerPage:
+              type: number
+            totalPages:
+              type: number
+            currentPage:
+              type: number
     ErrorItem:
       properties:
         type:
@@ -234,26 +260,6 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
-    UploadedDocumentListResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/UploadedDocumentResponse'
-        meta:
-          type: object
-          properties:
-            totalItems:
-              type: number
-            itemCount:
-              type: number
-            itemsPerPage:
-              type: number
-            totalPages:
-              type: number
-            currentPage:
-              type: number
     UploadedDocumentResponse:
       type: object
       properties:
@@ -295,12 +301,6 @@ components:
         type: SELFIE
         status: uploaded
         expiresAt: '2026-04-15T18:00:00.000Z'
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
   securitySchemes:
     X-Client-ID:
       type: apiKey

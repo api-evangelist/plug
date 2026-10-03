@@ -98,44 +98,6 @@ paths:
       - Flows
 components:
   schemas:
-    AllFlowResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/FlowResponse'
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/MetaPagination'
-      example:
-        items:
-        - id: b4ced0dd-2136-4bce-a231-364e93554073
-          paymentMethod: credit
-          clientId: f1babb21-6a4c-323d-12db-69d3af407ee1
-          merchants:
-          - merchantId: z1babb21-6a4c-987d-89db-11d3af737ee1
-          parentId: g1babb21-6a4c-987d-89db-11d3af737ee1
-          createdAt: '2023-03-22T20:45:06.020Z'
-          flow:
-            version: 0.0.0
-            root:
-            - rule: provider
-              id: z1babb21-6a4c-987d-89db-11d3af737ee1
-          restoredFrom: df601922-e024-6394-8f12-af21ec4218b1
-        meta:
-          itemCount: 10
-          totalItems: 20
-          itemsPerPage: 10
-          totalPages: 5
-          currentPage: 2
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
     ErrorItem:
       properties:
         type:
@@ -165,6 +127,23 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
+    MetaPagination:
+      properties:
+        itemCount:
+          type: integer
+          description: Quantidade de itens na página
+        totalItems:
+          type: integer
+          description: Quantidade total de itens na consulta (esse valor é mantido em cache por 5 minutos para melhorar a performance da API)
+        itemsPerPage:
+          type: integer
+          description: Quantidade de itens por página
+        totalPages:
+          type: integer
+          description: Quantidade total de páginas
+        currentPage:
+          type: integer
+          description: Página atual
     FlowResponse:
       type: object
       properties:
@@ -211,23 +190,44 @@ components:
           - rule: provider
             id: z1babb21-6a4c-987d-89db-11d3af737ee1
         restoredFrom: df601922-e024-6394-8f12-af21ec4218b1
-    MetaPagination:
+    ErrorResponse:
       properties:
-        itemCount:
-          type: integer
-          description: Quantidade de itens na página
-        totalItems:
-          type: integer
-          description: Quantidade total de itens na consulta (esse valor é mantido em cache por 5 minutos para melhorar a performance da API)
-        itemsPerPage:
-          type: integer
-          description: Quantidade de itens por página
-        totalPages:
-          type: integer
-          description: Quantidade total de páginas
-        currentPage:
-          type: integer
-          description: Página atual
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    AllFlowResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/FlowResponse'
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/MetaPagination'
+      example:
+        items:
+        - id: b4ced0dd-2136-4bce-a231-364e93554073
+          paymentMethod: credit
+          clientId: f1babb21-6a4c-323d-12db-69d3af407ee1
+          merchants:
+          - merchantId: z1babb21-6a4c-987d-89db-11d3af737ee1
+          parentId: g1babb21-6a4c-987d-89db-11d3af737ee1
+          createdAt: '2023-03-22T20:45:06.020Z'
+          flow:
+            version: 0.0.0
+            root:
+            - rule: provider
+              id: z1babb21-6a4c-987d-89db-11d3af737ee1
+          restoredFrom: df601922-e024-6394-8f12-af21ec4218b1
+        meta:
+          itemCount: 10
+          totalItems: 20
+          itemsPerPage: 10
+          totalPages: 5
+          currentPage: 2
   securitySchemes:
     X-Client-ID:
       type: apiKey

@@ -59,19 +59,6 @@ paths:
         source: "import requests\n\nclient_id = <YOUR CLIENT ID>\npublic_key = <YOUR CLIENT TOKEN>\n\nrequest = requests.post('https://api.malga.io/v1/tokens', headers={\n    \"X-Client-Id\": client_id,\n    \"X-Api-Key\": publick_key\n  }, json={\n  \"cardHolderName\": \"JOSE DAS NEVES\",\n  \"cardNumber\": \"4019598346009339\",\n  \"cardCvv\": \"123\",\n  \"cardExpirationDate\": \"12/2026\"\n})\nprint(request.json().get('tokenId'))\n"
 components:
   schemas:
-    TokenCvv:
-      properties:
-        cvvUpdate:
-          type: string
-          description: Código de verificação
-      required:
-      - cvvUpdate
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
     ErrorItem:
       properties:
         type:
@@ -101,6 +88,18 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
+    TokenRequest:
+      properties:
+        tokenização:
+          description: Pode ser tokenizado o cartão e/ou cvv de acordo com a passagem dos atributos
+          oneOf:
+          - $ref: '#/components/schemas/TokenCard'
+          - $ref: '#/components/schemas/TokenCvv'
+      example:
+        cardHolderName: JOSE DAS NEVES
+        cardNumber: '4019598346009339'
+        cardCvv: '123'
+        cardExpirationDate: 12/2026
     TokenCard:
       properties:
         cardHolderName:
@@ -120,28 +119,26 @@ components:
       - cardNumber
       - cardCvv
       - cardExpirationDate
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
     TokenResponse:
       properties:
         tokenId:
           type: string
           format: uuid
           description: Identificador do token gerado
-    TokenRequest:
+    TokenCvv:
       properties:
-        tokenização:
-          description: Pode ser tokenizado o cartão e/ou cvv de acordo com a passagem dos atributos
-          oneOf:
-          - $ref: '#/components/schemas/TokenCard'
-          - $ref: '#/components/schemas/TokenCvv'
-      example:
-        cardHolderName: JOSE DAS NEVES
-        cardNumber: '4019598346009339'
-        cardCvv: '123'
-        cardExpirationDate: 12/2026
+        cvvUpdate:
+          type: string
+          description: Código de verificação
+      required:
+      - cvvUpdate
   examples:
-    TokenResponse:
-      value:
-        tokenId: cc0b1e41-2936-45c5-947f-93995ffcdc00
     TokenRequestCard:
       summary: Exemplo de tokenização de cartão
       value:
@@ -149,6 +146,9 @@ components:
         cardNumber: '4019598346009339'
         cardCvv: '123'
         cardExpirationDate: 12/2026
+    TokenResponse:
+      value:
+        tokenId: cc0b1e41-2936-45c5-947f-93995ffcdc00
   securitySchemes:
     X-Client-ID:
       type: apiKey

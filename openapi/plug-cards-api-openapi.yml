@@ -147,340 +147,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    Card:
-      properties:
-        id:
-          type: string
-          description: ID do cartão
-        expirationMonth:
-          type: string
-          description: Data de expiração MM
-        expirationYear:
-          type: string
-          description: Data de expiração YYYY
-        brand:
-          type: string
-          enum:
-          - American Express
-          - Mastercard
-          - Visa
-          - Elo
-          - Discover
-          - JCB
-          - Diners
-          description: Bandeira
-        cvvChecked:
-          type: boolean
-          description: Identifica se o CVV foi verificado
-        fingerprint:
-          type: string
-          description: Hash de identificação única do cartão com base nos dados sensíveis
-        first6digits:
-          type: string
-          description: Primeiros 6 digitos do cartão
-        last4digits:
-          type: string
-          description: Últimos 4 digitos do cartão
-        status:
-          type: string
-          enum:
-          - failed
-          - active
-          - pending
-          description: Status de validação dos dados cartões, failed (cartão inválido para uso), active (cartão válido para uso), pending (validação do cartão pendente, uso autorizado temporariamente)
-        statusReason:
-          type: string
-          description: Contém uma string com um breve descritivo informando o motivo do status do cartão. Em alguns casos uma string vazia é retornada.
-        createdAt:
-          type: string
-          description: Data de criação do cartão
-        updatedAt:
-          type: string
-          description: Data de atualização do cartão
-        customer:
-          allOf:
-          - $ref: '#/components/schemas/Customer'
-        tokens:
-          type: array
-          items:
-            $ref: '#/components/schemas/NetworkToken'
-          description: Lista de tokens externos associados ao cartão
-    Customer:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Identificador do customer
-        createdAt:
-          type: string
-          description: Data de criação
-        clientId:
-          type: string
-          format: uuid
-          description: Identificador do client
-        name:
-          type: string
-          description: Nome do usuario
-        email:
-          type: string
-          description: Email do usuario
-        phoneNumber:
-          type: string
-          description: Telefones de contato do usuario
-        document:
-          allOf:
-          - $ref: '#/components/schemas/Document'
-        address:
-          allOf:
-          - $ref: '#/components/schemas/Address'
-    NetworkToken:
-      properties:
-        id:
-          type: string
-          description: Identificador do token
-        status:
-          type: string
-          description: Status atual do token
-          enum:
-          - failed
-          - active
-          - suspended
-          - deleted
-        type:
-          type: string
-          description: Tipo de token externo
-          enum:
-          - network_token
-        providerType:
-          type: string
-          description: Provedor de tokenização usado
-        updatedAt:
-          type: string
-          description: Última data de atualização do token
-    CardToken:
-      properties:
-        id:
-          type: string
-          description: ID do cartão
-        status:
-          type: string
-          enum:
-          - failed
-          - active
-          - pending
-          description: Status de validação dos dados cartões, failed (cartão inválido para uso), active (cartão válido para uso), pending (validação do cartão pendente, uso autorizado temporariamente)
-        statusReason:
-          type: string
-          description: Contém uma string com um breve descritivo informando o motivo do status do cartão. Em alguns casos uma string vazia é retornada.
-        createdAt:
-          type: string
-          description: Data de criação do cartão
-        clientId:
-          type: string
-          description: Identificação do cliente
-        brand:
-          type: string
-          enum:
-          - American Express
-          - Mastercard
-          - Visa
-          - Elo
-          - Discover
-          - JCB
-          - Diners
-          description: Bandeira do cartão
-        cardHolderName:
-          type: string
-          description: Nome do cliente do cartão
-        cvvChecked:
-          type: boolean
-          description: Identifica se o CVV foi verificado
-        fingerprint:
-          type: string
-          description: Hash de identificação única do cartão com base nos dados sensíveis
-        first6digits:
-          type: string
-          description: Primeiros 6 digitos do cartão
-        last4digits:
-          type: string
-          description: Últimos 4 digitos do cartão
-        customerId:
-          type: string
-          description: Identificador de comprador para consulta futura
-        expirationMonth:
-          type: string
-          description: Data de expiração MM
-        expirationYear:
-          type: string
-          description: Data de expiração YYYY
-        tokens:
-          type: array
-          items:
-            $ref: '#/components/schemas/NetworkToken'
-          description: Lista de tokens externos associados ao cartão
-    Document:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Tipo de documento, consultar tabela de tipos suportados
-        number:
-          type: string
-          description: Número do documento formato conforme tipo selecionado
-        country:
-          type: string
-          description: Pais de emissão do documento, Padrão ISO 3166-1 alpha-2, consultar tabela de tipos suportados
-          default: BR
-          enum:
-          - AL
-          - AD
-          - AR
-          - AT
-          - AU
-          - BA
-          - BZ
-          - BE
-          - BG
-          - BR
-          - BY
-          - CA
-          - CU
-          - CY
-          - CZ
-          - CH
-          - CL
-          - CN
-          - CO
-          - CR
-          - DE
-          - DK
-          - DO
-          - EC
-          - EE
-          - SV
-          - GT
-          - FI
-          - FR
-          - GB
-          - GR
-          - HR
-          - HK
-          - HU
-          - IS
-          - ID
-          - IE
-          - IN
-          - IL
-          - IT
-          - LI
-          - LT
-          - LU
-          - LV
-          - MK
-          - MC
-          - MD
-          - MT
-          - MU
-          - JP
-          - KR
-          - MX
-          - ME
-          - MY
-          - NL
-          - NZ
-          - 'NO'
-          - PY
-          - PE
-          - PK
-          - PL
-          - PT
-          - RU
-          - RO
-          - SM
-          - RS
-          - SE
-          - SG
-          - TH
-          - TW
-          - TR
-          - SI
-          - SK
-          - ES
-          - UY
-          - UA
-          - US
-          - VE
-          - VN
-          - ZA
-      required:
-      - type
-      - number
-    FailedDependencyResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/FailedDependencyItem'
-    CardList:
-      properties:
-        meta:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/MetaPagination'
-        items:
-          type: array
-          allOf:
-          - $ref: '#/components/schemas/Card'
-    CardRequest:
-      required:
-      - tokenId
-      properties:
-        tokenId:
-          type: string
-          format: uuid
-          description: Identificador do token gerado
-        merchantId:
-          type: string
-          format: uuid
-          description: Caso queria validar o cartão via zero dollar, informe o merchantId que possui pelo menos 1 provedor com suporte a validação zero dollar.
-        cvvCheck:
-          type: boolean
-          description: Mesmo informando o merchantId, é possível desabilitar a validação do cvv (zero dollar). Informe true para validar ou false para pular a validação. Caso você informe false, a verificação será pulada e o cartão será criado como pending necessitando validar via uma transação.
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
-    ErrorItem:
-      properties:
-        type:
-          type: string
-          enum:
-          - api_error
-          - bad_request
-          - invalid_request_error
-          - card_declined
-        code:
-          type: integer
-          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
-        declinedCode:
-          type: string
-          description: Código de retorno da transação em caso de falha na autorização
-        key:
-          type: string
-          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
-        businessCode:
-          type: string
-          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
-
-            '
-        message:
-          type: string
-          description: Descrição breve do erro
-        details:
-          type: array
-          description: Lista contendo objetos que detalham o erro de validação
     FailedDependencyItem:
       properties:
         type:
@@ -615,6 +281,160 @@ components:
       - state
       - city
       - district
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador do customer
+        createdAt:
+          type: string
+          description: Data de criação
+        clientId:
+          type: string
+          format: uuid
+          description: Identificador do client
+        name:
+          type: string
+          description: Nome do usuario
+        email:
+          type: string
+          description: Email do usuario
+        phoneNumber:
+          type: string
+          description: Telefones de contato do usuario
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+    Document:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Tipo de documento, consultar tabela de tipos suportados
+        number:
+          type: string
+          description: Número do documento formato conforme tipo selecionado
+        country:
+          type: string
+          description: Pais de emissão do documento, Padrão ISO 3166-1 alpha-2, consultar tabela de tipos suportados
+          default: BR
+          enum:
+          - AL
+          - AD
+          - AR
+          - AT
+          - AU
+          - BA
+          - BZ
+          - BE
+          - BG
+          - BR
+          - BY
+          - CA
+          - CU
+          - CY
+          - CZ
+          - CH
+          - CL
+          - CN
+          - CO
+          - CR
+          - DE
+          - DK
+          - DO
+          - EC
+          - EE
+          - SV
+          - GT
+          - FI
+          - FR
+          - GB
+          - GR
+          - HR
+          - HK
+          - HU
+          - IS
+          - ID
+          - IE
+          - IN
+          - IL
+          - IT
+          - LI
+          - LT
+          - LU
+          - LV
+          - MK
+          - MC
+          - MD
+          - MT
+          - MU
+          - JP
+          - KR
+          - MX
+          - ME
+          - MY
+          - NL
+          - NZ
+          - 'NO'
+          - PY
+          - PE
+          - PK
+          - PL
+          - PT
+          - RU
+          - RO
+          - SM
+          - RS
+          - SE
+          - SG
+          - TH
+          - TW
+          - TR
+          - SI
+          - SK
+          - ES
+          - UY
+          - UA
+          - US
+          - VE
+          - VN
+          - ZA
+      required:
+      - type
+      - number
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
     MetaPagination:
       properties:
         itemCount:
@@ -632,7 +452,209 @@ components:
         currentPage:
           type: integer
           description: Página atual
+    CardToken:
+      properties:
+        id:
+          type: string
+          description: ID do cartão
+        status:
+          type: string
+          enum:
+          - failed
+          - active
+          - pending
+          description: Status de validação dos dados cartões, failed (cartão inválido para uso), active (cartão válido para uso), pending (validação do cartão pendente, uso autorizado temporariamente)
+        statusReason:
+          type: string
+          description: Contém uma string com um breve descritivo informando o motivo do status do cartão. Em alguns casos uma string vazia é retornada.
+        createdAt:
+          type: string
+          description: Data de criação do cartão
+        clientId:
+          type: string
+          description: Identificação do cliente
+        brand:
+          type: string
+          enum:
+          - American Express
+          - Mastercard
+          - Visa
+          - Elo
+          - Discover
+          - JCB
+          - Diners
+          description: Bandeira do cartão
+        cardHolderName:
+          type: string
+          description: Nome do cliente do cartão
+        cvvChecked:
+          type: boolean
+          description: Identifica se o CVV foi verificado
+        fingerprint:
+          type: string
+          description: Hash de identificação única do cartão com base nos dados sensíveis
+        first6digits:
+          type: string
+          description: Primeiros 6 digitos do cartão
+        last4digits:
+          type: string
+          description: Últimos 4 digitos do cartão
+        customerId:
+          type: string
+          description: Identificador de comprador para consulta futura
+        expirationMonth:
+          type: string
+          description: Data de expiração MM
+        expirationYear:
+          type: string
+          description: Data de expiração YYYY
+        tokens:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkToken'
+          description: Lista de tokens externos associados ao cartão
+    CardRequest:
+      required:
+      - tokenId
+      properties:
+        tokenId:
+          type: string
+          format: uuid
+          description: Identificador do token gerado
+        merchantId:
+          type: string
+          format: uuid
+          description: Caso queria validar o cartão via zero dollar, informe o merchantId que possui pelo menos 1 provedor com suporte a validação zero dollar.
+        cvvCheck:
+          type: boolean
+          description: Mesmo informando o merchantId, é possível desabilitar a validação do cvv (zero dollar). Informe true para validar ou false para pular a validação. Caso você informe false, a verificação será pulada e o cartão será criado como pending necessitando validar via uma transação.
+    FailedDependencyResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/FailedDependencyItem'
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
+    CardList:
+      properties:
+        meta:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/MetaPagination'
+        items:
+          type: array
+          allOf:
+          - $ref: '#/components/schemas/Card'
+    NetworkToken:
+      properties:
+        id:
+          type: string
+          description: Identificador do token
+        status:
+          type: string
+          description: Status atual do token
+          enum:
+          - failed
+          - active
+          - suspended
+          - deleted
+        type:
+          type: string
+          description: Tipo de token externo
+          enum:
+          - network_token
+        providerType:
+          type: string
+          description: Provedor de tokenização usado
+        updatedAt:
+          type: string
+          description: Última data de atualização do token
+    Card:
+      properties:
+        id:
+          type: string
+          description: ID do cartão
+        expirationMonth:
+          type: string
+          description: Data de expiração MM
+        expirationYear:
+          type: string
+          description: Data de expiração YYYY
+        brand:
+          type: string
+          enum:
+          - American Express
+          - Mastercard
+          - Visa
+          - Elo
+          - Discover
+          - JCB
+          - Diners
+          description: Bandeira
+        cvvChecked:
+          type: boolean
+          description: Identifica se o CVV foi verificado
+        fingerprint:
+          type: string
+          description: Hash de identificação única do cartão com base nos dados sensíveis
+        first6digits:
+          type: string
+          description: Primeiros 6 digitos do cartão
+        last4digits:
+          type: string
+          description: Últimos 4 digitos do cartão
+        status:
+          type: string
+          enum:
+          - failed
+          - active
+          - pending
+          description: Status de validação dos dados cartões, failed (cartão inválido para uso), active (cartão válido para uso), pending (validação do cartão pendente, uso autorizado temporariamente)
+        statusReason:
+          type: string
+          description: Contém uma string com um breve descritivo informando o motivo do status do cartão. Em alguns casos uma string vazia é retornada.
+        createdAt:
+          type: string
+          description: Data de criação do cartão
+        updatedAt:
+          type: string
+          description: Data de atualização do cartão
+        customer:
+          allOf:
+          - $ref: '#/components/schemas/Customer'
+        tokens:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkToken'
+          description: Lista de tokens externos associados ao cartão
   examples:
+    CardList:
+      value:
+        meta:
+          itemCount: 10
+          totalItems: 20
+          itemsPerPage: 10
+          totalPages: 5
+          currentPage: 2
+        items:
+        - id: 148d5db0-f1c3-439f-902d-f1f268086e1d
+          customerId: 82aba896-9e37-45b6-aa90-d510c9050596
+          clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+          expirationMonth: '12'
+          expirationYear: '2026'
+          brand: Visa
+          cvvChecked: true
+          fingerprint: cbd4a441-c63c-4dee-ac6b-bfa7fa1df818
+          first6digits: '401959'
+          last4digits: '9339'
+          createdAt: 2012-06-30 23:59:59 +0000
+          status: active
+          tokens: []
     Card:
       description: Exemplo de resposta
       value:
@@ -658,28 +680,6 @@ components:
           requestStatus: success
           requestType: zero_dollar
           responseTs: 32ms
-    CardList:
-      value:
-        meta:
-          itemCount: 10
-          totalItems: 20
-          itemsPerPage: 10
-          totalPages: 5
-          currentPage: 2
-        items:
-        - id: 148d5db0-f1c3-439f-902d-f1f268086e1d
-          customerId: 82aba896-9e37-45b6-aa90-d510c9050596
-          clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
-          expirationMonth: '12'
-          expirationYear: '2026'
-          brand: Visa
-          cvvChecked: true
-          fingerprint: cbd4a441-c63c-4dee-ac6b-bfa7fa1df818
-          first6digits: '401959'
-          last4digits: '9339'
-          createdAt: 2012-06-30 23:59:59 +0000
-          status: active
-          tokens: []
     CardRequest:
       value:
         tokenId: 82aba896-9e37-45b6-aa90-d510c9050596
