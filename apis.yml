@@ -592,6 +592,9 @@ apis:
   - type: Authentication
     url: authentication/plug-authentication.yml
 common:
+- type: CapabilityMap
+  url: capabilities/plug-capability-edges.yml
+  name: Malga Business Capability Map
 - type: Website
   url: https://malga.io/
 - type: DeveloperPortal
