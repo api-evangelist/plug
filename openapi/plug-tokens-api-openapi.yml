@@ -58,36 +58,24 @@ paths:
       - lang: Python
         source: "import requests\n\nclient_id = <YOUR CLIENT ID>\npublic_key = <YOUR CLIENT TOKEN>\n\nrequest = requests.post('https://api.malga.io/v1/tokens', headers={\n    \"X-Client-Id\": client_id,\n    \"X-Api-Key\": publick_key\n  }, json={\n  \"cardHolderName\": \"JOSE DAS NEVES\",\n  \"cardNumber\": \"4019598346009339\",\n  \"cardCvv\": \"123\",\n  \"cardExpirationDate\": \"12/2026\"\n})\nprint(request.json().get('tokenId'))\n"
 components:
+  examples:
+    TokenRequestCard:
+      summary: Exemplo de tokenização de cartão
+      value:
+        cardHolderName: JOSE DAS NEVES
+        cardNumber: '4019598346009339'
+        cardCvv: '123'
+        cardExpirationDate: 12/2026
+    TokenResponse:
+      value:
+        tokenId: cc0b1e41-2936-45c5-947f-93995ffcdc00
   schemas:
-    ErrorItem:
+    ErrorResponse:
       properties:
-        type:
-          type: string
-          enum:
-          - api_error
-          - bad_request
-          - invalid_request_error
-          - card_declined
-        code:
-          type: integer
-          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
-        declinedCode:
-          type: string
-          description: Código de retorno da transação em caso de falha na autorização
-        key:
-          type: string
-          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
-        businessCode:
-          type: string
-          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
-
-            '
-        message:
-          type: string
-          description: Descrição breve do erro
-        details:
-          type: array
-          description: Lista contendo objetos que detalham o erro de validação
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
     TokenRequest:
       properties:
         tokenização:
@@ -119,12 +107,6 @@ components:
       - cardNumber
       - cardCvv
       - cardExpirationDate
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
     TokenResponse:
       properties:
         tokenId:
@@ -138,17 +120,35 @@ components:
           description: Código de verificação
       required:
       - cvvUpdate
-  examples:
-    TokenRequestCard:
-      summary: Exemplo de tokenização de cartão
-      value:
-        cardHolderName: JOSE DAS NEVES
-        cardNumber: '4019598346009339'
-        cardCvv: '123'
-        cardExpirationDate: 12/2026
-    TokenResponse:
-      value:
-        tokenId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+    ErrorItem:
+      properties:
+        type:
+          type: string
+          enum:
+          - api_error
+          - bad_request
+          - invalid_request_error
+          - card_declined
+        code:
+          type: integer
+          description: Código HTTP do erro (por exemplo, `422` em erros de regra de negócio).
+        declinedCode:
+          type: string
+          description: Código de retorno da transação em caso de falha na autorização
+        key:
+          type: string
+          description: 'Chave estável que identifica o erro de negócio (ex.: `bank_identifier_required`). Útil para tratar o erro programaticamente, independente da mensagem traduzida.'
+        businessCode:
+          type: string
+          description: 'Chave estável de regra de negócio retornada em `422`. Permite tratar o erro programaticamente independente da mensagem traduzida. Exemplos em sessões: `pix_boleto_multiple_payments_not_allowed`, `pix_boleto_one_to_one_reactivation_blocked`, `platform_fee_exceeds_link_amount`, `session_disabled`, `multiple_payments_limit_reached`.
+
+            '
+        message:
+          type: string
+          description: Descrição breve do erro
+        details:
+          type: array
+          description: Lista contendo objetos que detalham o erro de validação
   securitySchemes:
     X-Client-ID:
       type: apiKey

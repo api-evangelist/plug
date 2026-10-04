@@ -64,7 +64,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
+  examples:
+    AuthRequest:
+      value:
+        scope:
+        - tokens
+        expires: 31104000
+    AuthResponse:
+      value:
+        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
+        publicKey: <YOUR_PUBLIC_KEY>
+        scope:
+        - tokens
+        expires: 31104000
+        createdAt: 20200110 00:00:00
   schemas:
+    ErrorResponse:
+      properties:
+        error:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/ErrorItem'
     AuthRequest:
       properties:
         scope:
@@ -144,26 +164,6 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
-    ErrorResponse:
-      properties:
-        error:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/ErrorItem'
-  examples:
-    AuthResponse:
-      value:
-        clientId: cc0b1e41-2936-45c5-947f-93995ffcdc00
-        publicKey: <YOUR_PUBLIC_KEY>
-        scope:
-        - tokens
-        expires: 31104000
-        createdAt: 20200110 00:00:00
-    AuthRequest:
-      value:
-        scope:
-        - tokens
-        expires: 31104000
   securitySchemes:
     X-Client-ID:
       type: apiKey

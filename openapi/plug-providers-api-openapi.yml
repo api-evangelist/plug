@@ -41,31 +41,29 @@ paths:
       - Providers
 components:
   schemas:
-    MerchantAcquirerMultipleMid:
+    UpdateProvidersDto:
       type: object
-      description: Informações do adquirente
-      title: Múltiplos MID's
       properties:
-        bin:
-          type: array
-          description: BINs do adquirente
-          items:
-            type: object
-            required:
-            - merchantId
-            properties:
-              merchantId:
-                type: string
-                description: ID do merchant. Obrigatório se não estiver cadastrado no nível superior. Caso esteja nesse nível ele irá usar o merchantId para cada respectivo BIN.
-                example: '1234567890'
-              brand:
-                type: string
-                description: Bandeira do BIN
-                example: Mastercard
-              value:
-                type: string
-                description: Valor do BIN
-                example: '550259'
+        name:
+          type: string
+          description: Nome opcional de identificação do provedor
+          example: SANDBOX
+        credentials:
+          type: object
+          description: "Informe as credenciais fornecidas pelo provedor para autenticação. \n\nComo exemplo, utilizamos as credenciais de SANDBOX, porém a estrutura pode variar conforme o provedor. Consulte a [API de criação de merchant](../merchants/criacao-de-novo-merchant-para-cobranca) para saber quais informações são exigidas pelo seu provedor.\n\n**ATENÇÃO:** Alterar as credenciais pode impactar a integração e interromper o funcionamento dos serviços. \nCertifique-se de sempre validar as novas credenciais alteradas antes de atualizar.\n"
+          properties:
+            type:
+              type: string
+              description: Tipo do provedor
+              example: SANDBOX
+            apiKey:
+              type: string
+              description: Chave de API para autenticação no ambiente
+              example: '1234567890'
+        acquirer:
+          oneOf:
+          - $ref: '#/components/schemas/MerchantAcquirerSingleMid'
+          - $ref: '#/components/schemas/MerchantAcquirerMultipleMid'
     MerchantAcquirerSingleMid:
       type: object
       description: Informações do adquirente
@@ -93,29 +91,31 @@ components:
                 type: string
                 description: Valor do BIN
                 example: '550259'
-    UpdateProvidersDto:
+    MerchantAcquirerMultipleMid:
       type: object
+      description: Informações do adquirente
+      title: Múltiplos MID's
       properties:
-        name:
-          type: string
-          description: Nome opcional de identificação do provedor
-          example: SANDBOX
-        credentials:
-          type: object
-          description: "Informe as credenciais fornecidas pelo provedor para autenticação. \n\nComo exemplo, utilizamos as credenciais de SANDBOX, porém a estrutura pode variar conforme o provedor. Consulte a [API de criação de merchant](../merchants/criacao-de-novo-merchant-para-cobranca) para saber quais informações são exigidas pelo seu provedor.\n\n**ATENÇÃO:** Alterar as credenciais pode impactar a integração e interromper o funcionamento dos serviços. \nCertifique-se de sempre validar as novas credenciais alteradas antes de atualizar.\n"
-          properties:
-            type:
-              type: string
-              description: Tipo do provedor
-              example: SANDBOX
-            apiKey:
-              type: string
-              description: Chave de API para autenticação no ambiente
-              example: '1234567890'
-        acquirer:
-          oneOf:
-          - $ref: '#/components/schemas/MerchantAcquirerSingleMid'
-          - $ref: '#/components/schemas/MerchantAcquirerMultipleMid'
+        bin:
+          type: array
+          description: BINs do adquirente
+          items:
+            type: object
+            required:
+            - merchantId
+            properties:
+              merchantId:
+                type: string
+                description: ID do merchant. Obrigatório se não estiver cadastrado no nível superior. Caso esteja nesse nível ele irá usar o merchantId para cada respectivo BIN.
+                example: '1234567890'
+              brand:
+                type: string
+                description: Bandeira do BIN
+                example: Mastercard
+              value:
+                type: string
+                description: Valor do BIN
+                example: '550259'
   securitySchemes:
     X-Client-ID:
       type: apiKey

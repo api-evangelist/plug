@@ -205,6 +205,47 @@ paths:
       - Seller Documents
 components:
   schemas:
+    UploadedDocumentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador do documento
+        type:
+          type: string
+          enum:
+          - SELFIE
+          - CNH_FULL
+          - CNH_FRONT
+          - CNH_BACK
+          - RG_FRONT
+          - RG_BACK
+          description: Tipo do documento
+        status:
+          type: string
+          enum:
+          - uploaded
+          - attached
+          - sent
+          description: 'Status do documento:
+
+            - `uploaded`: documento enviado, aguardando associação com seller
+
+            - `attached`: documento associado a um seller, aguardando envio ao provedor
+
+            - `sent`: documento enviado ao provedor com sucesso
+
+            '
+        expiresAt:
+          type: string
+          format: date-time
+          description: Data de expiração do documento (7 dias após upload)
+      example:
+        id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        type: SELFIE
+        status: uploaded
+        expiresAt: '2026-04-15T18:00:00.000Z'
     ErrorResponse:
       properties:
         error:
@@ -260,47 +301,6 @@ components:
         details:
           type: array
           description: Lista contendo objetos que detalham o erro de validação
-    UploadedDocumentResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Identificador do documento
-        type:
-          type: string
-          enum:
-          - SELFIE
-          - CNH_FULL
-          - CNH_FRONT
-          - CNH_BACK
-          - RG_FRONT
-          - RG_BACK
-          description: Tipo do documento
-        status:
-          type: string
-          enum:
-          - uploaded
-          - attached
-          - sent
-          description: 'Status do documento:
-
-            - `uploaded`: documento enviado, aguardando associação com seller
-
-            - `attached`: documento associado a um seller, aguardando envio ao provedor
-
-            - `sent`: documento enviado ao provedor com sucesso
-
-            '
-        expiresAt:
-          type: string
-          format: date-time
-          description: Data de expiração do documento (7 dias após upload)
-      example:
-        id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
-        type: SELFIE
-        status: uploaded
-        expiresAt: '2026-04-15T18:00:00.000Z'
   securitySchemes:
     X-Client-ID:
       type: apiKey
